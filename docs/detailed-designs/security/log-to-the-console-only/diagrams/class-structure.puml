@@ -1,0 +1,68 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Log to the console only
+
+interface AppLogger {
+  +error(area: string, error: unknown): void
+}
+
+class ConsoleAppLogger {
+  +error(area: string, error: unknown): void
+}
+
+class RecordingAppLogger <<new, only with diagnose>> {
+  +error(area: string, error: unknown): void
+}
+
+class "redact" as redact <<function>> {
+  +redact(text: string): string
+}
+
+class "logLine" as logLine <<function>> {
+  +logLine(area: string, error: unknown): string
+}
+
+class "describeError" as describeError <<function>> {
+  +describeError(error: unknown): string
+}
+
+class WebBluetoothBikeConnection {
+  +frames: Observable<Uint8Array>
+  +lastError: Signal<string | null>
+  -report(error: unknown): void
+}
+
+class "provideBikeConnection" as provide <<function>> {
+  APP_LOGGER -> ConsoleAppLogger
+}
+
+class "provideDiagnostics" as diagnostics <<function>> {
+  APP_LOGGER -> RecordingAppLogger
+}
+
+class "app.config.ts" as appConfig <<config>> {
+  provideBrowserGlobalErrorListeners()
+}
+
+ConsoleAppLogger ..|> AppLogger
+RecordingAppLogger ..|> AppLogger
+RecordingAppLogger *-- ConsoleAppLogger : wraps
+ConsoleAppLogger ..> logLine : writes
+RecordingAppLogger ..> logLine : records
+logLine ..> describeError : formats with
+logLine ..> redact : redacts with
+WebBluetoothBikeConnection --> AppLogger : reports to
+provide ..> ConsoleAppLogger : binds
+diagnostics ..> RecordingAppLogger : binds in its place
+@enduml

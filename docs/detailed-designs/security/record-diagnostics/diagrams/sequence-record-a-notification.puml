@@ -1,0 +1,62 @@
+@startuml
+title UML sequence behaviour — Record a notification with its decoded reading
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+box "Device — Smart bike" #F2F4F7
+  participant "Bike" as bike
+end box
+box "Device — Browser" #F2F4F7
+  participant "navigator.bluetooth" as ble
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "WebBluetoothBikeConnection" as conn
+  participant "DiagnosticRecorder" as recorder
+  participant "readFrame" as reading
+  participant "telemetryDecoder" as pick
+  participant "RecordingBuffer" as buffer
+  participant "BikeTelemetry" as telemetry
+end box
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRideStore" as store
+end box
+bike -> ble : Notify F0 D2 01 0C CF
+ble -> conn : characteristicvaluechanged
+conn -> conn : onValue copies the bytes
+conn -> recorder : BIKE_LINK_TAP?.received(characteristic, bytes, "notification", "echelon") (L2-178 AC3)
+recorder -> reading : readFrame(bytes, "echelon")
+reading -> pick : telemetryDecoder("echelon")
+pick --> reading : EchelonFrameDecoder
+reading -> reading : decode(bytes, at); name the frame
+alt the decoder returns a sample
+  reading --> recorder : "EchelonFrameDecoder D2 resistance=12 checksum=ok" (L2-178 AC4)
+else the decoder returns null
+  reading --> recorder : "EchelonFrameDecoder D0 dropped: D0 is not read checksum=ok" (L2-178 AC4)
+end
+recorder -> buffer : push(one RX line: time, notification, characteristic, hex, reading)
+buffer -> buffer : Drop the oldest lines past 20,000 entries or 3,000,000 bytes (L2-178 AC9)
+recorder --> conn : Return
+conn -> telemetry : frames emits the bytes
+telemetry -> pick : telemetryDecoder("echelon")
+pick --> telemetry : EchelonFrameDecoder
+telemetry -> telemetry : decode(bytes, at); merge the sample or ignore null
+telemetry --> store : Readout signals change
+store -> recorder : DIAGNOSTIC_RECORDING?.readouts(power, cadence, resistance, target resistance)
+alt the line differs from the last SCR line
+  recorder -> buffer : push(one SCR line) (L2-178 AC8)
+else none changed
+  recorder -> recorder : Add nothing
+end
+note over conn, store : No step writes to the console (L2-115 AC2)
+@enduml

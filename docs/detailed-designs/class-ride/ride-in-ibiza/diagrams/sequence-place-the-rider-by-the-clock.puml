@@ -1,0 +1,52 @@
+@startuml
+title UML sequence behaviour — Place the rider by the clock
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRideStore" as store
+  participant "CourseSceneHost" as host
+end box
+box "Frontend — Ride app (world library)" #ECFDF3
+  participant "CourseScene" as scene
+  participant "FrameScheduler" as sched
+  participant "SceneDriver" as driver
+  participant "ThreeCourseRenderer" as renderer
+  participant "Course" as course
+end box
+box "Browser — Chrome or Edge" #F2F4F7
+  participant "Display and GPU" as gpu
+end box
+
+store -> host : elapsed (whole second), speedKmh, running = true
+host -> scene : setInput for each
+scene -> sched : startLoop() while running
+loop each display frame, tab showing
+  gpu -> sched : requestAnimationFrame(time)
+  sched -> scene : now = time
+  scene -> driver : frame(now, elapsed, speedKmh, running, reducedMotion)
+  driver -> driver : Advance time by the frame; clamp to elapsed .. elapsed + 1 (L2-174 AC2)
+  driver -> driver : Turn the crank by speedKmh / 5 m a turn; speed never places the rider
+  driver -> renderer : draw(time, crank, reducedMotion)
+  renderer -> course : metresAt(time)
+  course --> renderer : Metres in the segment's stretch, ridden evenly
+  renderer -> course : place(metres), place(metres - behind), place(metres + 14)
+  course --> renderer : Rider's place, camera's place, the point looked at
+  renderer -> renderer : chaseCamera(metres, finish): 2.75 m and 1.8 m, nearer at the grid and the finish (L2-174 AC10)
+  renderer -> renderer : Pose the rider from the crank; lay the shadow away from the sun (L2-174 AC11, AC12)
+  renderer -> gpu : Render the frame
+end
+gpu --> rider : The rider on the road, seen from behind (L2-174 AC1)
+@enduml

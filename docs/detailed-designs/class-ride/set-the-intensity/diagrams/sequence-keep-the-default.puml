@@ -1,0 +1,21 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName Arial
+actor Rider
+participant ClassRideStore as Store
+participant ClassDonePage as Done
+participant "INTENSITY_DEFAULT" as Default
+database localStorage
+
+Store -> Done : navigate /done, classResult.intensity = 7
+Done -> Default : kept()
+Default -> localStorage : getItem("telo-ride.intensity")
+Default --> Done : 5
+Done -> Rider : "Make 7/10 your intensity?"
+Rider -> Done : "Make it my default"
+Done -> Default : keep(7)
+Default -> localStorage : setItem("telo-ride.intensity", "7")
+Default --> Done : true
+Done -> Rider : "7/10 is now your intensity." (status)
+@enduml

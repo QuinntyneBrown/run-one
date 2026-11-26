@@ -1,0 +1,97 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Show the finish banner
+
+interface RideEndingState {
+  +stage: 'banner' | 'roll-out' | 'over'
+  +rollOut: number
+}
+
+class "rideEndingAt()" as fn <<function>> {
+  +BANNER_MS = 3200
+  +ROLL_OUT_MS = 5200
+  +rideEndingAt(elapsedMs: number): RideEndingState
+}
+
+class RideEnding <<service>> {
+  +state: Signal<RideEndingState | null>
+  +start(): void
+  +stop(): void
+  -read(): void
+}
+
+interface MonotonicTime {
+  +now(): number
+}
+
+interface FinishBanner {
+  +outputKj: number
+  +elapsedSeconds: number
+}
+
+class ClassRideStore <<store>> {
+  +phase: Signal<RidePhase>
+  +finished: Signal<FinishBanner | null>
+  +plan: Signal<PlanState | null>
+  +power: Signal<StatView>
+  +cadence: Signal<StatView>
+  -result: ClassResult | null
+  -finish(ride: ClassDefinition): void
+}
+
+interface ClassResult {
+  +classId: string
+  +title: string
+  +elapsedSeconds: number
+  +outputKj: number
+  +onTargetShare: number
+  +previousBestKj: number | null
+  +efforts: number[]
+  +saved: boolean
+}
+
+interface RideRecord {
+  +read(): RideRecordSnapshot
+  +add(outputKj: number): boolean
+}
+
+class RideRecorder {
+  +outputKj: number
+  +onTargetShare: number
+  +record(power: number | null, seconds: number, onTarget: boolean): void
+}
+
+class FinishBannerComponent <<component>> {
+  +outputKj: InputSignal<number>
+  +elapsedSeconds: InputSignal<number>
+  #time: Signal<string>
+  #status: Signal<string>
+}
+
+class ClassRidePage <<component>> {
+  #store: ClassRideStore
+}
+
+RideEnding ..> fn : reads
+fn ..> RideEndingState : returns
+RideEnding ..> MonotonicTime : MONOTONIC_TIME
+ClassRideStore --> RideEnding : start()
+ClassRideStore --> RideRecorder : reads the output
+ClassRideStore ..> RideRecord : RIDE_RECORD.add()
+ClassRideStore --> ClassResult : keeps for Class Done
+ClassRideStore ..> FinishBanner : exposes
+ClassRidePage --> ClassRideStore : reads
+ClassRidePage *-- FinishBannerComponent : projects into the box
+FinishBannerComponent ..> FinishBanner : draws
+@enduml

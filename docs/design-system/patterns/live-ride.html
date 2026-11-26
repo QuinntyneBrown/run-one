@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The shape of a ride — Telo Ride 1 design system</title>
+<meta name="description" content="A ride runs like a race against nobody: flyover, countdown, the class, finish banner, roll-out, Class Done. One rider, no positions, laps or places.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+<style>
+.ds-steps { list-style: none; padding: 0; display: grid; gap: var(--space-4); }
+.ds-step { display: grid; gap: var(--space-3); grid-template-columns: minmax(0, 1fr); align-items: start; }
+@media (min-width: 64rem) { .ds-step { grid-template-columns: 16rem minmax(0, 1fr); } }
+.ds-step__text { display: grid; gap: var(--space-1); font: var(--text-body-sm); }
+.ds-step__text span { color: var(--color-fg-muted); }
+.ds-step__frame { border: var(--border-width-hairline) solid var(--color-line); border-radius: var(--radius-lg); }
+</style>
+</head>
+<body id="top">
+<a class="ds-skip" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Telo Ride 1 DS</a><button class="ds-theme-toggle" type="button" aria-pressed="true">☀ Light</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/ride-readout.html">Bike panel</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/class-done.html">Class Done</a></li>
+      <li><a href="../components/video.html">Class video</a></li>
+      <li><a href="../components/container.html">Container</a></li>
+      <li><a href="../components/countdown.html">Countdown</a></li>
+      <li><a href="../components/course.html">Course</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/device-list.html">Device list</a></li>
+      <li><a href="../components/diagnostic-panel.html">Diagnostic panel</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+      <li><a href="../components/finish-banner.html">Finish banner</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/ibiza-flyover.html">Ibiza Flyover</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/lockup.html">Lockup</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/plan-chart.html">Plan chart</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/recording-mark.html">Recording mark</a></li>
+      <li><a href="../components/number-stepper.html">Resistance stepper</a></li>
+      <li><a href="../components/roll-out.html">Roll-out</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/sidebar-nav.html">Sidebar navigation</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/stat.html">Stat</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/the-class.html">The Class</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation.html">Navigation</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+      <li><a href="../patterns/live-ride.html">The shape of a ride</a></li>
+    </ul></details>
+  </nav>
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Pattern</p>
+      <h1>The shape of a ride</h1>
+      <p class="ds-lead">A ride runs like a race against nobody: flyover, countdown, the class, finish banner, roll-out, Class Done. One rider, no positions, laps or places.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#when">When to use what</a></li><li><a href="#structure">Structure</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#sources">Sources</a></li></ul>
+    </header>
+<section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+<p>A ride borrows a race’s shape and nothing else (ADR 0049, L2-179 to L2-182). The shape gives the 20 minutes a start and an end the rider can feel: the course seen from above, three lights, a banner at the line, a few seconds to spin down. It is always solo, so the rider can pause, leave or finish at any time.</p>
+<p>The pieces: <a href="../components/ibiza-flyover.html">Ibiza Flyover</a>, <a href="../components/countdown.html">Countdown</a>, the <a href="../components/video.html">class video</a> or the <a href="../components/course.html">course</a> over the <a href="../components/ride-readout.html">bike panel</a>, the <a href="../components/finish-banner.html">finish banner</a>, the <a href="../components/roll-out.html">roll-out</a> and <a href="../components/class-done.html">Class Done</a>.</p>
+</section>
+
+<section class="ds-section" id="when"><h2><a href="#when">When to use what</a></h2>
+<div class="ds-table-wrap"><table class="ds-table">
+<thead><tr><th scope="col">The rider chose</th><th scope="col">The ride is</th></tr></thead>
+<tbody>
+<tr><td>Class video</td><td>Countdown → the class with its video → finish banner → roll-out → Class Done. No flyover.</td></tr>
+<tr><td>Ibiza Sunset Strip</td><td>Ibiza Flyover → countdown → the class on the course, with music → finish banner → roll-out → Class Done.</td></tr>
+<tr><td>Ibiza, with reduced motion</td><td>As Ibiza, without the flyover.</td></tr>
+<tr><td>Ibiza, and the course cannot be drawn</td><td>The flyover gives way; the ride goes on over the course’s still, with a notice under it.</td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ds-section" id="structure"><h2><a href="#structure">Structure</a></h2>
+<ol class="ds-steps"><li class="ds-step"><div class="ds-step__text"><b>1. Ibiza Flyover</b><span>Before a ride in Ibiza only. Nine seconds from the grid to the finish line, while the course loads. Skip flyover or Cancel at any time.</span><a href="../../mocks/pages/ibiza-flyover/default.html">ibiza-flyover/default</a></div><iframe class="ds-frame ds-step__frame" src="../../mocks/pages/ibiza-flyover/default.html?chrome=0" height="300" title="Ibiza Flyover" loading="lazy" tabindex="-1"></iframe></li><li class="ds-step"><div class="ds-step__text"><b>2. Countdown</b><span>“3, 2, 1, Go!” inside the box. The clock starts at 0:00 on “Go!”.</span><a href="../../mocks/pages/class-ride/countdown-ibiza.html">class-ride/countdown-ibiza</a></div><iframe class="ds-frame ds-step__frame" src="../../mocks/pages/class-ride/countdown-ibiza.html?chrome=0" height="300" title="Countdown" loading="lazy" tabindex="-1"></iframe></li><li class="ds-step"><div class="ds-step__text"><b>3. The class</b><span>The plan sets the target resistance for each of 33 segments; the rider just pedals. Pause, Leave, Full screen and Music are always in reach.</span><a href="../../mocks/pages/class-ride/ibiza.html">class-ride/ibiza</a></div><iframe class="ds-frame ds-step__frame" src="../../mocks/pages/class-ride/ibiza.html?chrome=0" height="300" title="The class" loading="lazy" tabindex="-1"></iframe></li><li class="ds-step"><div class="ds-step__text"><b>4. Finish banner</b><span>At 20:00, for 3.2 seconds: “Finish!” and the output. The target resistance eases off; the stepper is disabled; Pause and Leave are gone.</span><a href="../../mocks/pages/class-ride/finish-ibiza.html">class-ride/finish-ibiza</a></div><iframe class="ds-frame ds-step__frame" src="../../mocks/pages/class-ride/finish-ibiza.html?chrome=0" height="300" title="Finish banner" loading="lazy" tabindex="-1"></iframe></li><li class="ds-step"><div class="ds-step__text"><b>5. Roll-out</b><span>The video or the course carries on for a few seconds. Resistance 4 of 32.</span><a href="../../mocks/pages/class-ride/rolling-on-ibiza.html">class-ride/rolling-on-ibiza</a></div><iframe class="ds-frame ds-step__frame" src="../../mocks/pages/class-ride/rolling-on-ibiza.html?chrome=0" height="300" title="Roll-out" loading="lazy" tabindex="-1"></iframe></li><li class="ds-step"><div class="ds-step__text"><b>6. Class Done</b><span>Opens on its own: the output, the facts, the 17 efforts. Done returns to The Class.</span><a href="../../mocks/pages/class-done/default.html">class-done/default</a></div><iframe class="ds-frame ds-step__frame" src="../../mocks/pages/class-done/default.html?chrome=0" height="300" title="Class Done" loading="lazy" tabindex="-1"></iframe></li></ol>
+</section>
+
+<section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+<div class="ds-table-wrap"><table class="ds-table">
+<thead><tr><th scope="col">State</th><th scope="col">What changes</th><th scope="col">Mock</th></tr></thead>
+<tbody>
+<tr><td>Paused</td><td>The clock, the bike’s plan and the video or course stop; “Paused” over the box; the button reads Resume.</td><td><a href="../../mocks/pages/class-ride/paused.html">class-ride/paused</a>, <a href="../../mocks/pages/class-ride/paused-ibiza.html">paused-ibiza</a></td></tr>
+<tr><td>Off target</td><td>The power hint shows the difference in the warning colour.</td><td><a href="../../mocks/pages/class-ride/off-target.html">class-ride/off-target</a></td></tr>
+<tr><td>Lost the bike</td><td>An alert covers the screen under the header; Reconnect.</td><td><a href="../../mocks/pages/class-ride/disconnected.html">class-ride/disconnected</a>, <a href="../../mocks/pages/ibiza-flyover/bike-lost.html">ibiza-flyover/bike-lost</a></td></tr>
+<tr><td>Short of something</td><td>The video cannot play, the course cannot be drawn, the bike’s resistance cannot be set: a notice under the box or the panel, and the ride goes on.</td><td><a href="../../mocks/pages/class-ride/video-unavailable-by-hand.html">class-ride/video-unavailable-by-hand</a>, <a href="../../mocks/pages/class-ride/ibiza-unavailable.html">ibiza-unavailable</a></td></tr>
+<tr><td>Course loading</td><td>“Loading Ibiza Sunset Strip” over the still; the bike already follows the class.</td><td><a href="../../mocks/pages/class-ride/ibiza-loading.html">class-ride/ibiza-loading</a></td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+<ul><li>In a landscape window from 768px Class Ride does not scroll at any step; the box takes the height the header and the bike panel leave.</li><li>The countdown, the finish banner and the roll-out lie inside the box at every size, above the bike panel and its stepper. They never cover the header.</li><li>Ibiza Flyover is three rows that fill the window; it never scrolls.</li></ul>
+</section>
+
+<section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+<ul><li>Each moment speaks once through a <code>role="status"</code>: “The class starts in 3 seconds”, “Go”, “Finished. 351 kJ.”, “Easy spin. Your summary is coming up.” The pictures of the moment (lights, numeral, band) are hidden from assistive technology.</li><li>No moment takes focus or blocks the header: the rider can always leave.</li><li>With reduced motion the flyover is skipped, the countdown and the banner fade, and the roll-out card simply appears.</li><li>Nothing is said by colour alone: the lights have the numeral, the banner has its words.</li></ul>
+</section>
+
+<section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+<ul><li>Use the product’s words: flyover, countdown, finish banner, roll-out, output, efforts.</li><li>The ride is the rider’s own: no “1st”, “position”, “lap”, “gap” or other riders’ names.</li><li>The flyover’s status says only what is true of the bike.</li></ul>
+</section>
+
+<section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+<div class="ds-dodont">
+<figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><p class="ds-note">Countdown, banner and roll-out inside the video’s or the course’s box.</p></div><figcaption>Keep Class Ride’s layout through every moment.</figcaption></figure>
+<figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><p class="ds-note">The prototype’s newest frame: the picture edge to edge under the readouts, no stepper, efforts called “drops”.</p></div><figcaption>Adopt that layout. It is not in the mocks (L2.md, open questions 39 and 40).</figcaption></figure>
+</div>
+<div class="ds-dodont">
+<figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><p class="ds-note">One rider; “351 kJ output · 20:00”.</p></div><figcaption>Borrow the race’s shape.</figcaption></figure>
+<figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><p class="ds-note">A start grid of riders, a live leaderboard, “Lap 2 of 3”.</p></div><figcaption>Borrow the race.</figcaption></figure>
+</div>
+</section>
+
+<section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+<p>Mocks this pattern was extracted from:</p>
+<ul>
+<li><a href="../../mocks/pages/ibiza-flyover/default.html">pages/ibiza-flyover/default</a></li>
+<li><a href="../../mocks/pages/ibiza-flyover/landed.html">pages/ibiza-flyover/landed</a></li>
+<li><a href="../../mocks/pages/class-ride/countdown.html">pages/class-ride/countdown</a></li>
+<li><a href="../../mocks/pages/class-ride/countdown-ibiza.html">pages/class-ride/countdown-ibiza</a></li>
+<li><a href="../../mocks/pages/class-ride/go-ibiza.html">pages/class-ride/go-ibiza</a></li>
+<li><a href="../../mocks/pages/class-ride/default.html">pages/class-ride/default</a></li>
+<li><a href="../../mocks/pages/class-ride/ibiza.html">pages/class-ride/ibiza</a></li>
+<li><a href="../../mocks/pages/class-ride/finish.html">pages/class-ride/finish</a></li>
+<li><a href="../../mocks/pages/class-ride/finish-ibiza.html">pages/class-ride/finish-ibiza</a></li>
+<li><a href="../../mocks/pages/class-ride/rolling-on.html">pages/class-ride/rolling-on</a></li>
+<li><a href="../../mocks/pages/class-ride/rolling-on-ibiza.html">pages/class-ride/rolling-on-ibiza</a></li>
+<li><a href="../../mocks/pages/class-done/default.html">pages/class-done/default</a></li>
+</ul>
+<p>This page’s earlier subject, the race HUD over a 3D world with standings and a route profile, was removed with races.</p>
+</section>
+    <footer class="ds-footer"><span>Telo Ride 1 design system · extracted from <a href="../../mocks/index.html">docs/mocks</a> on 24 November 2026</span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

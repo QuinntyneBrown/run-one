@@ -1,0 +1,63 @@
+@startuml
+title UML sequence behaviour — Recover a dropped bike
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "Class Ride or The Class" as screen
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "WebBluetoothBikeConnection" as conn
+  participant "DeviceReconnector" as recon
+  participant "EchelonLink" as link
+  participant "ConsoleAppLogger" as logger
+end box
+box "Device — Browser" #F2F4F7
+  participant "console" as console
+end box
+box "Device — Smart bike" #F2F4F7
+  participant "Echelon EX-5s" as bike
+end box
+bike --> conn : gattserverdisconnected, or a Web Bluetooth call fails
+conn -> logger : APP_LOGGER.error("bluetooth", error) (L2-017 AC5)
+logger -> console : One line: area, name and message as text (L2-115 AC3)
+conn -> link : close(); the keepalive stops (L2-016 AC3)
+conn --> screen : ble is disconnected (L2-017 AC1)
+screen --> rider : The app's own message only: "No bike · Connect" or "Lost the bike"
+conn -> recon : start(attempt)
+loop every 3 s until connected or disconnect() (L2-017 AC1)
+  opt rider presses Reconnect (L2-017 AC3)
+    rider -> screen : Press Reconnect
+    screen -> conn : reconnectNow()
+    conn -> recon : retryNow(): cancel the wait, attempt at once
+  end
+  recon -> conn : attempt()
+  conn -> bike : gatt.connect() on the same device, no chooser
+  alt bike is switched on and pedalled (L2-017 AC2)
+    bike --> conn : Connected
+    conn -> link : open(), initialise(), await the first notification
+    conn -> link : setResistance(current target) before anything else (L2-017 AC4)
+    link -> bike : F0 B1 01 LL CS with response
+    conn -> link : connected(); the keepalive restarts
+    note over conn, link : During a ride WorkoutEngine.resend() then sends the current segment's level (L2-027 AC4)
+    conn --> screen : ble is connected
+    screen --> rider : Status and controls follow within 1 s (L2-019 AC5)
+  else bike still off
+    bike --> conn : NetworkError
+    conn -> logger : APP_LOGGER.error("bluetooth", error)
+    conn --> recon : false; wait 3 s from the end of the attempt
+  end
+end
+@enduml

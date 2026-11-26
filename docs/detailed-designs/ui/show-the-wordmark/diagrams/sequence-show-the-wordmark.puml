@@ -1,0 +1,47 @@
+@startuml
+title UML sequence behaviour — Show the wordmark in a header
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "Screen page" as page
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "ScreenHeader" as hdr
+  participant "Lockup" as lockup
+end box
+box "Device — Browser" #F2F4F7
+  participant "Rendering engine" as engine
+  participant "Screen reader" as sr
+end box
+rider -> page : Open Connect Bike, The Class, Class Done or Page not found
+alt The Class, Class Done or Page not found
+  page -> hdr : Render wz-screen-header
+  hdr -> lockup : Render wz-lockup, size md
+else Connect Bike
+  page -> lockup : Render wz-lockup, size md, in connect~__header
+end
+lockup -> engine : span.lockup with the mark, "TELO" and "Ride 1"
+engine -> engine : Set the wordmark in bundled Barlow Condensed, upper case
+engine -> engine : Colour "RIDE 1" with ~--color-volt-fg, signal orange (L2-172 AC1)
+engine --> rider : TELO RIDE 1 in the header (L2-172 AC1)
+rider -> sr : Move to the header
+sr -> lockup : Read role="img" and aria-label
+lockup --> sr : One image named "Telo Ride 1" (L2-172 AC1, AC2)
+sr --> rider : Speaks "Telo Ride 1", with the digit (L2-172 AC2)
+opt forced colours are active
+  engine --> rider : Mark and wordmark in CanvasText
+end
+@enduml

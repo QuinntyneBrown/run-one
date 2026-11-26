@@ -1,0 +1,120 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Keep the ride clock true
+
+interface MonotonicTime {
+  +now(): number
+}
+
+class RideClock {
+  -startedAt: number | null
+  -pausedAt: number | null
+  -pausedTotalMs: number
+  +running: Signal<boolean>
+  +start(): void
+  +pause(): void
+  +resume(): void
+  +elapsedMs(): number
+}
+
+class RideTicker {
+  -timer: Timeout | null
+  +second: Signal<number>
+  +ticks: Observable<number>
+  +start(): void
+  +stop(): void
+  -tick(): void
+  -scheduleNext(): void
+  -onVisibilityChange(): void
+}
+
+class WorkoutEngine {
+  +state: Signal<PlanState | null>
+  +follow(plan: Plan): void
+  -step(): void
+}
+
+class "planStateAt(plan, elapsedMs)" as planStateAt <<function>>
+
+interface PlanState {
+  +index: number
+  +remainingMs: number
+  +progress: number
+  +targetPower: number | null
+}
+
+class ClassRideStore <<store>> {
+  -lastSecond: number
+  +elapsed: Signal<number>
+  -record(second: number): void
+}
+
+class RideTotals {
+  +runningSeconds: Signal<number>
+  +outputKj: Signal<number>
+  +onRunningSecond(seconds: number): void
+}
+class EffortTotals {
+  +count(effort: number, powerW: number | null, seconds: number): void
+}
+class OnTargetCounter {
+  +count(powerW: number | null, targetPowerW: number | null, seconds: number): void
+}
+
+interface ScreenWakeLock {
+  +hold(): void
+  +release(): void
+}
+
+class BrowserScreenWakeLock {
+  -sentinel: WakeLockSentinel | null
+  -held: boolean
+  -onVisibilityChange(): void
+  -request(): void
+}
+
+class ClassRidePage <<component>> {
+  #confirmLeaving(event: BeforeUnloadEvent): void
+}
+
+class BikeTelemetry {
+  +cadence: Signal<number | null>
+  +powerW: Signal<number | null>
+}
+
+class ReadoutSampler <<new>> {
+  -timer: Timeout | null
+  -publishedAt: number
+  +cadence: Signal<number | null>
+  +powerW: Signal<number | null>
+}
+
+RideClock --> MonotonicTime : reads
+RideTicker --> RideClock : schedules from
+WorkoutEngine --> RideTicker : steps on ticks
+WorkoutEngine --> RideClock
+WorkoutEngine ..> planStateAt : calls
+planStateAt ..> PlanState : returns
+ClassRideStore --> RideTicker : counts seconds
+ClassRideStore --> RideTotals : reports seconds
+ClassRideStore --> EffortTotals : reports effort seconds
+ClassRideStore --> OnTargetCounter : reports aimed seconds
+ClassRideStore ..> planStateAt : places skipped seconds
+ClassRideStore --> ScreenWakeLock : holds
+BrowserScreenWakeLock ..|> ScreenWakeLock
+ClassRidePage *-- ClassRideStore
+ReadoutSampler --> BikeTelemetry : samples
+ReadoutSampler --> MonotonicTime
+ClassRideStore --> ReadoutSampler : reads
+@enduml

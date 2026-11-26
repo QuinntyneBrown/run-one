@@ -1,0 +1,55 @@
+@startuml
+title UML sequence behaviour — Play the music and hold it with the ride
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+  participant "ClassRideStore" as store
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "ClassCourse" as box
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "BrowserRideMusic" as music
+end box
+box "Browser — Chrome or Edge" #F2F4F7
+  participant "HTMLAudioElement" as audio
+  participant "localStorage" as storage
+end box
+box "Static host — the app's own origin" #FFF4E5
+  participant "Static host" as origin
+end box
+
+music -> storage : getItem("telo-ride.music") when created
+storage --> music : null: the music is on
+note over store : way is 'ibiza': the effect is made.\nWith the class video no effect is made and nothing is fetched (L2-176 AC3)
+store -> store : running() becomes true: on "Go!" (L2-176 AC1; today, when Class Ride opens)
+store -> music : play()
+music -> audio : new Audio("music/beautiful-boom-bap.mp3"); loop = true
+music -> audio : play()
+audio -> origin : GET /music/beautiful-boom-bap.mp3 (L2-176 AC2)
+origin --> audio : The track
+audio --> rider : Beautiful Boom Bap, looping
+rider -> page : Press Pause, or the bike stops answering
+page -> store : pause(), or ble becomes disconnected
+store -> store : running() becomes false
+store -> music : pause() in the same change-detection pass (L2-176 AC4)
+music -> audio : pause()
+rider -> page : Press Resume, or the bike is back
+store -> music : play()
+music -> audio : play(): from the same place
+note over audio : A hidden tab changes nothing:\nthe element plays on as the clock runs on (L2-176 AC8)
+@enduml

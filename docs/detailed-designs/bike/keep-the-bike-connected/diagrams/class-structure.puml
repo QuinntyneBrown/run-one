@@ -1,0 +1,128 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Keep the bike connected
+
+interface BikeConnection {
+  +ble: Signal<BleState>
+  +bike: Signal<BikeInfo | null>
+  +reconnectRemembered(bike: RememberedBikeRecord): Promise<boolean>
+  +setResistance(level: number): Promise<number>
+  +reconnectNow(): void
+  +forgetTarget(): void
+  +disconnect(): void
+}
+enum BleState {
+  idle
+  connecting
+  connected
+  disconnected
+}
+
+class WebBluetoothBikeConnection {
+  -device: BluetoothDevice | null
+  -target: number | null
+  -watching: AbortController | null
+  -reconnector: DeviceReconnector
+  +reconnectRemembered(bike: RememberedBikeRecord): Promise<boolean>
+  +reconnectNow(): void
+  +forgetTarget(): void
+  +disconnect(): void
+  -onDrop(error?: unknown): void
+  -attempt(): Promise<boolean>
+  -report(error: unknown): void
+}
+
+class DeviceReconnector {
+  {static} RETRY_MS = 3000
+  -timer: Timeout
+  -trying: boolean
+  +start(attempt: () => Promise<boolean>): void
+  +retryNow(): void
+  +stop(): void
+}
+
+class EchelonLink {
+  -keepalive: KeepaliveScheduler
+  +connected(): void
+  +close(): void
+}
+
+class KeepaliveScheduler {
+  {static} KEEPALIVE_MIN_GAP_MS = 900
+  -lastSentAt: number
+  +start(): void
+  +stop(): void
+  -tick(): void
+}
+
+interface Ticker {
+  +seconds: Observable<number>
+}
+
+interface MonotonicTime {
+  +now(): number
+}
+
+class SecondTicker {
+  +seconds: Observable<number>
+}
+
+interface RememberedBike {
+  +get(): RememberedBikeRecord | null
+  +save(bike: RememberedBikeRecord): void
+  +forget(): void
+}
+
+class RememberedBikeRecord {
+  +id: string
+  +name: string
+}
+
+class RememberedBikeStore {
+  {static} REMEMBERED_BIKE_KEY = 'telo-ride.bike'
+  +get(): RememberedBikeRecord | null
+  +save(bike: RememberedBikeRecord): void
+  +forget(): void
+}
+
+class BikeStatusView {
+  +connected: boolean
+  +name: string
+  +hiddenText: string
+  +action: string
+}
+
+class "bikeStatus" as bikeStatus <<function>> {
+  +bikeStatus(ble: BleState, bikeName: string | null): BikeStatusView
+}
+
+interface AppLogger {
+  +error(area: string, error: unknown): void
+}
+
+BikeConnection <|.. WebBluetoothBikeConnection
+BikeConnection --> BleState : ble
+WebBluetoothBikeConnection *-- DeviceReconnector
+WebBluetoothBikeConnection o-- EchelonLink : link
+WebBluetoothBikeConnection ..> AppLogger : reports errors through APP_LOGGER
+WebBluetoothBikeConnection ..> RememberedBikeRecord : finds by id
+EchelonLink *-- KeepaliveScheduler
+KeepaliveScheduler --> Ticker : subscribes
+KeepaliveScheduler --> MonotonicTime : reads
+Ticker <|.. SecondTicker
+RememberedBike <|.. RememberedBikeStore
+RememberedBike --> RememberedBikeRecord
+bikeStatus ..> BleState : reads
+bikeStatus ..> BikeStatusView : returns
+@enduml

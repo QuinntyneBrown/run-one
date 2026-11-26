@@ -1,0 +1,52 @@
+@startuml
+title UML sequence behaviour — Run the pipeline
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+box "External — CI" #FFF4E5
+  participant "ci.yml" as ci
+  participant "lint job" as lint
+  participant "build job" as build
+  participant "acceptance job" as accept
+  participant "deploy job" as deploy
+end box
+box "External — Static host" #FFF4E5
+  participant "Static host" as host
+end box
+[-> ci : Push or pull request
+ci -> ci : Cancel an earlier run of the same ref
+ci -> lint : Start, in parallel
+ci -> build : Start, in parallel
+ci -> accept : Start, in parallel
+lint -> lint : Prettier check, ESLint, e2e type check (L2-149 AC2)
+build -> build : npm run build, failing over a budget (L2-149 AC2)
+accept -> accept : Build, serve on localhost, run the @critical specs in Chromium (L2-149 AC2)
+note over lint, accept : No unit test runs here; each job times out at 5 minutes (L2-149 AC2)
+lint --> ci : Result
+build --> ci : Result
+accept --> ci : Result
+alt any job fails
+  [<-- ci : The run fails; nothing is deployed
+else all pass, on a push to main
+  ci -> deploy : Start
+  deploy -> deploy : npm ci and npm run build
+  deploy -> deploy : Append the commit to ngsw-worker.js
+  deploy -> host : Sign in with OIDC, read the deployment token
+  deploy -> host : Upload dist/ride/browser
+  host --> deploy : Served over HTTPS (L2-149 AC1)
+  [<-- ci : The run passes
+else all pass, on any other ref
+  [<-- ci : The run passes
+end
+@enduml

@@ -1,0 +1,55 @@
+@startuml
+title UML sequence behaviour — Refuse a blocked ride
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "Router" as router
+  participant "connectedBikeGuard" as guard
+  participant "ConnectBikePage" as connect
+  participant "TheClassPage" as page
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "ConnectBlocker" as blocker
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "WebBluetoothSupport" as support
+  participant "BikeConnection" as conn
+end box
+rider -> router : Open the ride's address in a blocked browser
+router -> guard : canActivate
+guard -> conn : Read ble()
+conn --> guard : idle: a blocked browser has no connected bike; no Bluetooth call is made (L2-010 AC2)
+guard --> router : UrlTree to /
+router -> page : Open The Class
+page --> rider : Video, plan chart and record work; start button disabled (L2-010 AC1, AC3)
+rider -> router : Follow "No bike · Connect"
+router -> connect : Open Connect Bike
+connect -> support : Read state()
+support --> connect : unsupported-browser or insecure-context
+alt unsupported-browser (L2-008 AC1)
+  connect -> blocker : "This browser can't reach the bike" with Try again
+  blocker --> rider : Alert replaces the device card
+  rider -> connect : Press Try again
+  connect -> support : recheck()
+  support --> connect : State read again
+else insecure-context (L2-009 AC4)
+  connect -> support : secureUrl()
+  support --> connect : Same path on https://
+  connect -> blocker : "Open the secure version of this page" with Open over HTTPS
+  blocker --> rider : Alert replaces the device card
+end
+connect --> rider : "Works with" list shows in every state (L2-007 AC1)
+@enduml

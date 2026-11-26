@@ -1,0 +1,46 @@
+@startuml
+title UML sequence behaviour — Raise the eight efforts
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassDonePage" as page
+  participant "tokens.css" as tokens
+end box
+box "Device — Browser" #F2F4F7
+  participant "Rendering engine" as engine
+end box
+rider -> page : Finish the class; Class Done opens
+page -> engine : Render eight class-done~__effort items with ~--value and ~--index 0 to 7
+engine -> tokens : Resolve ~--duration-slow and ~--duration-stagger
+alt no reduced-motion preference
+  tokens --> engine : 250 ms and 40 ms
+  loop bar 0 to 7
+    engine -> engine : Run class-done-rise for 250 ms after a delay of index x 40 ms (L2-142 AC2)
+  end
+  engine --> rider : Bars rise in turn; nothing else on the screen moves (L2-142 AC2)
+else prefers-reduced-motion: reduce
+  tokens --> engine : 0 ms and 0 ms
+  engine --> rider : Every bar is in its end state at once (L2-142 AC3)
+end
+rider -> page : Hover Done
+page -> tokens : Resolve ~--duration-fast
+alt no reduced-motion preference
+  tokens --> page : 150 ms colour transition (L2-142 AC1)
+else prefers-reduced-motion: reduce
+  tokens --> page : 0 ms; the hover colour applies at once (L2-142 AC3)
+end
+page --> rider : Done in its hover colour
+@enduml

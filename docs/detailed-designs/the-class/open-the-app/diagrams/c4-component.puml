@@ -1,0 +1,38 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Open the app
+
+Person(rider, "Rider", "Rides a smart bike at home")
+ContainerDb(storage, "Browser storage", "localStorage", "The record and the remembered bike")
+
+Container_Boundary(ride, "ride application") {
+  Component(shell, "AppShell", "Angular component", "Skip link and the router outlet; no menu, tab bar or navigation")
+  Component(routes, "rideRoutes", "Route configuration", "The four screens and page not found, each loaded on demand")
+  Component(guard, "rememberedBikeGuard", "CanActivateFn", "Chooses Connect Bike or The Class at /")
+  Component(connect, "ConnectBikePage", "Angular page", "Connect Bike at /connect")
+  Component(theclass, "TheClassPage", "Angular page", "The Class at /")
+}
+Container_Boundary(domain, "domain library") {
+  Component(bikeStore, "RememberedBikeStore", "Storage service", "The remembered bike as one JSON record")
+  Component(rule, "openingScreen", "Pure function", "Connect Bike for a new rider, The Class for every other")
+  Component(recordStore, "RideRecordStore", "Service", "The record of finished rides in localStorage; answers FinishedRides from its ride count")
+}
+Container_Boundary(api, "api library") {
+  Component(bikeToken, "REMEMBERED_BIKE", "Injection token", "Contract RememberedBike")
+  Component(recordToken, "FINISHED_RIDES", "Injection token", "Contract FinishedRides")
+}
+
+Rel(rider, shell, "Opens the app at /")
+Rel(shell, routes, "Renders the matched route of")
+Rel(routes, guard, "Runs on the empty path")
+Rel(guard, bikeToken, "Reads the remembered bike through")
+Rel(guard, recordToken, "Reads whether a ride was finished through")
+Rel(guard, rule, "Asks for the screen")
+Rel(bikeStore, bikeToken, "Implements")
+Rel(recordStore, recordToken, "Implements")
+Rel(bikeStore, storage, "Reads", "localStorage")
+Rel(recordStore, storage, "Reads, from slice 32.1", "localStorage")
+Rel(routes, connect, "Loads for a new rider", "loadComponent")
+Rel(routes, theclass, "Loads for a returning rider", "loadChildren")
+@enduml

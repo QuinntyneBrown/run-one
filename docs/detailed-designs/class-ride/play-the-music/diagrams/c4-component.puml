@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Play the music
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(audio, "Browser audio", "HTMLAudioElement")
+
+Container_Boundary(ride, "ride application") {
+  Component(provide, "provideClassRide", "Route providers", "Binds RIDE_MUSIC to BrowserRideMusic")
+  Component(page, "ClassRidePage", "Angular page", "Binds the Music button to the store")
+  Component(store, "ClassRideStore", "Store", "Plays and pauses with the ride, in Ibiza only; releases")
+}
+Container_Boundary(components, "components library") {
+  Component(box, "ClassCourse", "wz-class-course", "The Music toggle in the box's top-right corner")
+}
+Container_Boundary(api, "api library") {
+  Component(contract, "RideMusic", "Contract, token RIDE_MUSIC", "on, available, toggle, play, pause, release")
+}
+Container_Boundary(domain, "domain library") {
+  Component(music, "BrowserRideMusic", "browser/browser-ride-music.ts", "One looping HTMLAudioElement; the setting in localStorage")
+}
+
+Rel(rider, box, "Presses Music")
+Rel(page, box, "musicOn, musicAvailable; musicToggle")
+Rel(page, store, "toggleMusic()")
+Rel(store, contract, "play(), pause(), toggle(), release(); reads on and available")
+Rel(provide, music, "useClass")
+Rel(music, contract, "Implements")
+Rel(music, audio, "new Audio(path), loop, play, pause, load")
+@enduml

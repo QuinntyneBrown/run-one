@@ -1,0 +1,177 @@
+// Block ibiza-flyover (docs/design-system/components/ibiza-flyover.html, docs/mocks/pages/ibiza-flyover/): the screen is
+// a bar, the course edge to edge, and a band, so no word lies on the course (L2-179 AC1).
+:host {
+  display: block;
+  height: 100%;
+}
+
+.ibiza-flyover {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+.ibiza-flyover__bar {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--space-14);
+  padding-inline: var(--space-4);
+
+  @media (min-width: 40rem) {
+    min-height: var(--space-16);
+    padding-inline: var(--space-6);
+  }
+
+  @media (min-width: 64rem) {
+    padding-inline: var(--space-8);
+  }
+}
+
+.ibiza-flyover__skip {
+  margin-left: auto;
+  min-height: var(--target-comfortable);
+  white-space: nowrap;
+}
+
+.ibiza-flyover__cancel {
+  min-width: var(--target-comfortable);
+  min-height: var(--target-comfortable);
+}
+
+.ibiza-flyover__cancel--alone {
+  margin-left: auto;
+}
+
+.ibiza-flyover__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ibiza-flyover__scene {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--color-raised);
+}
+
+.ibiza-flyover__still {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ibiza-flyover__course {
+  position: absolute;
+  inset: 0;
+}
+
+.ibiza-flyover__loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: var(--color-scrim-photo);
+  color: var(--color-on-photo);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+}
+
+.ibiza-flyover__band {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-4);
+  min-height: var(--space-40);
+  padding: var(--space-4);
+  padding-bottom: max(var(--space-4), env(safe-area-inset-bottom));
+
+  @media (min-width: 40rem) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    min-height: var(--space-36);
+    padding-inline: var(--space-6);
+  }
+
+  @media (min-width: 64rem) {
+    padding-inline: var(--space-8);
+  }
+}
+
+.ibiza-flyover__where {
+  min-width: 0;
+}
+
+.ibiza-flyover__title {
+  font: var(--text-display);
+  font-size: var(--font-size-4xl);
+  text-transform: uppercase;
+
+  @media (min-width: 40rem) {
+    font-size: var(--font-size-5xl);
+  }
+
+  @media (min-width: 64rem) {
+    font-size: var(--font-size-6xl);
+  }
+}
+
+.ibiza-flyover__caption {
+  margin-top: var(--space-2);
+  color: var(--color-muted);
+}
+
+.ibiza-flyover__place {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-fg);
+}
+
+.ibiza-flyover__status {
+  flex-shrink: 0;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-muted);
+}
+
+.ibiza-flyover__status--ready {
+  color: var(--color-volt-fg);
+}
+
+.ibiza-flyover__lost {
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.ibiza-flyover__lost-line {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+  color: var(--color-heart-fg);
+}
+
+.ibiza-flyover__retry {
+  min-height: var(--target-ride);
+}

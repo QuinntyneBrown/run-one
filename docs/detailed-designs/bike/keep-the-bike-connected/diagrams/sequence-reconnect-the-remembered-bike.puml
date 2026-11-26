@@ -1,0 +1,61 @@
+@startuml
+title UML sequence behaviour — Reconnect the remembered bike
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "rememberedBikeGuard" as guard
+  participant "TheClassPage" as page
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "RememberedBikeStore" as store
+  participant "WebBluetoothBikeConnection" as conn
+  participant "bikeStatus" as status
+end box
+box "Device — Browser" #F2F4F7
+  participant "localStorage" as ls
+  participant "navigator.bluetooth" as bt
+end box
+box "Device — Smart bike" #F2F4F7
+  participant "Echelon EX-5s" as bike
+end box
+rider -> guard : Open Telo Ride 1 at /
+guard -> store : get()
+store -> ls : Read telo-ride.bike
+ls --> store : id and name only (L2-015 AC4)
+store --> guard : RememberedBikeRecord
+guard -> conn : reconnectRemembered(record), not awaited
+guard --> page : The Class opens without Connect Bike (L2-015 AC1)
+page -> status : bikeStatus(ble, name)
+status --> page : "No bike", "· Connect", off icon (L2-019 AC2)
+page --> rider : Start button reads "Connect your bike" (L2-015 AC2)
+alt getDevices() exists and returns the bike
+  conn -> bt : getDevices()
+  bt --> conn : Permitted device with the remembered id
+  conn -> bt : watchAdvertisements(signal)
+  rider -> bike : Pedal to wake the bike
+  bike --> conn : advertisementreceived
+  conn -> bike : Connect and initialise without the chooser (L2-015 AC1)
+  bike --> conn : First notification
+  conn --> page : ble is connected
+  page -> status : bikeStatus(ble, name)
+  status --> page : "Echelon EX-5s", " connected", "· Change" (L2-019 AC1)
+  page --> rider : Link and start button follow within 1 s (L2-019 AC5)
+else getDevices() is missing or the bike is not permitted (L2-015 AC2)
+  conn --> guard : false; nothing else is requested
+  rider -> page : Follow "No bike · Connect"
+  page --> rider : Connect Bike opens (L2-019 AC3)
+end
+@enduml

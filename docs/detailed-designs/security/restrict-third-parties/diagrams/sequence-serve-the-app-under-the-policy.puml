@@ -1,0 +1,42 @@
+@startuml
+title UML sequence behaviour — Serve the app under the policy
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Device — Browser" #F2F4F7
+  participant "Chrome or Edge" as browser
+end box
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "index.html" as index
+  participant "AppShell" as shell
+end box
+box "External — Static host" #FFF4E5
+  participant "Static host" as host
+end box
+rider -> browser : Open the app's address
+browser -> host : GET / over HTTPS
+host --> browser : index.html with the Content Security Policy (L2-131 AC1)
+note over browser, host : Also X-Content-Type-Options nosniff, Referrer-Policy strict-origin-when-cross-origin and frame-ancestors none (L2-131 AC4)
+browser -> index : Parse the document
+index -> browser : Request the script bundles and the stylesheet
+browser -> browser : Check script-src and style-src: own origin
+browser -> host : GET the bundles and styles
+host --> browser : Files with nosniff (L2-131 AC4)
+browser -> host : GET /fonts/*.woff2, allowed by font-src self (L2-131 AC2)
+host --> browser : Self-hosted fonts
+browser -> shell : Bootstrap the app
+shell --> rider : Show the first screen
+note over browser, host : No analytics, advertising or tracking script is requested (L2-131 AC2)
+@enduml

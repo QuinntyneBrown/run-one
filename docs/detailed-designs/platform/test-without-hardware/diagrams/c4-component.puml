@@ -1,0 +1,34 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Test without hardware
+
+Container_Boundary(e2e, "frontend/e2e (Playwright, outside the workspace projects)") {
+  Component(spec, "Behaviour specs", "*.spec.ts", "Import test and expect from the shared fixture")
+  Component(pages, "Page objects", "e2e/pages/*.page.ts", "One per screen; own every selector")
+  Component(test, "test", "e2e/fixtures/test.ts", "Extends Playwright's test with the fixtures and the guard")
+  Component(fakeBle, "FakeBluetooth", "Fixture", "Fake navigator.bluetooth: records writes, pushes notifications")
+  Component(yt, "YouTubeFixture", "Fixture", "Answers the IFrame API and the covers")
+  Component(guard, "guard", "Automatic fixture", "Fails on a page error, a foreign or unanswered request, an unexpected Bluetooth call")
+}
+Container_Boundary(ride, "ride application") {
+  Component(app, "Production build of ride", "dist/ride/browser", "Served on localhost by scripts/serve-dist.mjs")
+}
+Container_Boundary(domainlib, "domain library") {
+  Component(conn, "WebBluetoothBikeConnection", "Service", "Calls navigator.bluetooth, real or fake")
+  Component(timers, "RideClock, KeepaliveScheduler, DeviceReconnector", "Time-driven rules", "Read time through tokens and timers")
+}
+Container_Boundary(apilib, "api library") {
+  Component(time, "MONOTONIC_TIME, TICKER", "Tokens", "Bound to fakes in unit tests")
+}
+Rel(spec, test, "Imports test and expect from")
+Rel(spec, pages, "Acts and asserts through")
+Rel(pages, app, "Drives")
+Rel(test, fakeBle, "Installs before the app loads")
+Rel(test, yt, "Installs")
+Rel(test, guard, "Runs for every spec")
+Rel(guard, fakeBle, "Collects unexpected calls from")
+Rel(conn, fakeBle, "Calls, as navigator.bluetooth")
+Rel(app, conn, "Binds BIKE_CONNECTION to")
+Rel(timers, time, "Inject")
+@enduml

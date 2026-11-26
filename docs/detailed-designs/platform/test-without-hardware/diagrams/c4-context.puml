@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Test without hardware
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System(telo, "Telo Ride 1", "One class, on the rider's own bike")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Ext(youtube, "YouTube", "Privacy-enhanced player for the class video")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+
+Rel(rider, telo, "Uses; a Playwright spec acts in the rider's place")
+Rel(telo, bike, "Reaches; a fake navigator.bluetooth stands in for it", "Bluetooth LE")
+Rel(telo, youtube, "Loads the player from; a fixture answers in its place", "HTTPS")
+Rel(host, telo, "Serves; a local server on localhost stands in for it", "HTTPS")
+@enduml

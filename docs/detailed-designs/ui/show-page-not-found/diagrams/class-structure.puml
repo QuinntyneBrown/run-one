@@ -1,0 +1,73 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Show Page not found
+
+class "ride.routes.ts" as Routes <<config>> {
+  path: "**"
+  title: "Page not found · Telo Ride 1"
+  loadComponent: not-found-page
+}
+class NotFoundPage <<component>> {
+  selector: wz-not-found-page
+  #fullscreen: Fullscreen
+  #toggleFullscreen(): void
+}
+class "not-found-page.html" as Template <<template>> {
+  main#main.container.page.not-found
+  h1.page~__title: "This page doesn’t exist."
+  p.page~__lead
+  a.not-found~__action: "Back to the class"
+}
+class "not-found-page.scss" as Sheet <<stylesheet>> {
+  .not-found > *: max-width ~--layout-text-xl
+  .not-found~__action: margin-top ~--space-8
+}
+class ScreenHeader {
+  selector: wz-screen-header
+  slots: default, end
+}
+class Lockup {
+  +size: LockupSize
+}
+class FullscreenToggle {
+  +active: boolean
+  +toggled: void
+}
+class Button {
+  +variant: "primary"
+  +size: "lg"
+}
+interface Fullscreen {
+  +available: Signal<boolean>
+  +active: Signal<boolean>
+  +enter(): void
+  +exit(): void
+}
+class "NotFoundPage page object" as PageObject <<fixture>> {
+  +heading: Locator
+  +lead: Locator
+  +backToTheClass: Locator
+  +open(path: string): Promise<void>
+}
+
+Routes ..> NotFoundPage : lazy loads
+NotFoundPage *-- Template
+NotFoundPage *-- Sheet
+NotFoundPage --> ScreenHeader : renders
+ScreenHeader --> Lockup : renders
+NotFoundPage --> FullscreenToggle : renders when available
+NotFoundPage --> Button : renders
+NotFoundPage ..> Fullscreen : injects FULLSCREEN
+PageObject ..> NotFoundPage : locates
+@enduml

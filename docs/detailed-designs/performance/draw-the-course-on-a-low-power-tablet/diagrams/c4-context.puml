@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Draw the course on a low-power tablet
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System(telo, "Telo Ride 1", "One class, on the rider's own bike")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+System_Ext(blender, "Blender build", "tools/blender: builds the map and the rider within their sizes")
+
+Rel(rider, telo, "Rides in Ibiza on a tablet or low-power laptop")
+Rel(telo, host, "Fetches the model (at most 3 MB gzipped) and the music (at most 4 MB)", "HTTPS")
+Rel(blender, host, "Writes ibiza.glb and rider.glb, shipped with the app")
+@enduml

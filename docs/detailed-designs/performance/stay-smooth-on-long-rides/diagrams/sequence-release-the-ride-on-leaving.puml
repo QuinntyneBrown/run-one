@@ -1,0 +1,53 @@
+@startuml
+title UML sequence behaviour — Release the ride on leaving
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "Angular Router" as router
+  participant "ClassRidePage" as page
+  participant "ClassRideStore" as store
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "RideTicker" as ticker
+  participant "BikeTelemetry" as telemetry
+  participant "BrowserScreenWakeLock" as wake
+  participant "BikeConnection" as conn
+end box
+box "Frontend — Ride app (video library)" #ECFDF3
+  participant "YouTubeVideoPlayer" as player
+end box
+box "Device — Browser" #F2F4F7
+  participant "document, window and timers" as doc
+end box
+rider -> router : Leave Class Ride for The Class
+router -> page : Destroy the page and its providers
+page -> doc : Remove the beforeunload host listener
+page -> store : DestroyRef runs
+store -> player : destroy()
+player -> doc : Remove the iframe
+store -> wake : release()
+wake -> doc : Release the sentinel; remove visibilitychange
+store -> conn : forgetTarget(); the connection outlives the page (L2-093 AC3)
+store -> ticker : Unsubscribe from ticks
+page -> ticker : DestroyRef runs
+ticker -> doc : Clear the timeout; remove visibilitychange
+page -> telemetry : DestroyRef runs
+telemetry -> doc : Unsubscribe from frames; clear the cadence timeout
+note over page, telemetry : No reference to the page's services remains; the garbage collector reclaims them
+router --> rider : The Class
+rider -> router : Start the class again
+router -> page : New page, new providers, new totals (L2-138 AC3)
+@enduml

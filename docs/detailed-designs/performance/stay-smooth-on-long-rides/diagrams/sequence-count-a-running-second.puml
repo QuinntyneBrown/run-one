@@ -1,0 +1,52 @@
+@startuml
+title UML sequence behaviour — Count a running second
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRideStore" as store
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "RideTicker" as ticker
+  participant "WorkoutEngine" as engine
+  participant "BikeTelemetry" as telemetry
+  participant "RideTotals" as totals
+  participant "OnTargetCounter" as counter
+  participant "EffortTotals" as efforts
+end box
+box "Device — Smart bike" #F2F4F7
+  participant "Smart bike" as bike
+end box
+rider -> bike : Pedal
+bike -> telemetry : Notification
+telemetry -> telemetry : Overwrite the latest cadence, resistance and power
+ticker -> engine : Tick: a new whole second
+engine -> engine : Replace the current PlanState
+ticker -> store : Tick: a new whole second
+store -> telemetry : Read the latest power
+telemetry --> store : Power, or unknown
+store -> totals : onRunningSecond(1)
+totals -> totals : runningSeconds + 1; outputKj + power / 1000
+store -> counter : count(power, target power, 1)
+opt the segment has a cadence aim
+  counter -> counter : aimedSeconds + 1; onTargetSeconds + 1 when within 10 %
+end
+opt the segment is an effort
+  store -> efforts : count(effort, power, 1)
+  efforts -> efforts : Add to that effort's slot of the two arrays of 8
+end
+note over store, efforts : Nothing is appended: only running totals are held (L2-138 AC2)
+store -> store : lastSecond = second
+@enduml

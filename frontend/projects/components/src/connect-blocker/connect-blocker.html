@@ -1,0 +1,48 @@
+<section class="connect-blocker" role="alert" aria-labelledby="blocker-title">
+  <div class="connect-blocker__head">
+    <svg
+      class="icon icon--lg connect-blocker__icon"
+      [class.connect-blocker__icon--heart]="icon() === 'bluetooth-off'"
+      [class.connect-blocker__icon--warn]="icon() !== 'bluetooth-off'"
+      [attr.data-icon]="icon()"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      @switch (icon()) {
+        @case ('bluetooth-off') {
+          <path d="m17 17-5 5V12l-5 5" />
+          <path d="m2 2 20 20" />
+          <path d="M14.5 9.5 17 7l-5-5v4.5" />
+        }
+        @case ('browser') {
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+          <path d="M2 12h20" />
+        }
+        @case ('lock') {
+          <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+        }
+        @default {
+          <circle cx="12" cy="12" r="10" />
+          <path d="m4.9 4.9 14.2 14.2" />
+        }
+      }
+    </svg>
+    <h2 class="connect-blocker__title" id="blocker-title">{{ title() }}</h2>
+  </div>
+  <p class="connect-blocker__body">{{ body() }}</p>
+  @if (href(); as url) {
+    <a wz-button variant="primary" class="connect-blocker__retry" [href]="url">{{ action() }}</a>
+  } @else {
+    <button
+      wz-button
+      variant="raised"
+      type="button"
+      class="connect-blocker__retry"
+      (click)="retry.emit()"
+    >
+      {{ action() }}
+    </button>
+  }
+</section>

@@ -1,0 +1,40 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "paths": {
+      "@telo/api": ["./projects/api/src/public-api.ts"],
+      "@telo/domain": ["./projects/domain/src/public-api.ts"],
+      "@telo/domain/diagnostics": ["./projects/domain/src/diagnostics/public-api.ts"],
+      "@telo/components": ["./projects/components/src/public-api.ts"],
+      "@telo/components/diagnostics": ["./projects/components/src/diagnostics/public-api.ts"],
+      "@telo/video": ["./projects/video/src/public-api.ts"],
+      "@telo/world": ["./projects/world/src/public-api.ts"]
+    },
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "preserve"
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true,
+    "strictStandalone": true
+  },
+  "files": [],
+  "references": [
+    {
+      "path": "./projects/ride/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/ride/tsconfig.spec.json"
+    }
+  ]
+}

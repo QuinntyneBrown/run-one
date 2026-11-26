@@ -1,0 +1,54 @@
+// Element the-class__bike (docs/design-system/assets/components.css, The Class): the header's link to Connect Bike.
+:host {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  min-height: var(--target-comfortable);
+  border-radius: var(--radius-md);
+  padding: var(--space-1-5) var(--space-2);
+  color: inherit;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color var(--duration-fast) var(--ease-standard);
+}
+
+:host(:hover) {
+  background: var(--color-raised);
+}
+
+:host(:focus-visible) {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.the-class__bike-icon {
+  flex-shrink: 0;
+  color: var(--color-volt-fg);
+}
+
+.the-class__bike-icon--off {
+  color: var(--color-heart-fg);
+}
+
+.the-class__bike-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.the-class__bike-action {
+  color: var(--color-muted);
+
+  // On a phone: hidden from sight, still read (L2-019 AC4).
+  @media (max-width: 39.99rem) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}

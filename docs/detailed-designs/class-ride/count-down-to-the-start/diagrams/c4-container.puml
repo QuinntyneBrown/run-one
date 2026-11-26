@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Count down to the start
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The five screens, Web Bluetooth, the protocol and the engine")
+  ContainerDb(storage, "Browser storage", "localStorage", "The record and the remembered bike; not written by the countdown")
+}
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Ext(youtube, "YouTube", "Privacy-enhanced player for the class video")
+
+Rel(rider, app, "Watches 3, 2, 1, Go!; may press Leave", "HTTPS")
+Rel(app, bike, "Sends the first segment's level; takes the stepper's presses", "Web Bluetooth")
+Rel(app, youtube, "Loads the player parked; plays it on Go!", "IFrame Player API")
+Rel(app, storage, "Reads how the rider chose to ride", "localStorage")
+@enduml

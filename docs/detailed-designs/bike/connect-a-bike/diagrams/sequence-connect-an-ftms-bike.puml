@@ -1,0 +1,54 @@
+@startuml
+title UML sequence behaviour — Connect an FTMS bike
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ConnectBikeStore" as store
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "WebBluetoothBikeConnection" as conn
+  participant "FtmsLink" as link
+  participant "GattWriteQueue" as queue
+end box
+box "Device — Smart bike" #F2F4F7
+  participant "FTMS bike" as bike
+end box
+rider -> store : Pick an FTMS bike in the chooser
+store -> conn : connect()
+conn -> bike : gatt.connect(), list primary services
+bike --> conn : 0x1826 and no Echelon service
+conn -> link : open(service)
+link -> bike : Subscribe to Indoor Bike Data 0x2AD2 (L2-014 AC1)
+link -> bike : Subscribe to Control Point 0x2AD9 indications (L2-014 AC1)
+link -> bike : Read Supported Resistance Level Range 0x2AD6 (L2-014 AC1)
+bike --> link : Minimum, maximum, increment
+bike --> conn : First Indoor Bike Data notification
+conn --> store : ble is connected
+== First target resistance, during a ride ==
+conn -> link : setResistance(level)
+link -> queue : Enqueue Request Control, op code 0x00 (L2-014 AC2)
+queue -> bike : Write to 0x2AD9 with response
+alt bike answers 0x80 0x00 0x01 within 3 s
+  bike --> link : Success
+  link -> link : mapLevel 1 to 32 onto the range, rounded to the increment (L2-014 AC4)
+  link -> queue : Enqueue Set Target Resistance Level, op code 0x04 (L2-014 AC2)
+  queue -> bike : Write to 0x2AD9 with response
+  link --> conn : Acknowledged
+else bike refuses, stays silent, or has no control point or range (L2-014 AC3)
+  link --> conn : BikeConnectionError code read-only
+  conn --> rider : Ride goes on; Class Ride disables the resistance controls and says so
+end
+@enduml

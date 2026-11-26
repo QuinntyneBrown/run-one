@@ -1,0 +1,108 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Load the course
+
+class CourseSession <<service, designed>> {
+  -scene: ComponentRef<CourseScene>
+  +drawn: Signal<boolean>
+  +unavailable: Signal<boolean>
+  +attach(host: ViewContainerRef): void
+  +detach(host: ViewContainerRef): void
+}
+
+class CourseSceneHost <<directive>> {
+  +drawn: Output<void>
+  +unavailable: Output<void>
+}
+
+class ClassRideStore <<store>> {
+  +way: RideWith
+  +courseDrawn: Signal<boolean>
+  +courseUnavailable: Signal<boolean>
+  +showCourse(): void
+  +failCourse(): void
+}
+
+class ClassCourse <<component>> {
+  +name: InputSignal<string>
+  +still: InputSignal<{url, alt}>
+  +loading: InputSignal<boolean>
+  +unavailable: InputSignal<boolean>
+  +paused: InputSignal<boolean>
+}
+
+class CourseScene <<component>> {
+  +drawn: Output<Backend>
+  +unavailable: Output<void>
+  -CONTEXT_GRACE_MS = 3000
+  -giveUp(): void
+}
+
+interface CourseRenderer {
+  +backend: Backend
+  +start(canvas, nextFrame, segments): Promise<boolean>
+  +dispose(): void
+}
+
+class ThreeCourseRenderer {
+  -path = "courses/ibiza"
+  +start(canvas, nextFrame, segments): Promise<boolean>
+  -build(map, canvas): void
+  -rehearse(): void
+  -warm(renderer): void
+}
+
+class RiderBody {
+  +{static} load(url = "riders/rider.glb"): Promise<RiderBody>
+}
+
+interface CourseFile {
+  +id: string
+  +name: string
+  +lengthMetres: number
+  +durationSeconds: number
+  +step: number
+  +startIndex: number
+  +roadHalfWidth: number
+  +sun: [number, number, number]
+  +stages: CourseStage[]
+  +points: number[]
+  +sky?: string[]
+  +haze?: string
+  +light?: {colour, intensity}
+  +fill?: [string, string]
+  +lights?: number[]
+  +rain?: number
+  +wet?: number
+  +lamps?: {every, first, across, height, colour}
+}
+
+class "course.ts" as coursets <<module>> {
+  +parseCourse(value: unknown): CourseFile
+  +courseLook(file: CourseFile): CourseLook
+  +courseLights(file: CourseFile): CourseLight[]
+  +courseLamps(file: CourseFile): CourseLamps | null
+  -refuseBadLook(file: CourseFile): void
+}
+
+CourseSession *-- CourseScene : creates once
+CourseSceneHost --> CourseSession : attach, detach
+CourseSceneHost ..> ClassRideStore : drawn, unavailable (through the page)
+ClassRideStore ..> ClassCourse : loading, unavailable (through the page)
+CourseScene --> CourseRenderer : COURSE_RENDERER
+ThreeCourseRenderer ..|> CourseRenderer
+ThreeCourseRenderer ..> coursets : parseCourse
+ThreeCourseRenderer ..> RiderBody : load
+coursets ..> CourseFile : returns or throws
+@enduml

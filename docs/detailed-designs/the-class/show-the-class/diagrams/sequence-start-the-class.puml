@@ -1,0 +1,66 @@
+@startuml
+title UML sequence behaviour — Start the class
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "TheClassPage" as page
+  participant "TheClassStore" as store
+  participant "theClassView" as view
+  participant "Router" as router
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "TheClass" as block
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "BikeConnection" as conn
+  participant "HowToRideStore" as how
+end box
+box "Frontend — Ride app (video library)" #ECFDF3
+  participant "YouTubeVideoPlayer" as player
+end box
+store -> conn : ble()
+conn --> store : "connected" or another state
+store -> how : kept()
+how --> store : "video", "ibiza" or null
+store -> view : theClassView(class, connected, rideWith, drawable, videoUnavailable)
+alt bike connected
+  view --> store : start "Start class" (L2-084 AC4)
+else no connected bike, supported browser
+  view --> store : start "Connect your bike" with its hint (L2-084 AC6)
+end
+store --> block : TheClassView
+block --> rider : Ride with and the start button
+opt the rider chooses how to ride (L2-173 AC2)
+  rider -> block : Choose "Ibiza Sunset Strip" or "Class video"
+  block -> page : choose
+  page -> store : choose(way)
+  store -> how : keep(way)
+  store -> player : destroy() for Ibiza, or park again for the video
+end
+rider -> block : Press the start button
+block -> page : start
+alt target is the ride (L2-084 AC7)
+  page -> router : navigate to the class ride
+  router -> store : Destroy with the page
+  store -> player : destroy()
+  router --> rider : Class Ride opens and the ride starts at 0:00, with the video or in the course as kept (L2-173 AC5)
+else target is Connect Bike (L2-084 AC6)
+  page -> router : navigate to /connect
+  router -> store : Destroy with the page
+  store -> player : destroy()
+  router --> rider : Connect Bike opens
+end
+@enduml

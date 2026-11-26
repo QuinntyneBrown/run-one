@@ -1,0 +1,48 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Connect a bike
+
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+Container_Boundary(ride, "ride application") {
+  Component(page, "ConnectBikePage", "Angular page, exists", "Header, photo, device card, pair button and alerts at /connect")
+  Component(store, "ConnectBikeStore", "Page-scoped store, exists", "Steps default, searching, pairing, paired, failed")
+}
+Container_Boundary(components, "components library") {
+  Component(device, "ConnectDevice", "wz-connect-device, exists", "Name and identifier, spinner, check")
+  Component(blocker, "ConnectBlocker", "wz-connect-blocker", "Alert that stands in for the device card")
+}
+Container_Boundary(domain, "domain library") {
+  Component(conn, "WebBluetoothBikeConnection", "Service in bluetooth/, exists", "The only caller of navigator.bluetooth")
+  Component(echelon, "EchelonLink", "BikeLink, exists", "Subscribes, then writes the three initialisation frames")
+  Component(ftms, "FtmsLink", "BikeLink, exists", "Subscribes, reads the range, requests control")
+  Component(queue, "GattWriteQueue", "Class, exists", "One write at a time, in order, with a minimum gap")
+  Component(proto, "EchelonProtocol and FtmsProtocol", "protocol/, exists", "UUIDs, frames, op codes and level mapping")
+  Component(identity, "bikeIdentity", "Pure helper, exists", "Model name and identifier from the device name")
+  Component(supp, "WebBluetoothSupport", "Service, exists", "Reports adapter-off from getAvailability")
+  Component(rememberStore, "RememberedBikeStore", "Service in storage/, exists", "Keeps the paired bike")
+}
+Container_Boundary(api, "api library") {
+  Component(token, "BIKE_CONNECTION", "Contract and token, exists", "requestBike, connect, ble, bike, frames")
+  Component(remToken, "REMEMBERED_BIKE", "Contract and token, exists", "get, save, forget")
+  Component(supToken, "BLUETOOTH_SUPPORT", "Contract and token, exists", "state, recheck")
+}
+
+Rel(page, store, "Reads view, calls pair on click")
+Rel(page, device, "Passes name, identifier and state")
+Rel(page, blocker, "Renders for a failure or Bluetooth off")
+Rel(page, supToken, "Reads state, calls recheck")
+Rel(store, token, "requestBike, then connect")
+Rel(store, remToken, "save after pairing")
+Rel(conn, token, "Implements")
+Rel(rememberStore, remToken, "Implements")
+Rel(supp, supToken, "Implements")
+Rel(conn, echelon, "Opens for the Echelon service")
+Rel(conn, ftms, "Opens for FTMS")
+Rel(conn, identity, "Names the bike with")
+Rel(echelon, queue, "Enqueues writes")
+Rel(ftms, queue, "Enqueues writes")
+Rel(echelon, proto, "Builds frames with")
+Rel(ftms, proto, "Builds commands with")
+Rel(conn, bike, "requestDevice, GATT", "Web Bluetooth")
+@enduml

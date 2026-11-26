@@ -1,0 +1,68 @@
+// Block browser-notice (docs/design-system/assets/components.css, Browser notice; docs/mocks/pages/the-class/
+// needs-chromium, link-copied and needs-https): a band under the header that says why Bluetooth will not work here,
+// with the one action that helps. Words over the action on a phone; icon, words and action on one line from sm.
+:host {
+  display: block;
+  flex-shrink: 0;
+}
+
+.browser-notice {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  border-bottom: var(--border-width-hairline) solid var(--color-warning-border);
+  background: var(--color-warning-bg);
+  padding: var(--space-3) var(--space-5);
+
+  @media (min-width: 40rem) {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 64rem) {
+    padding-inline: var(--space-8);
+  }
+}
+
+.browser-notice__icon {
+  display: none;
+  color: var(--color-warn-fg);
+
+  @media (min-width: 40rem) {
+    display: block;
+  }
+}
+
+.browser-notice__text {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+.browser-notice__title {
+  font-weight: var(--font-weight-semibold);
+}
+
+.browser-notice__body {
+  color: var(--color-muted);
+}
+
+// Its action: Copy link (raised) or Open over HTTPS (primary), 36 px tall, taking touches across 44.
+.browser-notice__action {
+  --btn-height: var(--control-height-sm);
+  --btn-pad: var(--space-3-5);
+
+  flex-shrink: 0;
+  align-self: flex-start;
+
+  @media (min-width: 40rem) {
+    align-self: auto;
+  }
+}
+
+// Copied: a check in the accent, beside the word, so the colour is never the only sign.
+.browser-notice__action[data-copied] .icon {
+  color: var(--color-volt-fg);
+}

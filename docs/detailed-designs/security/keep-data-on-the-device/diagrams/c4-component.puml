@@ -1,0 +1,26 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Keep data on the device
+
+ContainerDb(storage, "Browser storage", "localStorage", "The record and the remembered bike")
+Container_Boundary(ride, "ride application") {
+  Component(routes, "ride.routes.ts", "Lazy parent route", "Four screens; no sign-in route, guard or session provider")
+  Component(config, "app.config.ts", "Composition root", "Provides no HttpClient")
+  Component(rideStore, "ClassRideStore", "Page-scoped store", "Adds a finished ride's output to the record")
+}
+Container_Boundary(domainlib, "domain library") {
+  Component(bikeStore, "RememberedBikeStore", "Service", "One JSON value under telo-ride.bike")
+  Component(recordStore, "RideRecordStore", "Service, new", "One JSON value under telo-ride.record")
+}
+Container_Boundary(apilib, "api library") {
+  Component(tokens, "REMEMBERED_BIKE, RIDE_RECORD", "Contracts and tokens", "Storage contracts with no network method")
+}
+Rel(routes, bikeStore, "Binds REMEMBERED_BIKE to")
+Rel(routes, recordStore, "Binds RIDE_RECORD to")
+Rel(rideStore, tokens, "Injects RIDE_RECORD from")
+Rel(bikeStore, tokens, "Implements")
+Rel(recordStore, tokens, "Implements")
+Rel(bikeStore, storage, "Reads and writes", "localStorage")
+Rel(recordStore, storage, "Reads and writes", "localStorage")
+@enduml

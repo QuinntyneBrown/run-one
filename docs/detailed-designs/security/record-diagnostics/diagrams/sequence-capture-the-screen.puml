@@ -1,0 +1,61 @@
+@startuml
+title UML sequence behaviour — Take a screen capture
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Person diagnosing" as person
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "DiagnosticPanel" as panel
+end box
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "DiagnosticsHost" as host
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "BrowserScreenCapture" as capture
+  participant "DiagnosticRecorder" as recorder
+end box
+box "Device — Browser" #F2F4F7
+  participant "navigator.mediaDevices" as media
+end box
+person -> panel : Press Capture screen
+panel -> host : capture output
+host -> host : Close the dialog; the mark reads "Capturing…"; wait two animation frames
+host -> capture : SCREEN_CAPTURE.capture()
+capture -> media : getDisplayMedia with preferCurrentTab
+media -> person : Ask the browser's own permission to share the tab
+alt the person allows it
+  person --> media : Share this tab
+  media --> capture : Stream with one video track
+  capture -> capture : Play the stream in a detached video element
+  capture -> capture : Draw the first frame to a canvas; encode a PNG
+  capture -> media : Clear the timer; stop each track; let go of the video element (L2-178 AC13, AC20)
+  capture --> host : CapturedScreen: picture, width, height
+  host -> recorder : keepCapture(captured)
+  recorder -> recorder : Number and name it; add one CAP line; past 8, drop the oldest and add a CAP line that names it (L2-178 AC9, AC13)
+  recorder --> host : 1
+  host -> host : showModal()
+  host -> panel : Status "Screen capture 1 kept"
+else the person refuses, or the capture fails
+  media --> capture : Reject with NotAllowedError, or a stream that gives no frame in 5 s
+  capture -> media : Stop each track that was opened (L2-178 AC20)
+  capture --> host : Reject with ScreenCaptureError, code refused or failed
+  host -> recorder : captureFailed(code, the error's message)
+  recorder -> recorder : Add one CAP line: the code and the error as quoted text (L2-178 AC14)
+  host -> host : showModal()
+  host -> panel : Status "The browser didn’t share the screen, so no capture was kept. The ride carries on."
+end
+panel --> person : Show the status in the dialog
+note over panel, recorder : The ride, the bike and the recording carry on throughout (L2-178 AC14)
+note over panel, host : Without the Screen Capture API, canCapture is false and Capture screen is off (L2-178 AC14)
+@enduml

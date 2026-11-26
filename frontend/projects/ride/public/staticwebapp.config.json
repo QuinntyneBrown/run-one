@@ -1,0 +1,54 @@
+{
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": [
+      "/courses/*",
+      "/fonts/*",
+      "/icons/*",
+      "/machines/*",
+      "/music/*",
+      "/riders/*",
+      "/*.{js,css,json,webmanifest,svg,png,jpg,ico,woff2,ogg,glb,wasm,map,txt}"
+    ]
+  },
+  "routes": [
+    {
+      "route": "/ngsw-worker.js",
+      "headers": {
+        "Cache-Control": "no-cache",
+        "Content-Security-Policy": "default-src 'self'; connect-src 'self' https://www.youtube.com https://i.ytimg.com; object-src 'none'; base-uri 'self'"
+      }
+    },
+    {
+      "route": "/safety-worker.js",
+      "headers": {
+        "Cache-Control": "no-cache",
+        "Content-Security-Policy": "default-src 'self'; connect-src 'self' https://www.youtube.com https://i.ytimg.com; object-src 'none'; base-uri 'self'"
+      }
+    },
+    {
+      "route": "/worker-basic.min.js",
+      "headers": {
+        "Cache-Control": "no-cache",
+        "Content-Security-Policy": "default-src 'self'; connect-src 'self' https://www.youtube.com https://i.ytimg.com; object-src 'none'; base-uri 'self'"
+      }
+    },
+    {
+      "route": "/*.{js,css}",
+      "headers": { "Cache-Control": "public, max-age=31536000, immutable" }
+    }
+  ],
+  "globalHeaders": {
+    "Content-Security-Policy": "default-src 'self'; script-src 'self' https://www.youtube.com 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self'; media-src 'self'; img-src 'self' https://i.ytimg.com blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src https://www.youtube-nocookie.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Strict-Transport-Security": "max-age=31536000",
+    "Cache-Control": "no-cache"
+  },
+  "mimeTypes": {
+    ".webmanifest": "application/manifest+json",
+    ".glb": "model/gltf-binary",
+    ".ogg": "audio/ogg",
+    ".wasm": "application/wasm"
+  }
+}

@@ -1,0 +1,60 @@
+@startuml
+title UML sequence behaviour — Hold the course, and hide the tab
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRideStore" as store
+  participant "CourseSceneHost" as host
+end box
+box "Frontend — Ride app (world library)" #ECFDF3
+  participant "CourseScene" as scene
+  participant "FrameScheduler" as sched
+  participant "SceneDriver" as driver
+  participant "ThreeCourseRenderer" as renderer
+  participant "Course" as course
+end box
+box "Browser — Chrome or Edge" #F2F4F7
+  participant "Display and GPU" as gpu
+end box
+
+== The ride is held (L2-174 AC5) ==
+rider -> store : Press Pause, or the bike stops answering
+store -> host : running = false
+host -> scene : setInput('running', false)
+scene -> sched : Stop the loop
+scene -> driver : One frame for the changed input; time does not move
+driver -> renderer : draw(same time)
+renderer -> gpu : The rider at the metre the clock stopped at
+rider -> store : Press Resume, or the bike is back
+store -> host : running = true
+scene -> sched : startLoop()
+note over driver : The clock resumes from its second,\nso the rider carries on from the same metre
+== The tab is hidden (L2-174 AC9) ==
+gpu -> sched : visibilitychange, document.hidden
+sched -> sched : cancelAnimationFrame
+gpu -> scene : visibilitychange
+scene -> scene : visible = false: no frame, not even for a new second
+note over store : The ride clock runs on (L2-133)
+gpu -> scene : visibilitychange, tab shows
+scene -> renderer : pauseBudget()
+scene -> sched : measurePeriod()
+sched --> scene : The display's frame period
+scene -> renderer : setFramePeriod(period)
+scene -> driver : frame(now, elapsed = the clock's second now)
+driver -> driver : Clamp time up to elapsed
+driver -> renderer : draw(time)
+renderer -> gpu : The rider where the clock puts them (L2-133 AC2)
+@enduml

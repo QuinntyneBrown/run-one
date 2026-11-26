@@ -1,0 +1,50 @@
+@startuml
+title UML sequence behaviour — Lose the bike
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+  participant "ClassRideStore" as store
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "ClassLost" as lost
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "WebBluetoothBikeConnection" as conn
+  participant "RideClock" as clock
+end box
+box "Frontend — Ride app (video library)" #ECFDF3
+  participant "YouTubeVideoPlayer" as player
+end box
+box "Device — Smart bike" #F2F4F7
+  participant "Smart bike" as bike
+end box
+bike -> conn : gattserverdisconnected, or a call fails
+conn -> conn : ble = disconnected; schedule a retry in 3 s (L2-017 AC1)
+conn --> store : bikeLost becomes true
+store --> page : Signal changes
+page -> lost : Render the alert
+lost --> rider : "Lost the bike" and "The video is paused. Pedal to wake the bike, then reconnect." (L2-092 AC1)
+page --> rider : "Resume" disabled, stepper disabled, Leave active (L2-092 AC2)
+store -> store : followBike() on the next TICKER beat: pausedByBike = true
+alt the rider had not paused
+  store -> clock : pause()
+  store -> player : pause()
+else the rider had already paused
+  note over store, clock : The clock and the video are already held
+end
+note over clock : No new second is published: the plan holds and no plan level is sent
+@enduml

@@ -1,0 +1,63 @@
+@startuml
+title UML sequence behaviour — Follow the plan
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRideStore" as store
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "ClassResist" as resist
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "WorkoutEngine" as engine
+  participant "ResistanceController" as controller
+  participant "WebBluetoothBikeConnection" as conn
+  participant "BikeTelemetry" as telemetry
+end box
+box "Device — Smart bike" #F2F4F7
+  participant "Smart bike" as bike
+end box
+rider -> store : Starts the class
+store -> engine : follow(plan) as the ride clock starts
+engine -> controller : applyPlanLevel(first segment's level) (L2-027 AC1)
+loop each tick of the running ride clock
+  engine -> engine : planStateAt(plan, elapsedMs)
+  opt a new segment has started
+    engine -> controller : applyPlanLevel(segment.level) within 500 ms (L2-027 AC2)
+    controller -> controller : Clamp to 1 to 32; target = level, source = plan (L2-025 AC2)
+    controller -> conn : setResistance(level)
+    alt Echelon
+      conn -> bike : Write F0 B1 01 0C AE for level 12, with response (L2-025 AC1)
+    else FTMS with control
+      conn -> bike : Write Set Target Resistance Level, mapped by L2-014 AC4 (L2-025 AC3)
+    end
+    bike --> conn : Acknowledge the write
+    conn --> controller : Resolved
+  end
+end
+bike -> telemetry : D2 frame with the resistance the bike holds
+telemetry --> store : resistance signal changes
+store --> resist : level input
+resist --> rider : "6" and "of 32" within one second; "—" before any report (L2-026)
+opt the ride is paused
+  engine -> engine : No tick, no segment change, no command (L2-027 AC3)
+end
+opt the bike reconnects mid-segment
+  conn -> bike : Write the kept target first (L2-017 AC4)
+  store -> engine : resend()
+  engine -> controller : applyPlanLevel(current segment's level) (L2-027 AC4)
+end
+@enduml

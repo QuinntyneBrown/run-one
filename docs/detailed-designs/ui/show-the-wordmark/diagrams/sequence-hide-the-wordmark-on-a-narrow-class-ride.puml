@@ -1,0 +1,43 @@
+@startuml
+title UML sequence behaviour — Hide the wordmark on a narrow Class Ride
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "ClassHeader" as hdr
+  participant "Lockup" as lockup
+end box
+box "Device — Browser" #F2F4F7
+  participant "Viewport" as viewport
+end box
+rider -> page : Start the class; Class Ride opens
+page -> hdr : Render wz-class-header
+hdr -> lockup : Render wz-lockup, size sm, markOnlyWhenNarrow
+lockup -> viewport : Evaluate max-width: 23.99rem on .lockup~--mark-narrow .wordmark
+alt viewport 384 px wide or more
+  viewport --> lockup : No match
+  lockup --> rider : The mark and TELO RIDE 1 at 20 px (L2-172 AC3)
+else viewport below 384 px
+  viewport --> lockup : Match: the wordmark is display none
+  lockup --> rider : The mark alone; the header does not scroll sideways (L2-172 AC3)
+  lockup --> rider : The image keeps the name "Telo Ride 1" for a screen reader (L2-172 AC1)
+end
+rider -> page : Finish or leave; another screen opens
+page -> lockup : That screen renders wz-lockup at size md
+lockup --> rider : The wordmark shows at every width (L2-172 AC3)
+@enduml

@@ -1,0 +1,55 @@
+@startuml
+title UML sequence behaviour — Finish the class
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRideStore" as store
+  participant "FinishedRideHolder" as holder
+  participant "Angular Router" as router
+  participant "ClassDonePage" as done
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "RideTicker" as ticker
+  participant "RideClock" as clock
+  participant "RideTotals, EffortTotals, OnTargetCounter" as totals
+  participant "RideRecordStore" as record
+  participant "BikeConnection" as conn
+end box
+box "Frontend — Ride app (video library)" #ECFDF3
+  participant "YouTubeVideoPlayer" as player
+end box
+box "Device — Browser" #F2F4F7
+  database "localStorage" as ls
+end box
+ticker -> store : Tick: second 1800, the plan's length
+store -> store : Count the last running second
+store -> clock : pause() at 20:00 (L2-093 AC2)
+store -> ticker : stop()
+store -> player : pause()
+store -> totals : Read runningSeconds, outputKj, watts() and percent()
+totals --> store : The ride's running totals
+store -> record : RIDE_RECORD.add(output rounded to a whole kJ) (L2-168)
+record -> ls : Write telo-ride.record: rides, best output and last output
+ls --> record : Written, or refused
+record --> store : RecordOutcome: previousBestKj and saved
+store -> holder : FINISHED_RIDE.set(ClassResult)
+store -> conn : forgetTarget(): no resistance command follows the ride (L2-093 AC3)
+store -> router : navigateByUrl("/done")
+router -> holder : classDoneGuard peeks: a result is held
+router -> store : Destroy Class Ride: timers, listeners and player released (L2-093 AC3)
+router -> done : Activate /done
+done --> rider : Class Done shows the result (L2-078)
+@enduml

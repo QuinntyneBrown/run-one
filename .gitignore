@@ -1,0 +1,18 @@
+# Generated caches
+.cache/
+
+# Python caches (skill scripts)
+__pycache__/
+
+# Node
+node_modules/
+
+# macOS
+.DS_Store
+
+# Video build intermediates (docs/videos/README.md)
+docs/videos/**/narration.wav
+docs/videos/**/*.partial.mp4
+
+# Worktrees of parallel Claude Code sessions
+.claude/worktrees/

@@ -1,0 +1,71 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Play the music
+
+interface RideMusic {
+  +on: Signal<boolean>
+  +available: Signal<boolean>
+  +toggle(): void
+  +play(): void
+  +pause(): void
+  +release(): void
+}
+
+class BrowserRideMusic {
+  -isOn: WritableSignal<boolean>
+  -isAvailable: WritableSignal<boolean>
+  -audio: HTMLAudioElement | null
+  +on: Signal<boolean>
+  +available: Signal<boolean>
+  +toggle(): void
+  +play(): void
+  +pause(): void
+  +release(): void
+  -read(): boolean
+  -keep(on: boolean): void
+}
+
+class "browser-ride-music.ts" as consts <<constants>> {
+  +RIDE_MUSIC_PATH = "music/beautiful-boom-bap.mp3"
+  +RIDE_MUSIC_KEY = "telo-ride.music"
+}
+
+class ClassRideStore <<store>> {
+  +way: RideWith
+  +running: Signal<boolean>
+  +musicOn: Signal<boolean>
+  +musicAvailable: Signal<boolean>
+  +toggleMusic(): void
+}
+
+class ClassCourse <<component>> {
+  +musicOn: InputSignal<boolean>
+  +musicAvailable: InputSignal<boolean>
+  +musicToggle: Output<void>
+}
+
+class HTMLAudioElement <<browser>> {
+  +loop: boolean
+  +play(): Promise<void>
+  +pause(): void
+  +load(): void
+}
+
+BrowserRideMusic ..|> RideMusic
+BrowserRideMusic ..> consts : reads
+BrowserRideMusic "1" o-- "0..1" HTMLAudioElement : makes on the first play
+ClassRideStore --> RideMusic : RIDE_MUSIC
+ClassRideStore ..> ClassCourse : musicOn, musicAvailable (through the page)
+ClassCourse ..> ClassRideStore : musicToggle (through the page)
+@enduml

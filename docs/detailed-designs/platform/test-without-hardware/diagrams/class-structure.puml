@@ -1,0 +1,89 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Test without hardware
+
+class "test" as Test <<fixture>> {
+  +bluetooth: FakeBluetooth
+  +youtube: YouTubeFixture
+  +wakeLock: WakeLockFixture
+  +api: ApiFixture
+  +guard: void <<auto>>
+}
+
+class FakeBluetooth <<fixture>> {
+  +{static} install(page: Page): Promise<FakeBluetooth>
+  +offer(bike: FakeBike): Promise<void>
+  +remember(bike: FakeBike): Promise<void>
+  +notify(characteristic: string, bytes: number[]): Promise<void>
+  +writes(): RecordedWrite[]
+  +requests(): RecordedRequest[]
+  +unexpected(): string[]
+  +drop(): Promise<void>
+  +adapterOff(): Promise<void>
+  +cancelChooser(): Promise<void>
+  +remove(): Promise<void>
+  +servePlainHttp(): Promise<void>
+}
+
+class FakeBike <<type>> {
+  +name: string
+  +services: Record<string, string[]>
+}
+
+class RecordedWrite <<type>> {
+  +characteristic: string
+  +hex: string
+  +withResponse: boolean
+}
+
+class YouTubeFixture <<fixture>> {
+  +{static} answers(url: URL): boolean
+  +block(): void
+  +players(): Promise<FakePlayer[]>
+  +fail(code: number): Promise<void>
+}
+
+class ApiFixture <<fixture>> {
+  +answer(method, path, reply): void
+  +unanswered(): string[]
+}
+
+class "playwright.config.ts" as Config <<config>> {
+  projects: chromium, development
+  use: devices["Desktop Chrome"]
+  retries: 0
+  testMatch: **/*.spec.ts
+}
+
+class "Page object" as PageObject <<page object>> {
+  +open(): Promise<void>
+  locators by role and BEM class
+}
+
+interface MonotonicTime {
+  +now(): number
+}
+
+interface Ticker {
+  +seconds: Observable<number>
+}
+
+Test *-- FakeBluetooth
+Test *-- YouTubeFixture
+Test *-- ApiFixture
+FakeBluetooth ..> FakeBike : offers
+FakeBluetooth ..> RecordedWrite : records
+Config ..> Test : runs specs that import
+PageObject ..> Test : used by specs of
+@enduml

@@ -1,0 +1,43 @@
+@startuml
+title UML sequence behaviour — Open an unknown address
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "External — Static host" #FFF4E5
+  participant "Static host" as host
+end box
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "Router" as router
+  participant "NotFoundPage" as page
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "ScreenHeader" as hdr
+  participant "FullscreenToggle" as toggle
+end box
+rider -> host : GET /no-such-screen
+host --> rider : index.html, the fallback for every path
+rider -> router : App boots at /no-such-screen
+router -> router : Match /connect, /, /ride, /done: none
+router -> page : Load the ** route's chunk and render (L2-145 AC1)
+page -> hdr : Render wz-screen-header
+hdr --> rider : The wordmark, named "Telo Ride 1" (L2-145 AC1)
+opt the Fullscreen API is available
+  page -> toggle : Project into the header's end slot
+  toggle --> rider : "Full screen" (L2-145 AC1)
+end
+page --> rider : h1 "This page doesn’t exist." (L2-145 AC1)
+page --> rider : "The link may be old, or the address has a typo. Your rides are safe." (L2-145 AC1)
+page --> rider : Link "Back to the class" (L2-145 AC1)
+@enduml

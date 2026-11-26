@@ -1,0 +1,53 @@
+@startuml
+title UML sequence behaviour — Keep packets out of the console
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "WebBluetoothBikeConnection" as conn
+  participant "BikeTelemetry" as telemetry
+  participant "EchelonFrameDecoder" as decoder
+end box
+box "Device — Browser" #F2F4F7
+  participant "navigator.bluetooth" as ble
+  participant "console" as console
+end box
+box "Device — Smart bike" #F2F4F7
+  participant "Bike" as bike
+end box
+rider -> page : Pedal during the class
+loop each notification, about once a second
+  bike -> ble : Notify a frame
+  ble -> conn : characteristicvaluechanged
+  conn -> telemetry : frames emits the bytes
+  telemetry -> decoder : decode(bytes, at)
+  alt well-formed frame
+    decoder --> telemetry : TelemetrySample
+    telemetry --> page : Readout signals change
+  else malformed frame
+    decoder --> telemetry : null
+    telemetry -> telemetry : Ignore the frame
+  end
+end
+loop each keepalive and each target resistance
+  conn -> ble : writeValue(command)
+  ble -> bike : Write
+end
+note over conn, console : No step above writes to the console, with the diagnostic recording off or on (L2-115 AC2)
+page --> rider : Show power, cadence and resistance
+@enduml

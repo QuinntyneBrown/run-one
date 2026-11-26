@@ -1,0 +1,53 @@
+@startuml
+title UML sequence behaviour — Change resistance by hand
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "ClassResist" as resist
+end box
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRideStore" as store
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "ResistanceController" as controller
+  participant "WorkoutEngine" as engine
+  participant "WebBluetoothBikeConnection" as conn
+end box
+box "Device — Smart bike" #F2F4F7
+  participant "Smart bike" as bike
+end box
+alt bike connected, ride running or paused
+  rider -> resist : Presses "Raise resistance" (L2-028 AC1, AC4)
+  resist -> store : raise output
+  store -> controller : nudge(+1)
+  controller -> controller : target + 1, clamped to 1 to 32; source = manual (L2-028 AC1)
+  controller -> conn : setResistance(level)
+  conn -> bike : Write the set-resistance command, with response (L2-025)
+  bike --> conn : Acknowledge the write
+  conn --> controller : Resolved
+  bike -> conn : D2 frame with the resistance it now holds
+  resist --> rider : Readout shows the bike's resistance; the target stays as requested (L2-026 AC1)
+else bike lost
+  store --> resist : disabled = true, since canControl is false
+  resist --> rider : Both buttons are disabled (L2-028 AC3)
+end
+opt the next segment starts
+  engine -> controller : applyPlanLevel(segment.level)
+  controller -> controller : target = the plan's level; source = plan (L2-028 AC2)
+  controller -> conn : setResistance(level)
+  conn -> bike : Write the set-resistance command, with response
+end
+@enduml

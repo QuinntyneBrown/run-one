@@ -1,0 +1,46 @@
+@startuml
+title UML sequence behaviour — Ignore a malformed frame
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "WebBluetoothBikeConnection" as conn
+  participant "BikeTelemetry" as telemetry
+  participant "EchelonFrameDecoder" as decoder
+end box
+box "Device — Browser" #F2F4F7
+  participant "navigator.bluetooth" as ble
+end box
+box "Device — Smart bike" #F2F4F7
+  participant "Bike" as bike
+end box
+rider -> page : Pedal during the class
+bike -> ble : Notify a frame
+ble -> conn : characteristicvaluechanged
+conn -> telemetry : frames emits the bytes
+telemetry -> decoder : decode(bytes, at)
+alt well-formed frame
+  decoder --> telemetry : TelemetrySample
+  telemetry -> telemetry : Update cadence or resistance
+  telemetry --> page : Readout signals change
+else under 4 bytes, wrong marker, unknown type or short workout frame
+  decoder --> telemetry : null (L2-020 AC3)
+  telemetry -> telemetry : Leave every readout and the output unchanged (L2-129 AC4)
+end
+page --> rider : Show the readouts
+@enduml

@@ -1,0 +1,80 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Meet performance budgets
+
+class "angular.json (ride, production)" as AngularJson <<config>> {
+  initial: warn 304 kB, error 310 kB, raw
+  anyComponentStyle: warn 6 kB, error 10 kB
+  outputHashing: all
+}
+
+class "bundle-size.mjs" as BundleSize <<script, new>> {
+  limit: 300 KB gzipped
+  +initialFiles(indexHtml): string[]
+  +gzippedSize(file): number
+  exits non-zero over the limit
+}
+
+class "verify.mjs" as Verify <<script>> {
+  step: production build and budget
+  step: gzipped bundle size
+}
+
+class "ci.yml (build job)" as Ci <<config>> {
+  step: npm run build
+  step: bundle-size.mjs
+}
+
+class "the-class-vitals.mjs" as Vitals <<script, new>> {
+  LCP at most 2.5 s
+  INP under 200 ms
+  runs when a person asks
+}
+
+class "class-ride-frames.mjs" as Frames <<script, new>> {
+  no frame over 100 ms
+  runs when a person asks
+}
+
+class "app.routes.ts" as AppRoutes <<routes>> {
+  loadChildren: ride.routes
+}
+
+class "ride.routes.ts" as RideRoutes <<routes>> {
+  connect: loadComponent
+  empty path: loadComponent
+  ride: loadChildren
+  done: loadComponent
+  wildcard: loadComponent
+}
+
+class "provideClassVideo()" as ProvideVideo <<provider>> {
+  VIDEO_PLAYER_FACTORY: import('@telo/video')
+}
+
+interface VideoPlayerFactory {
+  (): Promise<VideoPlayer>
+}
+
+Ci ..> AngularJson : build fails on
+Ci ..> BundleSize : runs
+Verify ..> AngularJson : build fails on
+Verify ..> BundleSize : runs
+BundleSize ..> AngularJson : reads the build output of
+AppRoutes --> RideRoutes : lazy
+RideRoutes ..> ProvideVideo : on The Class and Class Ride
+ProvideVideo ..> VideoPlayerFactory : binds
+Vitals ..> RideRoutes : measures The Class
+Frames ..> RideRoutes : measures Class Ride
+@enduml

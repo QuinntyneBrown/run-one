@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Count down to the start
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System(telo, "Telo Ride 1", "One class, on the rider's own bike")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Ext(youtube, "YouTube", "Privacy-enhanced player for the class video")
+
+Rel(rider, telo, "Watches the countdown and starts pedalling in")
+Rel(telo, bike, "Sends the warm-up's target resistance before the countdown to", "Bluetooth LE")
+Rel(telo, youtube, "Parks the class video at 0:03 and plays it on Go! through", "IFrame Player API")
+@enduml

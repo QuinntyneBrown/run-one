@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Score on target
+
+Container_Boundary(ride, "ride application") {
+  Component(rideStore, "ClassRideStore", "Page-scoped store", "Counts each running second; reads the share at the finish")
+  Component(view, "classDoneView", "Pure helper", "Formats the share as the On target fact")
+}
+Container_Boundary(domain, "domain library") {
+  Component(counter, "OnTargetCounter", "Engine service", "On-target seconds and aimed seconds; the share")
+  Component(power, "PowerModel", "Pure helper", "Target power and the within-10 % test")
+  Component(plan, "planStateAt", "Pure helper", "The segment and its target power at a clock time")
+  Component(engine, "WorkoutEngine", "Engine service", "The plan's state on the ride clock")
+  Component(telemetry, "BikeTelemetry", "Engine service", "The rider's live power")
+  Component(ticker, "RideTicker", "Engine service", "One tick for each running second")
+}
+Container_Boundary(api, "api library") {
+  Component(result, "ClassResult", "Type", "Carries onTargetPercent to Class Done")
+}
+
+Rel(ticker, rideStore, "Reports each running second to")
+Rel(rideStore, engine, "Reads the segment's target power from")
+Rel(engine, plan, "Derives its state with")
+Rel(plan, power, "Computes target power with")
+Rel(rideStore, telemetry, "Reads the rider's power from")
+Rel(rideStore, counter, "Counts the second in; reads percent from")
+Rel(counter, power, "Tests on target with")
+Rel(rideStore, result, "Fills onTargetPercent of")
+Rel(view, result, "Reads")
+@enduml

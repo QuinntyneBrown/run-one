@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Read bike telemetry
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The four screens, Web Bluetooth, the protocol and the engine")
+}
+
+Rel(rider, app, "Reads power, cadence and resistance on Class Ride")
+Rel(bike, app, "Notifies D1 and D2 frames, or Indoor Bike Data 0x2AD2", "Web Bluetooth GATT")
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Check bike and browser support
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The four screens, Web Bluetooth, the protocol and the engine")
+}
+
+Rel(rider, app, "Reads the Works with list, the alert or the notice")
+Rel(host, app, "Delivers over HTTPS with Strict-Transport-Security", "HTTPS")
+Rel(app, bike, "Requests nothing while the browser is blocked", "Web Bluetooth")
+@enduml

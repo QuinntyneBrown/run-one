@@ -1,0 +1,256 @@
+{
+  "project": "Telo Run 1",
+  "source": "Magic Patterns OS vnjsCrjBAfcZGnW9rHMoch, prototype “Telo Run 1” pgrYab933NWX1NZCj29RWU",
+  "required_states": {
+    "page": [
+      "default",
+      "loading",
+      "empty",
+      "error"
+    ],
+    "dialog": [
+      "default",
+      "busy",
+      "invalid"
+    ],
+    "notification": [
+      "info",
+      "success",
+      "warning",
+      "danger"
+    ]
+  },
+  "screens": [
+    {
+      "id": "connect-treadmill",
+      "kind": "page",
+      "title": "Connect Treadmill",
+      "route": "/connect",
+      "requirements": [
+        "L2-007",
+        "L2-008",
+        "L2-009",
+        "L2-011",
+        "L2-012",
+        "L2-013",
+        "L2-014",
+        "L2-018",
+        "L2-178"
+      ],
+      "states": [
+        "default",
+        "searching",
+        "pairing",
+        "paired",
+        "bluetooth-off",
+        "unsupported-browser",
+        "needs-https",
+        "chooser-blocked",
+        "chooser-failed",
+        "recording"
+      ],
+      "not_applicable": {
+        "loading": "‘searching’ is the loading state: the card spins while the browser’s list of treadmills is open.",
+        "empty": "The supported treadmills list is fixed, and a search that finds nothing is the browser’s own chooser.",
+        "error": "The failures are their own states: bluetooth-off, unsupported-browser, needs-https, chooser-blocked and chooser-failed."
+      }
+    },
+    {
+      "id": "the-class",
+      "kind": "page",
+      "title": "The Class",
+      "route": "/",
+      "requirements": [
+        "L2-008",
+        "L2-009",
+        "L2-010",
+        "L2-019",
+        "L2-080",
+        "L2-084",
+        "L2-144",
+        "L2-173",
+        "L2-178"
+      ],
+      "states": [
+        "default",
+        "returning",
+        "no-treadmill",
+        "ibiza",
+        "video-unavailable",
+        "cannot-draw",
+        "needs-chromium",
+        "link-copied",
+        "needs-https",
+        "cannot-load",
+        "recording"
+      ],
+      "not_applicable": {
+        "loading": "Telo Run 1 has one class, bundled with the app; nothing loads before the page shows. The video player fills its box when YouTube answers.",
+        "empty": "There is always the one class. A runner with no runs yet is the default state, which simply has no stats.",
+        "error": "The failures are their own states: no-treadmill, video-unavailable, cannot-draw, needs-chromium, needs-https and cannot-load."
+      }
+    },
+    {
+      "id": "ibiza-flyover",
+      "kind": "page",
+      "title": "Ibiza Flyover",
+      "route": "/run",
+      "requirements": [
+        "L2-175",
+        "L2-178",
+        "L2-179"
+      ],
+      "states": [
+        "default",
+        "loading",
+        "landed",
+        "treadmill-lost",
+        "recording"
+      ],
+      "not_applicable": {
+        "empty": "The flyover always has the course’s name and the treadmill; there is nothing to be empty of.",
+        "error": "Its one failure is the lost treadmill (treadmill-lost). A course that cannot be drawn shows no error here: Class Run opens on the countdown instead (L2-179 AC8)."
+      }
+    },
+    {
+      "id": "class-run",
+      "kind": "page",
+      "title": "Class Run",
+      "route": "/run",
+      "requirements": [
+        "L2-014",
+        "L2-023",
+        "L2-026",
+        "L2-027",
+        "L2-028",
+        "L2-087",
+        "L2-088",
+        "L2-089",
+        "L2-091",
+        "L2-092",
+        "L2-093",
+        "L2-135",
+        "L2-173",
+        "L2-174",
+        "L2-175",
+        "L2-178",
+        "L2-180",
+        "L2-181",
+        "L2-182",
+        "L2-183",
+        "L2-185",
+        "L2-186"
+      ],
+      "states": [
+        "default",
+        "intensity",
+        "countdown",
+        "paused",
+        "ibiza",
+        "ibiza-intensity",
+        "ibiza-sound",
+        "ibiza-youtube",
+        "ibiza-youtube-class",
+        "ibiza-youtube-audio",
+        "ibiza-youtube-unavailable",
+        "countdown-ibiza",
+        "go-ibiza",
+        "ibiza-loading",
+        "ibiza-unavailable",
+        "ibiza-music-off",
+        "ibiza-music-unavailable",
+        "paused-ibiza",
+        "off-target",
+        "video-unavailable",
+        "by-hand",
+        "video-unavailable-by-hand",
+        "disconnected",
+        "disconnected-ibiza",
+        "countdown-disconnected",
+        "finish",
+        "finish-ibiza",
+        "walking-off",
+        "walking-off-ibiza",
+        "finish-by-hand",
+        "walking-off-by-hand",
+        "recording"
+      ],
+      "not_applicable": {
+        "loading": "The run itself never loads: it starts from The Class with the treadmill connected and the plan in memory. In Ibiza the course loads in its box while the run runs, which is the state ibiza-loading.",
+        "empty": "A run always has its plan, its clock and the treadmill’s readings.",
+        "error": "A run has three failures, each its own state: the lost treadmill (disconnected), the video that cannot play (video-unavailable) and the treadmill that gives no control (by-hand)."
+      }
+    },
+    {
+      "id": "class-done",
+      "kind": "page",
+      "title": "Class Done",
+      "route": "/done",
+      "requirements": [
+        "L2-077",
+        "L2-078",
+        "L2-079",
+        "L2-184",
+        "L2-178"
+      ],
+      "states": [
+        "default",
+        "first",
+        "not-best",
+        "efforts-none",
+        "not-saved",
+        "intensity",
+        "intensity-kept",
+        "recording"
+      ],
+      "not_applicable": {
+        "loading": "The result is computed on the device when the class ends; the page has it before it opens.",
+        "empty": "Class Done only opens after a run, so it always has an distance and eight sprints.",
+        "error": "Telo Run 1 saves the run on the device and sends it nowhere, so there is no failure to show."
+      }
+    },
+    {
+      "id": "not-found",
+      "kind": "page",
+      "title": "Page not found",
+      "route": "/**",
+      "requirements": [
+        "L2-145"
+      ],
+      "states": [
+        "default"
+      ],
+      "not_applicable": {
+        "loading": "A static page; nothing loads.",
+        "empty": "The page is itself the empty answer to an address with no screen.",
+        "error": "The page is itself the error."
+      }
+    },
+    {
+      "id": "diagnostic-recording",
+      "kind": "dialog",
+      "title": "Diagnostic recording",
+      "route": "?diagnose",
+      "opens_from": "class-run",
+      "requirements": [
+        "L2-178"
+      ],
+      "states": [
+        "default",
+        "note-ready",
+        "note-added",
+        "capturing",
+        "capture-kept",
+        "capture-refused",
+        "capture-unsupported",
+        "saved",
+        "save-failed",
+        "limit-reached"
+      ],
+      "not_applicable": {
+        "busy": "‘capturing’ is the busy state: the dialog is closed while the browser asks to share the tab, and the recording mark reads “Capturing…”.",
+        "invalid": "The note has no invalid value: an empty field turns Add note off (default), text turns it on (note-ready), and the field takes no more than 200 characters."
+      }
+    }
+  ]
+}

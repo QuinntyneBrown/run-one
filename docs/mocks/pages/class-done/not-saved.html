@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Class Done · not-saved — Telo Run 1 mocks</title>
+<meta name="mock:kind" content="page">
+<meta name="mock:screen" content="class-done">
+<meta name="mock:state" content="not-saved">
+<meta name="mock:requirements" content="L2-077 L2-078 L2-079 L2-168">
+<meta name="description" content="A run whose record could not be written (storage full or blocked): Class Done shows the result as always, and a notice under the facts says the run could not be saved on this device.">
+<link rel="stylesheet" href="../../../design-system/tokens/tokens.css">
+<link rel="stylesheet" href="../../../design-system/assets/components.css">
+<link rel="stylesheet" href="../../assets/mock.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="app class-done">
+  <header class="class-header">
+    <span class="lockup" role="img" aria-label="Telo Run 1"><svg class="logo-mark" width="26" height="26" viewBox="0 0 48 48" aria-hidden="true"><path class="logo-mark__ring" d="M37.79 21.57 A14 14 0 1 1 26.43 10.21"/><path class="logo-mark__crank" d="M24 24 L38 10"/><circle class="logo-mark__hub" cx="24" cy="24" r="4.6"/></svg><span class="wordmark">TELO<span class="wordmark__product">Run 1</span></span></span>
+    <span class="class-done__class">20 Minute HIIT</span>
+    <button class="icon-btn class-header__end" type="button" aria-label="Full screen"><svg class="icon icon--md" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg></button>
+  </header>
+
+  <div class="app__scroll">
+    <main id="main" class="class-done__body">
+      <section class="class-done__score" aria-labelledby="verdict">
+        <h1 class="class-done__verdict class-done__verdict--best" id="verdict">New best distance</h1>
+        <p class="class-done__output class-done__output--best"><span class="class-done__number">3.36</span> <span class="class-done__unit">km</span></p>
+        <dl class="class-done__facts">
+          <div class="class-done__fact"><dt class="class-done__fact-label">Time</dt><dd class="class-done__fact-value">20:00</dd></div>
+          <div class="class-done__fact"><dt class="class-done__fact-label">Average pace</dt><dd class="class-done__fact-value">5:57 /km</dd></div>
+          <div class="class-done__fact"><dt class="class-done__fact-label">On stride</dt><dd class="class-done__fact-value">84%</dd></div>
+          <div class="class-done__fact"><dt class="class-done__fact-label">Previous best</dt><dd class="class-done__fact-value">3.34 km</dd></div>
+        </dl>
+        <p class="inline-message inline-message--warn class-done__notice" role="status"><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span class="inline-message__text">This run could not be saved on this device. Your result is above.</span></p>
+      </section>
+
+      <section class="class-done__efforts" aria-labelledby="efforts-title">
+        <h2 class="class-done__efforts-title" id="efforts-title">Your 8 sprints, average steps per minute</h2>
+        <ol class="class-done__chart" style="--class-done-efforts: 8">
+          <li class="class-done__effort" style="--share: 0.968; --index: 0"><span class="class-done__watts"><span class="visually-hidden">Sprint 1: </span>180<span class="visually-hidden"> spm</span></span><span class="class-done__bar"></span></li>
+          <li class="class-done__effort" style="--share: 0.984; --index: 1"><span class="class-done__watts"><span class="visually-hidden">Sprint 2: </span>183<span class="visually-hidden"> spm</span></span><span class="class-done__bar"></span></li>
+          <li class="class-done__effort" style="--share: 0.978; --index: 2"><span class="class-done__watts"><span class="visually-hidden">Sprint 3: </span>182<span class="visually-hidden"> spm</span></span><span class="class-done__bar"></span></li>
+          <li class="class-done__effort" style="--share: 0.973; --index: 3"><span class="class-done__watts"><span class="visually-hidden">Sprint 4: </span>181<span class="visually-hidden"> spm</span></span><span class="class-done__bar"></span></li>
+          <li class="class-done__effort" style="--share: 0.989; --index: 4"><span class="class-done__watts"><span class="visually-hidden">Sprint 5: </span>184<span class="visually-hidden"> spm</span></span><span class="class-done__bar"></span></li>
+          <li class="class-done__effort" style="--share: 0.978; --index: 5"><span class="class-done__watts"><span class="visually-hidden">Sprint 6: </span>182<span class="visually-hidden"> spm</span></span><span class="class-done__bar"></span></li>
+          <li class="class-done__effort" style="--share: 0.962; --index: 6"><span class="class-done__watts"><span class="visually-hidden">Sprint 7: </span>179<span class="visually-hidden"> spm</span></span><span class="class-done__bar"></span></li>
+          <li class="class-done__effort class-done__effort--peak" style="--share: 1; --index: 7"><span class="class-done__watts"><span class="visually-hidden">Sprint 8: </span>186<span class="visually-hidden"> spm, your strongest</span></span><span class="class-done__bar"></span></li>
+        </ol>
+        <p class="mock-note">The 8 bars rise in turn as the page opens: 250 ms each, 40 ms apart, from 96% height and transparent (<code>--index</code>). With reduced motion they are simply there. Each bar’s height is its steps per minute over the strongest’s (<code>--share</code>) of the room under its figure; the figures are set upright, as the design system’s chart sets them (L2-169 AC6).</p>
+      </section>
+
+      <div class="class-done__actions">
+        <a class="btn btn--primary btn--xl btn--block class-done__done" href="../the-class/returning.html">Done</a>
+      </div>
+    </main>
+  </div>
+</div>
+
+<nav class="mock-bar" aria-label="Mock navigation">
+  <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
+  <span class="mock-bar__screen">Class Done</span>
+  <ul class="mock-bar__states">
+    <li><a href="default.html">default</a></li>
+    <li><a href="first.html">first</a></li>
+    <li><a href="not-best.html">not-best</a></li>
+    <li><a href="efforts-none.html">sprints-none</a></li>
+    <li><a href="not-saved.html" aria-current="page">not-saved</a></li>
+    <li><a href="intensity.html">intensity</a></li>
+    <li><a href="intensity-kept.html">intensity-kept</a></li>
+  </ul>
+  <button type="button" data-theme-toggle aria-pressed="true">☀ Light</button>
+  <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
+</nav>
+<script src="../../assets/mock.js"></script>
+</body>
+</html>

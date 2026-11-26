@@ -1,0 +1,51 @@
+@startuml
+title UML sequence behaviour — Open as a returning rider
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "Router" as router
+  participant "rememberedBikeGuard" as guard
+  participant "TheClassPage" as page
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "RememberedBikeStore" as bikes
+  participant "FinishedRides" as record
+  participant "openingScreen" as rule
+  participant "WebBluetoothBikeConnection" as connection
+end box
+box "Device — Browser" #F2F4F7
+  database "localStorage" as storage
+end box
+rider -> router : Open the app at /
+router -> guard : canActivate for the empty path
+guard -> bikes : get()
+bikes -> storage : getItem("telo-ride.bike")
+storage --> bikes : Stored bike or nothing
+bikes --> guard : RememberedBikeRecord or null
+guard -> record : any()
+note right of record : the record in localStorage (RideRecordStore)
+record --> guard : true or false
+guard -> rule : openingScreen(bike, finished ride)
+rule --> guard : 'the-class'
+alt remembered bike
+  guard -> connection : reconnectRemembered(bike), not awaited (L2-015 AC1)
+  guard --> router : true (L2-167 AC2)
+else no remembered bike and at least one finished ride
+  guard --> router : true (L2-167 AC2)
+end
+router -> page : Load and show The Class
+page --> rider : The Class, whether or not the bike is connected (L2-167 AC2)
+@enduml

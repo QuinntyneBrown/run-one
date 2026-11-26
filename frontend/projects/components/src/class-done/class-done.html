@@ -1,0 +1,78 @@
+<div class="class-done">
+  <header class="class-done__header">
+    <wz-lockup />
+    <span class="class-done__class">{{ title() }}</span>
+    <span class="class-done__end"><ng-content select="[slot=end]" /></span>
+  </header>
+  <div class="class-done__scroll">
+    <main id="main" class="class-done__body" tabindex="-1">
+      <section class="class-done__score" aria-labelledby="class-done-title">
+        <h1
+          class="class-done__verdict"
+          [class.class-done__verdict--best]="best()"
+          id="class-done-title"
+        >
+          {{ verdict() }}
+        </h1>
+        <p class="class-done__output" [class.class-done__output--best]="best()">
+          <span class="class-done__number">{{ output() }}</span>
+          <span class="class-done__unit">kJ</span>
+        </p>
+        <dl class="class-done__facts">
+          <div class="class-done__fact">
+            <dt class="class-done__fact-label">Time</dt>
+            <dd class="class-done__fact-value">{{ time() }}</dd>
+          </div>
+          <div class="class-done__fact">
+            <dt class="class-done__fact-label">Average</dt>
+            <dd class="class-done__fact-value">{{ average() }} W</dd>
+          </div>
+          <div class="class-done__fact">
+            <dt class="class-done__fact-label">On target</dt>
+            <dd class="class-done__fact-value">{{ onTarget() }}</dd>
+          </div>
+          @if (bestFact(); as fact) {
+            <div class="class-done__fact">
+              <dt class="class-done__fact-label">{{ fact.label }}</dt>
+              <dd class="class-done__fact-value">{{ fact.value }}</dd>
+            </div>
+          }
+        </dl>
+        @if (!saved()) {
+          <wz-inline-message class="class-done__notice" tone="warn" role="status"
+            >This ride could not be saved on this device. Your result is above.</wz-inline-message
+          >
+        }
+      </section>
+      @if (efforts().length > 0) {
+        <section class="class-done__efforts" aria-labelledby="class-done-efforts-title">
+          <h2 class="class-done__efforts-title" id="class-done-efforts-title">
+            Your {{ efforts().length }} efforts, average watts
+          </h2>
+          <ol class="class-done__chart">
+            @for (effort of efforts(); track effort.number) {
+              <li
+                class="class-done__effort"
+                [class]="shareClass(effort)"
+                [class.class-done__effort--peak]="effort.strongest"
+              >
+                <span class="class-done__watts"
+                  ><span class="visually-hidden">Effort {{ effort.number }}: </span>{{ effort.watts
+                  }}<span class="visually-hidden">
+                    W{{ effort.strongest ? ', your strongest' : '' }}</span
+                  ></span
+                >
+                <span class="class-done__bar"></span>
+              </li>
+            }
+          </ol>
+        </section>
+      }
+      <!-- The intensity question, when there is one (L2-184), then Done; from lg in one row (L2-078 AC6). -->
+      <div class="class-done__end">
+        <ng-content select="[slot=question]" />
+        <div class="class-done__actions"><ng-content select="[slot=actions]" /></div>
+      </div>
+    </main>
+  </div>
+</div>

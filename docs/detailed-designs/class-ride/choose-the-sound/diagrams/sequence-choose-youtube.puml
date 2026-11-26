@@ -1,0 +1,27 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName Arial
+actor Rider
+participant "wz-class-sound" as Sound
+participant ClassRideStore as Store
+participant "RIDE_SOUND" as Choice
+participant "RIDE_MUSIC" as Music
+participant "VIDEO_PLAYER_FACTORY" as Factory
+participant "YouTube player" as Player
+
+Rider -> Sound : Sound → YouTube video
+Sound -> Store : soundChange("youtube-video")
+Store -> Choice : choose("youtube-video") (kept)
+Store -> Music : pause()
+Store -> Store : page renders the inset host
+Store -> Factory : import @telo/video, create player
+Factory --> Store : player
+Store -> Player : load(host, "xfgZRgPkoME", start = clock)
+loop each tick
+  Store -> Player : seekTo(clock) when drift > 1.5 s
+end
+Rider -> Sound : Sound → YouTube audio
+Store -> Choice : choose("youtube-audio")
+Store -> Store : inset gets --audio (same player)
+@enduml

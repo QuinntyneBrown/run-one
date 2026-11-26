@@ -1,0 +1,67 @@
+// Block class-rollout (docs/design-system/components/roll-out.html, docs/mocks/pages/class-ride/rolling-on): the card
+// lies at the foot of the video's or the course's box, under the Music button, and takes no pointer events (L2-182 AC4).
+@keyframes class-rollout-in {
+  from {
+    opacity: 0;
+    translate: 0 var(--space-3);
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+:host {
+  display: contents;
+}
+
+.class-rollout {
+  position: absolute;
+  inset-inline: var(--space-3);
+  bottom: var(--space-3);
+  z-index: 1;
+  margin-inline: auto;
+  max-width: var(--layout-text-2xl);
+  border-radius: var(--radius-2xl);
+  background: var(--color-scrim-strong);
+  padding: var(--space-3) var(--space-4);
+  color: var(--color-on-photo);
+  pointer-events: none;
+  animation: class-rollout-in var(--duration-base) var(--ease-enter) both;
+
+  @media (min-width: 40rem) {
+    padding: var(--space-4) var(--space-5);
+  }
+}
+
+.class-rollout__title {
+  font-weight: var(--font-weight-semibold);
+}
+
+.class-rollout__body {
+  margin-top: var(--space-0-5);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+  color: color-mix(in srgb, var(--color-on-photo) 72%, transparent);
+}
+
+.class-rollout__bar {
+  margin-top: var(--space-3);
+  height: var(--space-1);
+  overflow: hidden;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--color-on-photo) 18%, transparent);
+}
+
+.class-rollout__fill {
+  display: block;
+  height: 100%;
+  width: var(--value);
+  background: var(--color-on-photo);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .class-rollout {
+    animation: none;
+  }
+}

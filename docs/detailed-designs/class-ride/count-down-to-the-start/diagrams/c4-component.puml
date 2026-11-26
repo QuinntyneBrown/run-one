@@ -1,0 +1,43 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Count down to the start
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(bike, "Smart bike", "Echelon or FTMS")
+System_Ext(youtube, "YouTube", "Class video player")
+
+Container_Boundary(ride, "Ride app — ride application") {
+  Component(ridePage, "RidePage", "Angular component (designed)", "The /ride route's component; provides the ride's services")
+  Component(page, "ClassRidePage", "Angular component (changed)", "Projects the countdown into the box; header without Pause")
+  Component(store, "ClassRideStore", "Store (changed)", "Holds the ride phase; starts the clock on Go!")
+  Component(header, "rideHeader()", "Pure helper (designed)", "Which of Pause and Leave a phase shows")
+}
+Container_Boundary(components, "Ride app — components library") {
+  Component(countdownView, "wz-class-countdown", "Presentation component (designed)", "Three lights, the numeral, one line, a status for screen readers")
+  Component(box, "wz-class-video / wz-class-course", "Presentation components (changed)", "The box, with an overlay slot")
+}
+Container_Boundary(domain, "Ride app — domain library, engine/") {
+  Component(countdown, "Countdown", "Service (designed)", "Reads countdownStep() against the clock source")
+  Component(clock, "RideClock, RideTicker", "Services (changed)", "Start at the instant Go! was due")
+  Component(engine, "WorkoutEngine", "Service (exists)", "Sends the first segment's level when it follows the plan")
+  Component(resist, "ResistanceController", "Service (exists)", "Target resistance and the stepper's nudge")
+}
+Container_Boundary(video, "Ride app — video library") {
+  Component(player, "YouTubeVideoPlayer", "Service (exists)", "Loaded parked at the sync offset")
+}
+
+Rel(rider, page, "Watches the countdown on")
+Rel(ridePage, store, "Calls beginCountdown() on")
+Rel(page, store, "Reads phase and countdown from")
+Rel(page, header, "Asks for the header's buttons")
+Rel(page, box, "Projects the countdown into")
+Rel(page, countdownView, "Renders with the CountdownStep")
+Rel(store, countdown, "Starts, stops and reads")
+Rel(store, clock, "Starts on Go!")
+Rel(store, engine, "follow(plan) on creation")
+Rel(engine, resist, "applyPlanLevel(14)")
+Rel(resist, bike, "Sets the resistance of", "Web Bluetooth")
+Rel(store, player, "Loads parked; plays on Go!")
+Rel(player, youtube, "Embeds", "IFrame Player API")
+@enduml

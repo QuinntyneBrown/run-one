@@ -1,0 +1,50 @@
+@startuml
+title UML sequence behaviour — Lose the network mid-ride
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+  participant "ClassRideStore" as store
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "RideTicker" as ticker
+  participant "WorkoutEngine" as engine
+  participant "BikeConnection" as conn
+end box
+box "Frontend — Ride app (video library)" #ECFDF3
+  participant "YouTubeVideoPlayer" as player
+end box
+box "Device — Smart bike" #F2F4F7
+  participant "Smart bike" as bike
+end box
+box "External — YouTube" #FFF4E5
+  participant "YouTube" as yt
+end box
+rider -> page : Riding at 7:00
+yt ->x player : The network is lost; the stream stops
+player -> player : state = error
+player --> store : videoUnavailable becomes true
+store --> page : Signal changes
+page --> rider : "The video can’t play. The bike will still follow the class." (L2-088 AC4)
+ticker -> store : Tick: the next whole second
+store --> page : Clock and countdown update (L2-135 AC1)
+ticker -> engine : Tick at a segment boundary
+engine -> conn : The new segment's level
+conn -> bike : Write the target resistance over Bluetooth (L2-135 AC1)
+bike --> conn : Notifications continue
+conn --> page : Power, cadence and resistance update
+note over store, conn : No step of the ride waits on the player or on a request
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Restrict third parties
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System(telo, "Telo Ride 1", "One class, on the rider's own bike")
+System_Ext(youtube, "YouTube", "Privacy-enhanced player for the class video")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+
+Rel(rider, telo, "Takes the class with")
+Rel(host, telo, "Serves the files and the security headers of", "HTTPS")
+Rel(telo, youtube, "Loads the player script, the player frame and the cover image from", "HTTPS")
+@enduml

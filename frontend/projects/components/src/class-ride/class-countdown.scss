@@ -1,0 +1,120 @@
+// Block class-countdown (docs/design-system/components/countdown.html, docs/mocks/pages/class-ride/countdown): the
+// countdown lies over the whole of the video's or the course's box, under the Music button, and takes no pointer
+// events (L2-180 AC1).
+:host {
+  display: contents;
+}
+
+.class-countdown {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  background: var(--color-scrim-photo);
+}
+
+.class-countdown__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.class-countdown__lights {
+  display: flex;
+  gap: var(--space-2);
+  border-radius: var(--radius-xl);
+  background: var(--color-scrim-strong);
+  padding: var(--space-2);
+
+  @media (min-width: 40rem) {
+    gap: var(--space-3);
+    padding: var(--space-3);
+  }
+}
+
+.class-countdown__light {
+  display: block;
+  width: var(--space-6);
+  height: var(--space-6);
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--color-on-photo) 18%, transparent);
+  transition: background-color var(--duration-fast) var(--ease-out);
+
+  @media (min-width: 40rem) {
+    width: var(--space-9);
+    height: var(--space-9);
+  }
+}
+
+.class-countdown__light--on {
+  background: var(--color-heart);
+}
+
+// "Go!": all three lights and the numeral in the accent colour, so the numeral's words say it too (AC10).
+.class-countdown--go .class-countdown__light {
+  background: var(--color-volt);
+}
+
+.class-countdown__num {
+  margin: 0;
+  font: var(--text-display);
+  font-size: var(--font-size-7xl);
+  text-transform: uppercase;
+  color: var(--color-on-photo);
+  text-shadow: 0 var(--space-1) 0 var(--palette-ink);
+  animation: ride-countdown-step var(--duration-base) var(--ease-enter) both;
+
+  @media (min-width: 40rem) {
+    font-size: var(--font-size-score);
+  }
+
+  @media (min-width: 64rem) {
+    font-size: var(--font-size-score-lg);
+  }
+
+  // With reduced motion the numeral fades in and neither grows nor slides (L2-180 AC9).
+  @media (prefers-reduced-motion: reduce) {
+    animation-name: ride-countdown-fade;
+  }
+}
+
+.class-countdown--go .class-countdown__num {
+  color: var(--color-volt);
+}
+
+.class-countdown__line {
+  margin: 0;
+  border-radius: var(--radius-lg);
+  background: var(--color-scrim-strong);
+  padding: var(--space-1-5) var(--space-3);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+  color: var(--color-on-photo);
+}
+
+@keyframes ride-countdown-step {
+  from {
+    opacity: 0;
+    scale: 1.25;
+  }
+
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes ride-countdown-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

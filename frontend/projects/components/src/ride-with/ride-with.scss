@@ -1,0 +1,111 @@
+// Block ride-with (docs/design-system/assets/components.css, The Class). The chosen option is edged and tinted volt,
+// named by aria-checked and fills its mark; one that cannot be chosen is dashed and muted and says why, so colour never
+// carries either alone. Each option is 44 px or taller (L2-173 AC7).
+:host {
+  display: block;
+}
+
+.ride-with__title {
+  color: var(--color-muted);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.ride-with__options {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+
+  @media (min-width: 40rem) and (max-width: 63.99rem) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.ride-with__option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--target-comfortable);
+  border: var(--border-width-hairline) solid var(--color-line);
+  border-radius: var(--radius-lg);
+  background: none;
+  padding: var(--space-2) var(--space-3);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard);
+
+  &:hover {
+    border-color: var(--color-faint);
+  }
+
+  &:focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-focus-ring);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  &[aria-checked='true'] {
+    border-color: var(--color-volt);
+    background: color-mix(in srgb, var(--color-volt) 10%, transparent);
+  }
+
+  &[aria-disabled='true'] {
+    border-style: dashed;
+    border-color: var(--color-line);
+    cursor: not-allowed;
+  }
+}
+
+.ride-with__mark {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: var(--space-5);
+  height: var(--space-5);
+  border: var(--border-width-thick) solid var(--color-faint);
+  border-radius: var(--radius-full);
+
+  &::before {
+    content: '';
+    width: var(--space-2-5);
+    height: var(--space-2-5);
+    border-radius: var(--radius-full);
+    background: var(--color-volt-fg);
+    scale: 0;
+    transition: scale var(--duration-fast) var(--ease-standard);
+  }
+
+  [aria-checked='true'] > & {
+    border-color: var(--color-volt-fg);
+
+    &::before {
+      scale: 1;
+    }
+  }
+}
+
+.ride-with__text {
+  min-width: 0;
+}
+
+.ride-with__name {
+  display: block;
+  font-weight: var(--font-weight-semibold);
+
+  [aria-disabled='true'] & {
+    color: var(--color-muted);
+  }
+}
+
+.ride-with__detail {
+  display: block;
+  color: var(--color-muted);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+}

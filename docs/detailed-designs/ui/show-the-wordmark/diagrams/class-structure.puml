@@ -1,0 +1,68 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Show the wordmark
+
+enum LockupSize {
+  md
+  sm
+}
+class Lockup <<component>> {
+  selector: wz-lockup
+  +size: LockupSize = "md"
+  +markOnlyWhenNarrow: boolean = false
+}
+class "lockup.html" as Template <<template>> {
+  span.lockup: role="img", aria-label="Telo Ride 1"
+  svg.logo-mark: aria-hidden
+  span.wordmark: "TELO"
+  span.wordmark~__product: "Ride 1"
+}
+class "lockup.scss" as Sheet <<stylesheet>> {
+  --lockup-mark-size: 26 px, 24 px at sm
+  --lockup-wordmark-size: 24 px, 20 px at sm
+  --lockup-wordmark: ~--color-fg
+  --lockup-product: ~--color-volt-fg
+  .lockup~--mark-narrow .wordmark: display none below 24rem
+  @media (forced-colors: active): CanvasText
+}
+class ScreenHeader <<component>> {
+  selector: wz-screen-header
+  block: class-header
+  slots: default, end
+}
+class ClassHeader <<component>> {
+  selector: wz-class-header
+  +title: string
+  +mode: string
+  +elapsed: number
+  +total: number
+}
+class ConnectBikePage <<component>> {
+  header.connect~__header
+}
+class "Product name" as Names <<config>> {
+  index.html title: "Telo Ride 1"
+  route titles: "... · Telo Ride 1"
+  manifest name, short_name: "Telo Ride 1"
+  copy on every screen: "Telo Ride 1"
+}
+
+Lockup --> LockupSize
+Lockup *-- Template
+Lockup *-- Sheet
+ScreenHeader --> Lockup : size md
+ClassHeader --> Lockup : size sm, markOnlyWhenNarrow
+ConnectBikePage --> Lockup : size md
+Names ..> Lockup : same name, with the digit
+@enduml

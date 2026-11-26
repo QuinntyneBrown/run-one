@@ -1,0 +1,40 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Ride without a network
+
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Ext(youtube, "YouTube", "Privacy-enhanced player for the class video")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+ContainerDb(storage, "Browser storage", "localStorage", "The record and the remembered bike")
+
+Container_Boundary(ride, "ride application") {
+  Component(store, "ClassRideStore", "Page-scoped store", "Runs the ride with no network request; preloads Class Done")
+  Component(holder, "FinishedRideHolder", "In-memory holder, new", "Holds the ClassResult (FINISHED_RIDE)")
+  Component(done, "ClassDonePage", "Lazy route /done", "Renders from the held ClassResult")
+}
+Container_Boundary(components, "components library") {
+  Component(cvideo, "ClassVideo", "wz-class-video", "Shows the cannot-play notice")
+}
+Container_Boundary(domain, "domain library") {
+  Component(engine, "RideClock, RideTicker, WorkoutEngine and the accumulators", "engine services", "Time, plan and running totals from the device alone")
+  Component(wb, "WebBluetoothBikeConnection", "bluetooth service", "The link to the bike")
+  Component(record, "RideRecordStore", "storage service, new", "Writes the record (RIDE_RECORD)")
+}
+Container_Boundary(video, "video library") {
+  Component(yt, "YouTubeVideoPlayer", "VideoPlayer", "state becomes error when the stream is lost")
+}
+
+Rel(store, engine, "Runs")
+Rel(store, wb, "Sends levels through")
+Rel(store, yt, "Reads state; does not wait on it")
+Rel(store, cvideo, "Raises videoUnavailable for")
+Rel(store, record, "Adds the finished ride through RIDE_RECORD")
+Rel(store, holder, "Sets the ClassResult on")
+Rel(done, holder, "Reads the result from")
+Rel(store, done, "Preloads, then navigates to")
+Rel(record, storage, "Writes", "localStorage")
+Rel(wb, bike, "Reads and writes", "Web Bluetooth")
+Rel(yt, youtube, "Streams", "HTTPS")
+Rel(done, host, "Chunk fetched during the ride, not at the finish", "HTTPS")
+@enduml

@@ -1,0 +1,44 @@
+@startuml
+title UML sequence behaviour — Measure the frame period again
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+box "Frontend — Ride app (world library)" #ECFDF3
+  participant "CourseScene" as scene
+  participant "FrameScheduler" as sched
+  participant "ThreeCourseRenderer" as renderer
+  participant "FrameBudget" as budget
+  participant "SunShadow" as shadow
+end box
+box "Browser — Chrome or Edge" #F2F4F7
+  participant "Display and GPU" as gpu
+end box
+
+alt the tab shows again
+  gpu -> scene : visibilitychange, not hidden
+else the window moves to a screen of another resolution
+  gpu -> scene : change of (resolution: N dppx)
+end
+scene -> renderer : pauseBudget(): period = null
+scene -> scene : measuring = true: no frame is drawn or judged
+scene -> sched : measurePeriod()
+sched -> gpu : 31 empty frames
+gpu --> sched : Their times
+sched -> sched : estimateFramePeriod: drop the first interval and any over 100 ms;\nmedian; nearest of 30 to 240 Hz; 60 Hz with fewer than 10
+sched --> scene : period
+scene -> renderer : setFramePeriod(period)
+renderer -> budget : restart(): 90 frames afresh
+scene -> scene : measuring = false: the next frame is drawn at the clock's second
+note over budget : The step reached, and settled, are kept
+@enduml

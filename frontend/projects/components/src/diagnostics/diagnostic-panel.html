@@ -1,0 +1,73 @@
+<div class="diagnostic-panel">
+  <h2 class="diagnostic-panel__title" id="diagnostic-title">Diagnostic recording</h2>
+  <p class="diagnostic-panel__count">{{ count() }}</p>
+  <!-- Enter in the field adds the note, as Add note does. -->
+  <form class="diagnostic-panel__form" (submit)="add($event)">
+    <div class="diagnostic-panel__field">
+      <label class="diagnostic-panel__label" for="diagnostic-note"
+        >What the bike’s display reads</label
+      >
+      <input
+        class="diagnostic-panel__input"
+        id="diagnostic-note"
+        type="text"
+        autocomplete="off"
+        aria-describedby="diagnostic-note-hint"
+        [attr.maxlength]="maxLength"
+        [value]="draft()"
+        (input)="type($event)"
+      />
+      <p class="diagnostic-panel__hint" id="diagnostic-note-hint">
+        For example: bike shows 82 rpm, resistance 14
+      </p>
+    </div>
+    <div class="diagnostic-panel__actions">
+      <button wz-button variant="raised" size="lg" type="submit" [disabled]="draft().trim() === ''">
+        Add note
+      </button>
+      <button
+        wz-button
+        variant="raised"
+        size="lg"
+        type="button"
+        [attr.aria-describedby]="canCapture() ? null : 'diagnostic-capture-hint'"
+        [disabled]="!canCapture()"
+        (click)="capture.emit()"
+      >
+        Capture screen
+      </button>
+    </div>
+  </form>
+  @if (!canCapture()) {
+    <p class="diagnostic-panel__hint" id="diagnostic-capture-hint">
+      This browser can’t capture the screen. Notes and the recording still work.
+    </p>
+  }
+  <p
+    class="diagnostic-panel__status"
+    role="status"
+    [class.diagnostic-panel__status--warn]="status()?.tone === 'warn'"
+  >
+    @if (status(); as said) {
+      @if (said.tone === 'warn') {
+        <svg class="diagnostic-panel__status-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
+          <path d="M12 9v4" />
+          <path d="M12 17h.01" />
+        </svg>
+      }
+      <span>{{ said.text }}</span>
+    }
+  </p>
+  <p class="diagnostic-panel__privacy">
+    The recording holds your bike’s name and identifier and every Bluetooth message. A screen
+    capture holds whatever is on the screen. Nothing is sent anywhere: the files are saved only when
+    you press Save files.
+  </p>
+  <div class="diagnostic-panel__footer">
+    <button wz-button variant="primary" size="lg" type="button" (click)="save.emit()">
+      Save files
+    </button>
+    <button wz-button variant="quiet" size="lg" type="button" (click)="closed.emit()">Close</button>
+  </div>
+</div>

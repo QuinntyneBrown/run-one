@@ -1,0 +1,27 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Show Page not found
+
+Person(rider, "Rider", "Rides a smart bike at home")
+Container_Boundary(ride, "ride application") {
+  Component(routes, "ride.routes.ts", "Angular routes", "The ** route, always last, loads the page on demand")
+  Component(page, "NotFoundPage", "Angular component, wz-not-found-page", "The h1, the lead and Back to the class")
+  Component(opening, "rememberedBikeGuard", "CanActivateFn on /", "Connect Bike for a new rider, The Class otherwise (L2-167)")
+}
+Container_Boundary(components, "components library") {
+  Component(hdr, "ScreenHeader", "Angular component, wz-screen-header", "The wordmark and a slot at the end")
+  Component(toggle, "FullscreenToggle", "Angular component, wz-fullscreen-toggle", "Full screen")
+  Component(button, "Button", "Angular component, wz-button", "The primary link")
+}
+Container_Boundary(api, "api library") {
+  Component(contract, "Fullscreen and FULLSCREEN", "Contract and injection token", "available, active, enter(), exit()")
+}
+Rel(rider, page, "Reads, then chooses Back to the class on")
+Rel(routes, page, "Loads for an unmatched address", "loadComponent")
+Rel(page, hdr, "Renders")
+Rel(page, toggle, "Projects into the header when available")
+Rel(page, button, "Renders with routerLink /")
+Rel(page, contract, "Injects")
+Rel(button, opening, "Navigates to / through")
+@enduml

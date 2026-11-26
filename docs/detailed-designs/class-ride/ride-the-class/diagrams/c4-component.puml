@@ -1,0 +1,55 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Ride the class
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Ext(youtube, "YouTube", "Privacy-enhanced player for the class video")
+
+Container_Boundary(ride, "ride application") {
+  Component(guard, "connectedBikeGuard", "CanActivateFn", "Opens The Class when no bike is connected")
+  Component(page, "ClassRidePage", "Angular page, wz-class-ride-page", "Renders the header, the video and the bike panel")
+  Component(store, "ClassRideStore", "Page-scoped store", "Starts the ride and derives what the page shows")
+  Component(stat, "powerStat and cadenceStat", "Pure helpers", "Power against its target and cadence with its aim, in words")
+}
+Container_Boundary(components, "components library") {
+  Component(header, "ClassHeader", "wz-class-header", "Wordmark, class name and the ride clock")
+  Component(cvideo, "ClassVideo", "wz-class-video", "Cover, player frame and the cannot-play notice")
+  Component(panel, "ClassBike, ClassSegment, ClassStat, ClassResist", "wz-class-*", "The bike panel: segment card, Power, Cadence, stepper")
+}
+Container_Boundary(domain, "domain library") {
+  Component(clock, "RideClock and RideTicker", "engine services", "Monotonic ride clock and its whole-second beat")
+  Component(engine, "WorkoutEngine", "engine service", "Finds the plan's segment and sends its level")
+  Component(sync, "VideoClockSync", "engine service", "Decides when the video seeks back")
+  Component(telemetry, "BikeTelemetry", "engine service", "Cadence, resistance and power as signals")
+  Component(resist, "ResistanceController", "engine service", "Holds and sends the target resistance")
+}
+Container_Boundary(api, "api library") {
+  Component(conn, "BIKE_CONNECTION", "Contract and token", "The link to the bike")
+  Component(vp, "VIDEO_PLAYER_FACTORY", "Contract and token", "Resolves a VideoPlayer")
+}
+Container_Boundary(video, "video library") {
+  Component(yt, "YouTubeVideoPlayer", "VideoPlayer", "Embeds the privacy-enhanced player")
+}
+
+Rel(rider, page, "Opens /ride")
+Rel(guard, conn, "Reads ble")
+Rel(page, store, "Binds signals and calls actions")
+Rel(page, header, "Renders")
+Rel(page, cvideo, "Renders")
+Rel(page, panel, "Renders")
+Rel(store, stat, "Reads Power and Cadence through")
+Rel(store, clock, "Starts and reads")
+Rel(store, engine, "Follows the plan with")
+Rel(store, sync, "Checks drift with")
+Rel(store, telemetry, "Reads power and cadence from")
+Rel(store, resist, "Nudges through")
+Rel(store, vp, "Asks for a player")
+Rel(vp, yt, "Imports dynamically")
+Rel(engine, resist, "Applies each segment's level")
+Rel(resist, conn, "Sends target resistance")
+Rel(telemetry, conn, "Decodes frames from")
+Rel(conn, bike, "Reads and writes", "Web Bluetooth")
+Rel(yt, youtube, "Loads the IFrame API and the embed", "HTTPS")
+@enduml

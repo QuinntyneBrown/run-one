@@ -1,0 +1,49 @@
+@startuml
+title UML sequence behaviour — Add up output
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRideStore" as store
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "RideClock" as clock
+  participant "RideTicker" as ticker
+  participant "RideTotals" as totals
+  participant "BikeTelemetry" as telemetry
+end box
+rider -> store : Rides the class
+loop each whole second of the running ride clock
+  ticker -> clock : elapsedMs()
+  clock --> ticker : Ride time
+  ticker -> store : ticks emits the new second (L2-134 AC2)
+  store -> totals : onRunningSecond(seconds since the last tick)
+  totals -> telemetry : powerW()
+  alt power known
+    telemetry --> totals : 317 W
+    totals -> totals : outputKj grows by 317 / 1000 per second (L2-023 AC4)
+  else power unknown
+    telemetry --> totals : null
+    totals -> totals : outputKj is unchanged (L2-023 AC4)
+  end
+  totals --> store : outputKj, runningSeconds, avgPowerW
+end
+opt the ride is paused or the bike is lost
+  store -> clock : pause()
+  ticker -> ticker : No new whole second; nothing is published
+  totals -> totals : outputKj does not grow (L2-023 AC5)
+end
+store --> rider : Class Done later shows the ride's output in kJ
+@enduml

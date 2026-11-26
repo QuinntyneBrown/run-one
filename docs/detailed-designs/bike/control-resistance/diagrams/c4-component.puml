@@ -1,0 +1,39 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Control resistance
+
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+
+Container_Boundary(ride, "ride application") {
+  Component(page, "ClassRidePage", "Routed page", "Hosts the stepper and forwards its outputs")
+  Component(store, "ClassRideStore", "Page-scoped store", "Exposes level and canControl; calls raise and lower")
+}
+Container_Boundary(components, "components library") {
+  Component(resist, "ClassResist", "wz-class-resist", "Resistance readout between the two 48 px buttons")
+}
+Container_Boundary(domain, "domain library") {
+  Component(engine, "WorkoutEngine", "engine/ service", "Steps the plan and sends each segment's level")
+  Component(controller, "ResistanceController", "engine/ service", "Holds the target resistance, clamps and sends it")
+  Component(telemetry, "BikeTelemetry", "engine/ service", "The resistance the bike reports")
+  Component(conn, "WebBluetoothBikeConnection", "bluetooth/", "Keeps the last target; writes through the open link")
+  Component(echelon, "EchelonProtocol", "protocol/", "Encodes the B1 set-resistance frame")
+  Component(ftms, "FtmsProtocol", "protocol/", "Maps levels 1 to 32 and encodes op code 0x04")
+}
+Container_Boundary(api, "api library") {
+  Component(token, "BIKE_CONNECTION", "Injection token", "The BikeConnection contract: ble, setResistance()")
+}
+
+Rel(page, resist, "Binds level and disabled; listens to lower and raise")
+Rel(page, store, "Reads and calls")
+Rel(store, controller, "nudge(+1 or -1); reads canControl")
+Rel(store, telemetry, "Reads resistance")
+Rel(store, engine, "follow(plan); resend() when the bike is back")
+Rel(engine, controller, "applyPlanLevel(level)")
+Rel(controller, token, "Injects; setResistance(level), ble")
+Rel(conn, token, "Is bound to")
+Rel(conn, echelon, "Encodes Echelon commands with")
+Rel(conn, ftms, "Encodes FTMS commands with")
+Rel(conn, bike, "Writes with response", "GATT")
+Rel(bike, telemetry, "D2 frames, through the connection's frames")
+@enduml

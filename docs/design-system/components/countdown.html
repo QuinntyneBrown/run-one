@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Countdown — Telo Ride 1 design system</title>
+<meta name="description" content="The three seconds before the clock starts: three lights, a numeral, “Go!” and one line, over the video’s or the course’s box.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+<style>
+.ds-count { position: relative; width: 12rem; height: 12rem; border-radius: var(--radius-xl); overflow: hidden; background: var(--color-raised); }
+.ds-count .class-countdown__num { font-size: var(--font-size-7xl); }
+</style>
+</head>
+<body id="top">
+<a class="ds-skip" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Telo Ride 1 DS</a><button class="ds-theme-toggle" type="button" aria-pressed="true">☀ Light</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/ride-readout.html">Bike panel</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/class-done.html">Class Done</a></li>
+      <li><a href="../components/video.html">Class video</a></li>
+      <li><a href="../components/container.html">Container</a></li>
+      <li><a href="../components/countdown.html">Countdown</a></li>
+      <li><a href="../components/course.html">Course</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/device-list.html">Device list</a></li>
+      <li><a href="../components/diagnostic-panel.html">Diagnostic panel</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+      <li><a href="../components/finish-banner.html">Finish banner</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/ibiza-flyover.html">Ibiza Flyover</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/lockup.html">Lockup</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/plan-chart.html">Plan chart</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/recording-mark.html">Recording mark</a></li>
+      <li><a href="../components/number-stepper.html">Resistance stepper</a></li>
+      <li><a href="../components/roll-out.html">Roll-out</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/sidebar-nav.html">Sidebar navigation</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/stat.html">Stat</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/the-class.html">The Class</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation.html">Navigation</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+      <li><a href="../patterns/live-ride.html">The shape of a ride</a></li>
+    </ul></details>
+  </nav>
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · The shape of a ride</p>
+      <h1>Countdown</h1>
+      <p class="ds-lead">The three seconds before the clock starts: three lights, a numeral, “Go!” and one line, over the video’s or the course’s box.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">In the mocks</span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li></ul>
+    </header>
+<section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+<p>Every ride begins with the countdown (L2-180): “3, 2, 1, Go!”, a second each, drawn inside the box that holds the class video or the course, above the <a href="ride-readout.html">bike panel</a>. The clock starts at 0:00 on “Go!”.</p>
+<p>It is for one rider alone: no start grid, no other riders. Use it only at the start of a ride. It replaces the race lobby’s 3-2-1 this page documented for Telo Ride.</p>
+</section>
+
+<section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+<div class="ds-anatomy">
+<figure class="ds-anatomy__figure"><div class="ds-anatomy__target ds-anatomy__target--wide"><div class="ds-w-lg"><div class="class-course">
+<img alt="Ibiza Sunset Strip" class="photo class-course__scene" role="img" src="../../mocks/assets/images/courses/ibiza-sunset-strip.jpg"/>
+<div class="class-countdown">
+<div class="class-countdown__body">
+<div aria-hidden="true" class="class-countdown__lights"><span class="class-countdown__light class-countdown__light--on"></span><span class="class-countdown__light class-countdown__light--on"></span><span class="class-countdown__light"></span></div>
+<p aria-hidden="true" class="class-countdown__num">1</p>
+<p class="class-countdown__line">The plan sets your resistance. Just pedal.</p>
+<p class="visually-hidden" role="status">The class starts in 3 seconds</p>
+</div>
+</div>
+
+
+</div></div></div></figure>
+<ol class="ds-anatomy__list">
+<li><div><b>Scrim</b><small><code>--color-scrim-photo</code> (60% ink, the same in both themes) over the whole box, so the numeral reads on any frame of the video or the course. It takes no pointer input.</small></div></li>
+<li><div><b>Lights</b><small>Three discs, 24px (36px from 640px), on the strong scrim. “3” none lit, “2” one, “1” two; on “Go!” all three take the accent.</small></div></li>
+<li><div><b>Numeral</b><small>The display face, 72px, 88px from 640px and 120px from 1024px, in <code>--color-on-photo</code>; “Go!” in the accent. Each numeral is a fresh node, so its step animation replays.</small></div></li>
+<li><div><b>Line</b><small>“The plan sets your resistance. Just pedal.” on the strong scrim, 14px medium.</small></div></li>
+<li><div><b>Status</b><small>A visually hidden <code>role="status"</code>: “The class starts in 3 seconds”, then “Go”.</small></div></li>
+</ol>
+</div>
+</section>
+
+<section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+<div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stack"><div class="ds-w-lg"><div class="class-video">
+<img alt="Video: Intervals to the Beat, GCN Training" class="photo photo--yt" src="../../mocks/assets/images/classes/intervals-to-the-beat.jpg"/>
+<div class="class-countdown">
+<div class="class-countdown__body">
+<div aria-hidden="true" class="class-countdown__lights"><span class="class-countdown__light"></span><span class="class-countdown__light"></span><span class="class-countdown__light"></span></div>
+<p aria-hidden="true" class="class-countdown__num">3</p>
+<p class="class-countdown__line">The plan sets your resistance. Just pedal.</p>
+<p class="visually-hidden" role="status">The class starts in 3 seconds</p>
+</div>
+</div>
+
+</div></div></div>
+  <div class="ds-example__caption"><span>Over the class video (<code>.class-video</code>).</span></div>
+</div><div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stack"><div class="ds-w-lg"><div class="class-course">
+<img alt="Ibiza Sunset Strip" class="photo class-course__scene" role="img" src="../../mocks/assets/images/courses/ibiza-sunset-strip.jpg"/>
+<div class="class-countdown">
+<div class="class-countdown__body">
+<div aria-hidden="true" class="class-countdown__lights"><span class="class-countdown__light class-countdown__light--on"></span><span class="class-countdown__light class-countdown__light--on"></span><span class="class-countdown__light"></span></div>
+<p aria-hidden="true" class="class-countdown__num">1</p>
+<p class="class-countdown__line">The plan sets your resistance. Just pedal.</p>
+<p class="visually-hidden" role="status">The class starts in 3 seconds</p>
+</div>
+</div>
+
+
+</div></div></div>
+  <div class="ds-example__caption"><span>Over the course (<code>.class-course</code>), in a ride in Ibiza.</span></div>
+</div>
+</section>
+
+<section class="ds-section" id="sizes" data-na="One size; the numeral and the lights step with the window (see Responsive)."><h2><a href="#sizes">Sizes</a></h2>
+<p class="ds-na">One size; the numeral and the lights step with the window (see Responsive).</p>
+</section>
+
+<section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+<div class="ds-matrix"><table>
+<thead><tr><th scope="col"></th><th scope="col">3</th><th scope="col">2</th><th scope="col">1</th><th scope="col">Go!</th></tr></thead>
+<tbody>
+<tr><th scope="row">Lights and numeral</th><td><div class="ds-count"><div class="class-countdown" aria-hidden="true"><div class="class-countdown__body"><div class="class-countdown__lights"><span class="class-countdown__light"></span><span class="class-countdown__light"></span><span class="class-countdown__light"></span></div><p class="class-countdown__num">3</p></div></div></div></td><td><div class="ds-count"><div class="class-countdown" aria-hidden="true"><div class="class-countdown__body"><div class="class-countdown__lights"><span class="class-countdown__light class-countdown__light--on"></span><span class="class-countdown__light"></span><span class="class-countdown__light"></span></div><p class="class-countdown__num">2</p></div></div></div></td><td><div class="ds-count"><div class="class-countdown" aria-hidden="true"><div class="class-countdown__body"><div class="class-countdown__lights"><span class="class-countdown__light class-countdown__light--on"></span><span class="class-countdown__light class-countdown__light--on"></span><span class="class-countdown__light"></span></div><p class="class-countdown__num">1</p></div></div></div></td><td><div class="ds-count"><div class="class-countdown class-countdown--go" aria-hidden="true"><div class="class-countdown__body"><div class="class-countdown__lights"><span class="class-countdown__light class-countdown__light--on"></span><span class="class-countdown__light class-countdown__light--on"></span><span class="class-countdown__light class-countdown__light--on"></span></div><p class="class-countdown__num">Go!</p></div></div></div></td></tr>
+</tbody>
+</table></div><div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stack"><div class="ds-w-lg"><div class="class-course">
+<img alt="Ibiza Sunset Strip" class="photo class-course__scene" role="img" src="../../mocks/assets/images/courses/ibiza-sunset-strip.jpg"/>
+<div class="class-countdown class-countdown--go">
+<div class="class-countdown__body">
+<div aria-hidden="true" class="class-countdown__lights"><span class="class-countdown__light class-countdown__light--on"></span><span class="class-countdown__light class-countdown__light--on"></span><span class="class-countdown__light class-countdown__light--on"></span></div>
+<p aria-hidden="true" class="class-countdown__num">Go!</p>
+<p class="class-countdown__line">The plan sets your resistance. Just pedal.</p>
+<p class="visually-hidden" role="status">Go</p>
+</div>
+</div>
+
+
+</div></div></div>
+  <div class="ds-example__caption"><span>“Go!”: all three lights and the word in the accent (<code>.class-countdown--go</code>). The clock reads 0:00.</span></div>
+</div>
+</section>
+
+<section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+<ul>
+<li>The countdown always fills the video’s or the course’s box, whatever the box’s size. It never covers the header or the bike panel.</li>
+<li><b>Below 640px:</b> 24px lights, 72px numeral. <b>From 640px:</b> 36px lights, 88px numeral. <b>From 1024px:</b> 120px numeral.</li>
+</ul>
+</section>
+
+<section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+<p>The countdown lies on a picture, so it reads the on-photo colours, which are the same in both themes: <code>--color-on-photo</code> on <code>--color-scrim-photo</code> and <code>--color-scrim-strong</code>. A lit light is <code>--color-heart</code>; “Go!” is <code>--color-volt</code>.</p><div class="ds-themes"><div data-theme="light"><div class="ds-count"><div class="class-countdown" aria-hidden="true"><div class="class-countdown__body"><div class="class-countdown__lights"><span class="class-countdown__light class-countdown__light--on"></span><span class="class-countdown__light class-countdown__light--on"></span><span class="class-countdown__light"></span></div><p class="class-countdown__num">1</p></div></div></div></div><div data-theme="dark"><div class="ds-count"><div class="class-countdown" aria-hidden="true"><div class="class-countdown__body"><div class="class-countdown__lights"><span class="class-countdown__light class-countdown__light--on"></span><span class="class-countdown__light class-countdown__light--on"></span><span class="class-countdown__light"></span></div><p class="class-countdown__num">1</p></div></div></div></div></div>
+</section>
+
+<section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+<h3>Role and pattern</h3>
+<p>Not a dialog and not a timer: the lights and the numeral are <code>aria-hidden</code>, and one <code>role="status"</code> line speaks for them.</p>
+<h3>Keyboard</h3>
+<p>None: the countdown cannot be skipped or paused. Leave, in the header, still works.</p>
+<h3>Focus</h3>
+<p>Focus stays where it was (the header’s controls). Nothing in the countdown can be focused.</p>
+<h3>Labelling</h3>
+<p>The status says “The class starts in 3 seconds” once, then “Go”. It does not read every numeral: three announcements in three seconds would talk over each other.</p>
+<h3>Contrast</h3>
+<div class="ds-pairs"><div class="ds-pairs-col" data-theme="light"><span class="ds-pairs-col__title">light theme</span><div class="ds-pair"><span>Numeral on the photo scrim (large text)</span><span class="ds-pair__ratio" data-contrast="--color-on-photo|--color-scrim-photo" data-min="3"></span></div><div class="ds-pair"><span>Line on the strong scrim</span><span class="ds-pair__ratio" data-contrast="--color-on-photo|--color-scrim-strong" data-min="4.5"></span></div><div class="ds-pair"><span>“Go!” on the strong scrim (large text)</span><span class="ds-pair__ratio" data-contrast="--color-volt|--color-scrim-strong" data-min="3"></span></div><div class="ds-pair"><span>Lit light on the strong scrim (the numeral says the same in text, so 3:1 is not required)</span><span class="ds-pair__ratio" data-contrast="--color-heart|--color-scrim-strong" data-min="1"></span></div></div><div class="ds-pairs-col" data-theme="dark"><span class="ds-pairs-col__title">dark theme</span><div class="ds-pair"><span>Numeral on the photo scrim (large text)</span><span class="ds-pair__ratio" data-contrast="--color-on-photo|--color-scrim-photo" data-min="3"></span></div><div class="ds-pair"><span>Line on the strong scrim</span><span class="ds-pair__ratio" data-contrast="--color-on-photo|--color-scrim-strong" data-min="4.5"></span></div><div class="ds-pair"><span>“Go!” on the strong scrim (large text)</span><span class="ds-pair__ratio" data-contrast="--color-volt|--color-scrim-strong" data-min="3"></span></div><div class="ds-pair"><span>Lit light on the strong scrim (the numeral says the same in text, so 3:1 is not required)</span><span class="ds-pair__ratio" data-contrast="--color-heart|--color-scrim-strong" data-min="1"></span></div></div></div>
+<h3>Motion</h3>
+<p>Each numeral scales in from 125% over <code>--duration-base</code> with <code>--ease-enter</code>. With reduced motion it only fades (<code>ride-countdown-fade</code>); the lights change without a transition.</p>
+<h3>Touch</h3>
+<p>It takes no touches (<code>pointer-events: none</code>): Pause and Leave in the header stay in reach.</p>
+</section>
+
+<section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+<ul>
+<li>“3”, “2”, “1”, “Go!”. Always the exclamation mark; never “Start” or “GO”.</li>
+<li>The one line is fixed: “The plan sets your resistance. Just pedal.”</li>
+<li>No light carries meaning by colour alone: the numeral and “Go!” say the same in text.</li>
+</ul>
+</section>
+
+<section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+<div class="ds-dodont">
+<figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="ds-w-md"><div class="class-course">
+<img alt="Ibiza Sunset Strip" class="photo class-course__scene" role="img" src="../../mocks/assets/images/courses/ibiza-sunset-strip.jpg"/>
+<div class="class-countdown">
+<div class="class-countdown__body">
+<div aria-hidden="true" class="class-countdown__lights"><span class="class-countdown__light class-countdown__light--on"></span><span class="class-countdown__light class-countdown__light--on"></span><span class="class-countdown__light"></span></div>
+<p aria-hidden="true" class="class-countdown__num">1</p>
+<p class="class-countdown__line">The plan sets your resistance. Just pedal.</p>
+<p class="visually-hidden" role="status">The class starts in 3 seconds</p>
+</div>
+</div>
+
+
+</div></div></div><figcaption>Draw the countdown inside the video’s or the course’s box.</figcaption></figure>
+<figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><p class="ds-note">A numeral over the whole screen, covering the header and the bike panel.</p></div><figcaption>Cover Class Ride: the rider must see the bike’s numbers and reach Leave.</figcaption></figure>
+</div>
+<div class="ds-dodont">
+<figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="ds-count"><div class="class-countdown class-countdown--go" aria-hidden="true"><div class="class-countdown__body"><div class="class-countdown__lights"><span class="class-countdown__light class-countdown__light--on"></span><span class="class-countdown__light class-countdown__light--on"></span><span class="class-countdown__light class-countdown__light--on"></span></div><p class="class-countdown__num">Go!</p></div></div></div></div><figcaption>Say “Go!” in text and light all three.</figcaption></figure>
+<figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><p class="ds-note">Three green lights and no word.</p></div><figcaption>Rely on the lights’ colour to say the ride has started.</figcaption></figure>
+</div>
+</section>
+
+<section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+<div class="ds-table-wrap"><table class="ds-table">
+<thead><tr><th scope="col">Used by</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+<tbody>
+<tr><td>light--on</td><td><code>--color-heart</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-heart" data-swatch></i><span data-token="--color-heart"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-heart" data-swatch></i><span data-token="--color-heart"></span></span></td></tr>
+<tr><td>light, num, line</td><td><code>--color-on-photo</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-on-photo" data-swatch></i><span data-token="--color-on-photo"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-on-photo" data-swatch></i><span data-token="--color-on-photo"></span></span></td></tr>
+<tr><td>the block</td><td><code>--color-scrim-photo</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-scrim-photo" data-swatch></i><span data-token="--color-scrim-photo"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-scrim-photo" data-swatch></i><span data-token="--color-scrim-photo"></span></span></td></tr>
+<tr><td>lights, line</td><td><code>--color-scrim-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-scrim-strong" data-swatch></i><span data-token="--color-scrim-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-scrim-strong" data-swatch></i><span data-token="--color-scrim-strong"></span></span></td></tr>
+<tr><td>--go, light, num</td><td><code>--color-volt</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-volt" data-swatch></i><span data-token="--color-volt"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-volt" data-swatch></i><span data-token="--color-volt"></span></span></td></tr>
+<tr><td>num</td><td><code>--palette-ink</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--palette-ink" data-swatch></i><span data-token="--palette-ink"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--palette-ink" data-swatch></i><span data-token="--palette-ink"></span></span></td></tr>
+<tr><td>num</td><td><code>--duration-base</code></td><td><span data-theme="light"><span data-token="--duration-base"></span></span></td><td><span data-theme="dark"><span data-token="--duration-base"></span></span></td></tr>
+<tr><td>light</td><td><code>--duration-fast</code></td><td><span data-theme="light"><span data-token="--duration-fast"></span></span></td><td><span data-theme="dark"><span data-token="--duration-fast"></span></span></td></tr>
+<tr><td>num</td><td><code>--ease-enter</code></td><td><span data-theme="light"><span data-token="--ease-enter"></span></span></td><td><span data-theme="dark"><span data-token="--ease-enter"></span></span></td></tr>
+<tr><td>light</td><td><code>--ease-out</code></td><td><span data-theme="light"><span data-token="--ease-out"></span></span></td><td><span data-theme="dark"><span data-token="--ease-out"></span></span></td></tr>
+<tr><td>num</td><td><code>--font-size-7xl</code></td><td><span data-theme="light"><span data-token="--font-size-7xl"></span></span></td><td><span data-theme="dark"><span data-token="--font-size-7xl"></span></span></td></tr>
+<tr><td>num</td><td><code>--font-size-score</code></td><td><span data-theme="light"><span data-token="--font-size-score"></span></span></td><td><span data-theme="dark"><span data-token="--font-size-score"></span></span></td></tr>
+<tr><td>num</td><td><code>--font-size-score-lg</code></td><td><span data-theme="light"><span data-token="--font-size-score-lg"></span></span></td><td><span data-theme="dark"><span data-token="--font-size-score-lg"></span></span></td></tr>
+<tr><td>line</td><td><code>--font-size-sm</code></td><td><span data-theme="light"><span data-token="--font-size-sm"></span></span></td><td><span data-theme="dark"><span data-token="--font-size-sm"></span></span></td></tr>
+<tr><td>line</td><td><code>--font-weight-medium</code></td><td><span data-theme="light"><span data-token="--font-weight-medium"></span></span></td><td><span data-theme="dark"><span data-token="--font-weight-medium"></span></span></td></tr>
+<tr><td>line</td><td><code>--line-height-sm</code></td><td><span data-theme="light"><span data-token="--line-height-sm"></span></span></td><td><span data-theme="dark"><span data-token="--line-height-sm"></span></span></td></tr>
+<tr><td>light</td><td><code>--radius-full</code></td><td><span data-theme="light"><span data-token="--radius-full"></span></span></td><td><span data-theme="dark"><span data-token="--radius-full"></span></span></td></tr>
+<tr><td>line</td><td><code>--radius-lg</code></td><td><span data-theme="light"><span data-token="--radius-lg"></span></span></td><td><span data-theme="dark"><span data-token="--radius-lg"></span></span></td></tr>
+<tr><td>lights</td><td><code>--radius-xl</code></td><td><span data-theme="light"><span data-token="--radius-xl"></span></span></td><td><span data-theme="dark"><span data-token="--radius-xl"></span></span></td></tr>
+<tr><td>num</td><td><code>--space-1</code></td><td><span data-theme="light"><span data-token="--space-1"></span></span></td><td><span data-theme="dark"><span data-token="--space-1"></span></span></td></tr>
+<tr><td>line</td><td><code>--space-1-5</code></td><td><span data-theme="light"><span data-token="--space-1-5"></span></span></td><td><span data-theme="dark"><span data-token="--space-1-5"></span></span></td></tr>
+<tr><td>body, lights</td><td><code>--space-2</code></td><td><span data-theme="light"><span data-token="--space-2"></span></span></td><td><span data-theme="dark"><span data-token="--space-2"></span></span></td></tr>
+<tr><td>lights, line</td><td><code>--space-3</code></td><td><span data-theme="light"><span data-token="--space-3"></span></span></td><td><span data-theme="dark"><span data-token="--space-3"></span></span></td></tr>
+<tr><td>light</td><td><code>--space-6</code></td><td><span data-theme="light"><span data-token="--space-6"></span></span></td><td><span data-theme="dark"><span data-token="--space-6"></span></span></td></tr>
+<tr><td>light</td><td><code>--space-9</code></td><td><span data-theme="light"><span data-token="--space-9"></span></span></td><td><span data-theme="dark"><span data-token="--space-9"></span></span></td></tr>
+<tr><td>num</td><td><code>--text-display</code></td><td><span data-theme="light"><span data-token="--text-display"></span></span></td><td><span data-theme="dark"><span data-token="--text-display"></span></span></td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+<pre><code>&lt;div class="class-countdown"&gt;
+&lt;div class="class-countdown__body"&gt;
+&lt;div aria-hidden="true" class="class-countdown__lights"&gt;&lt;span class="class-countdown__light class-countdown__light--on"&gt;&lt;/span&gt;&lt;span class="class-countdown__light class-countdown__light--on"&gt;&lt;/span&gt;&lt;span class="class-countdown__light"&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;p aria-hidden="true" class="class-countdown__num"&gt;1&lt;/p&gt;
+&lt;p class="class-countdown__line"&gt;The plan sets your resistance. Just pedal.&lt;/p&gt;
+&lt;p class="visually-hidden" role="status"&gt;The class starts in 3 seconds&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;</code></pre><div class="ds-table-wrap"><table class="ds-table">
+<thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead>
+<tbody>
+<tr><td><code>.class-countdown</code></td><td>Fills its positioned parent (<code>.class-video</code> or <code>.class-course</code>).</td></tr>
+<tr><td><code>.class-countdown__light--on</code></td><td>A lit light.</td></tr>
+<tr><td><code>.class-countdown--go</code></td><td>All lights and the numeral in the accent.</td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+<p>Mocks this component was extracted from:</p>
+<ul>
+<li><a href="../../mocks/pages/class-ride/countdown.html">pages/class-ride/countdown</a></li>
+<li><a href="../../mocks/pages/class-ride/countdown-ibiza.html">pages/class-ride/countdown-ibiza</a></li>
+<li><a href="../../mocks/pages/class-ride/go-ibiza.html">pages/class-ride/go-ibiza</a></li>
+</ul>
+<p>Drift fixed during extraction: the scrim behind the numeral was <code>--color-scrim</code>, which is 45% in the light theme: bone on it read 2.77:1 over a white frame. It is now <code>--color-scrim-photo</code>, 60% in both themes (4.58:1). This page’s earlier subject, the race lobby’s countdown (<code>.race-countdown</code>), was removed with races.</p>
+</section>
+    <footer class="ds-footer"><span>Telo Ride 1 design system · extracted from <a href="../../mocks/index.html">docs/mocks</a> on 24 November 2026</span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

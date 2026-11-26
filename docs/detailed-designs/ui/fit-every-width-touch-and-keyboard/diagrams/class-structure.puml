@@ -1,0 +1,75 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Fit every width, touch and keyboard
+
+class "tokens.css" as Tokens <<stylesheet>> {
+  --layout-margin: 16 px, 24 px from sm, 32 px from lg
+  --layout-breakpoint-sm: 40rem
+  --layout-breakpoint-md: 48rem
+  --layout-breakpoint-lg: 64rem
+  --layout-breakpoint-xl: 80rem
+  --target-comfortable: 44 px
+  --target-ride: 48 px
+  --focus-ring-width: 2 px
+  --focus-ring-offset: 2 px
+}
+class "styles.scss" as Styles <<stylesheet>> {
+  :focus-visible
+  .skip-link
+  .visually-hidden
+}
+class "_app.scss" as AppPartial <<stylesheet>> {
+  .app
+  .app~__scroll
+}
+class "_page.scss" as PagePartial <<stylesheet>> {
+  .container
+  .page
+  .page~__title
+  .page~__lead
+}
+class AppShell {
+  -document: Document
+  #skipToMain(event: Event): void
+}
+class "Screen page" as Page <<component>> {
+  main#main tabindex="-1"
+  breakpoint rules in its own stylesheet
+}
+class Button {
+  +variant: ButtonVariant
+  +size: ButtonSize
+  +block: boolean
+}
+class ClassResist {
+  .class-resist~__btn: 48 x 48 px
+}
+class FullscreenToggle {
+  +active: boolean
+  +toggled: void
+}
+
+AppShell ..> Page : focuses main#main
+AppShell ..> Styles : .skip-link
+Page ..> AppPartial : @use
+Page ..> PagePartial : @use
+Page --> Button : renders
+Page --> ClassResist : renders on Class Ride
+Page --> FullscreenToggle : renders
+AppPartial ..> Tokens : reads
+PagePartial ..> Tokens : --layout-margin
+Button ..> Tokens : control heights
+ClassResist ..> Tokens : --target-ride
+Styles ..> Tokens : focus ring
+@enduml

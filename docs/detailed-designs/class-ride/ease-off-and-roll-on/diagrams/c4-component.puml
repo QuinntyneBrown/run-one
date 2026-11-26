@@ -1,0 +1,44 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Ease off and roll on
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(bike, "Smart bike", "Echelon or FTMS")
+
+Container_Boundary(ride, "Ride app — ride application") {
+  Component(page, "ClassRidePage", "Angular component (changed)", "Projects the roll-out card; stepper off")
+  Component(store, "ClassRideStore", "Store (changed)", "Runs the ending and opens Class Done")
+  Component(helpers, "rideHold(), rollOutTitle()", "Pure helpers (changed, designed)", "No lost-bike alert in the ending; the card's title")
+  Component(host, "CourseSceneHost", "Directive (exists)", "Hands the course its seconds")
+  Component(router, "Angular Router", "Router", "Opens /done with the ClassResult")
+}
+Container_Boundary(components, "Ride app — components library") {
+  Component(card, "wz-class-rollout", "Presentation component (designed)", "Title, one line, a bar that fills")
+  Component(resist, "wz-class-resist", "Presentation component (exists)", "The stepper, disabled in the ending")
+}
+Container_Boundary(domain, "Ride app — domain library, engine/") {
+  Component(ease, "ResistanceEaseOff", "Service (designed)", "Sends easeOffLevels() 110 ms apart")
+  Component(ending, "RideEnding", "Service (designed)", "The ending's stage and the roll-out's share")
+  Component(ctrl, "ResistanceController", "Service (exists)", "Target resistance")
+  Component(conn, "BikeConnection", "Service (exists)", "BIKE_CONNECTION: writes and the kept target")
+}
+Container_Boundary(world, "Ride app — world library") {
+  Component(course, "Course, chaseCamera()", "Helpers (exist)", "The rider past the finish line at the cool-down's pace")
+}
+
+Rel(rider, page, "Watches the roll-out on")
+Rel(page, store, "Reads phase, rollOut, stepperOff and courseSeconds from")
+Rel(page, card, "Renders with the title and the share")
+Rel(page, resist, "Disables")
+Rel(page, host, "Binds courseSeconds to")
+Rel(host, course, "Places the rider through CourseScene")
+Rel(store, helpers, "Asks")
+Rel(store, ease, "start() at the finish")
+Rel(store, ending, "Reads the stage from")
+Rel(ease, ctrl, "applyPlanLevel(level)")
+Rel(ctrl, conn, "setResistance(level)")
+Rel(conn, bike, "Sets the resistance of", "Web Bluetooth")
+Rel(store, conn, "forgetTarget() when the ending is over")
+Rel(store, router, "navigateByUrl('/done')")
+@enduml

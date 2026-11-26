@@ -1,0 +1,48 @@
+@startuml
+title UML sequence behaviour — Leave the class
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+  participant "ClassRideStore" as store
+  participant "Angular Router" as router
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "RideTicker and WorkoutEngine" as engine
+  participant "BikeTelemetry" as telemetry
+  participant "BikeConnection" as conn
+end box
+box "Frontend — Ride app (video library)" #ECFDF3
+  participant "YouTubeVideoPlayer" as player
+end box
+box "Device — Browser" #F2F4F7
+  participant "Wake lock" as wake
+end box
+rider -> page : Press Leave ("Leave class")
+page -> router : Navigate to / with no confirmation (L2-093 AC1)
+router -> page : Destroy the page and its providers
+page -> store : DestroyRef runs
+store -> player : destroy() (L2-088 AC6)
+store -> wake : release()
+store -> conn : forgetTarget() (L2-093 AC3)
+note right of conn : A lost bike's retries carry on, on The Class
+page -> engine : DestroyRef runs
+engine -> engine : Clear the timeout, remove visibilitychange, unsubscribe from ticks
+page -> telemetry : DestroyRef runs
+telemetry -> conn : Unsubscribe from frames; clear the cadence timer
+router --> rider : The Class opens; the record is unchanged (L2-093 AC1)
+note over store, conn : RIDE_RECORD.add is not called: the ride is not finished
+@enduml

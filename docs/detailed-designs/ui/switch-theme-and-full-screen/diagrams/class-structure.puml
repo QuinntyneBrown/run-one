@@ -1,0 +1,66 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Switch theme and full screen
+
+interface Fullscreen {
+  +available: Signal<boolean>
+  +active: Signal<boolean>
+  +enter(): void
+  +exit(): void
+}
+class FULLSCREEN <<InjectionToken>>
+class BrowserFullscreen {
+  -document: Document
+  -shown: WritableSignal<boolean>
+  +available: Signal<boolean>
+  +active: Signal<boolean>
+  +enter(): void
+  +exit(): void
+  -onChange(): void
+}
+class FullscreenToggle {
+  +active: boolean
+  +toggled: void
+}
+class "Screen page" as Page <<component>> {
+  #fullscreen: Fullscreen
+  #toggleFullscreen(): void
+}
+class "ride.routes.ts" as Routes <<config>> {
+  providers: FULLSCREEN useClass BrowserFullscreen
+}
+class "index.html" as Index <<config>> {
+  html lang="en", no data-theme
+  meta color-scheme: dark light
+}
+class "tokens.css" as Tokens <<stylesheet>> {
+  :root, [data-theme="dark"]: dark values
+  @media (prefers-color-scheme: light): light values
+  [data-theme="light"]: light values
+  :root, [data-theme]: role aliases
+  --color-gold-fg: a new best output only
+}
+class "contrast-pairs.json" as Pairs <<config>> {
+  pairs checked in both themes
+}
+
+BrowserFullscreen ..|> Fullscreen
+FULLSCREEN ..> Fullscreen : types
+Routes ..> FULLSCREEN : binds
+Routes ..> BrowserFullscreen : useClass
+Page ..> FULLSCREEN : injects
+Page --> FullscreenToggle : renders when available
+Index ..> Tokens : loads
+Tokens ..> Pairs : checked by
+@enduml

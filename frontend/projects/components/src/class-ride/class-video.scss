@@ -1,0 +1,74 @@
+// Block class-video (docs/design-system/assets/components.css, Class Ride; components/video.html): 16:9 on a phone,
+// filling the column above the bike panel in a landscape window from md, never under 8 rem (L2-087 AC5).
+:host {
+  display: flex;
+  flex-direction: column;
+  // The notice sits space-2 under the video, nearer than the stage's gap (class-video__notice).
+  gap: var(--space-2);
+
+  @media (min-width: 48rem) and (orientation: landscape) {
+    flex: 1;
+  }
+}
+
+.class-video {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  background: var(--color-raised);
+
+  @media (min-width: 48rem) and (orientation: landscape) {
+    min-height: var(--space-32);
+    flex: 1;
+    aspect-ratio: auto;
+  }
+}
+
+.photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+// The cover is YouTube's 4:3 hqdefault thumbnail, letterboxed: show only its 16:9 picture, as the player would.
+.photo--yt {
+  object-view-box: inset(12.5% 0);
+}
+
+.class-video__player {
+  position: absolute;
+  inset: 0;
+}
+
+// Ink at 70 % over the picture, "Paused" centred (components/video.html).
+.class-video__paused {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--color-ink) 70%, transparent);
+}
+
+.class-video__paused-label {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+// The box's controls slot on its left edge (class-intensity, L2-183 AC1): above the picture, the overlays and "Paused",
+// so the intensity can be set while the ride is paused. It is placed from the bottom, and grows up to its top.
+.class-video__controls {
+  position: absolute;
+  top: var(--space-3);
+  bottom: var(--space-3);
+  left: var(--space-3);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}

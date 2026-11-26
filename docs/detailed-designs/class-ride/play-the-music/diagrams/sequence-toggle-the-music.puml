@@ -1,0 +1,58 @@
+@startuml
+title UML sequence behaviour — Turn the music off and on
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+  participant "ClassRideStore" as store
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "ClassCourse" as box
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "BrowserRideMusic" as music
+end box
+box "Browser — Chrome or Edge" #F2F4F7
+  participant "HTMLAudioElement" as audio
+  participant "localStorage" as storage
+end box
+box "Static host — the app's own origin" #FFF4E5
+  participant "Static host" as origin
+end box
+
+box --> rider : "Music", aria-pressed="true", top right of the course's box (L2-176 AC5)
+rider -> box : Press Music (touch, Enter or Space)
+box -> page : musicToggle
+page -> store : toggleMusic()
+store -> music : toggle()
+music -> music : on = false
+music -> storage : setItem("telo-ride.music", "off")
+store -> music : pause(): the effect reads on()
+music -> audio : pause()
+box --> rider : aria-pressed="false", a stroke through the note; the ride goes on
+rider -> box : Press Music again
+box -> page : musicToggle
+page -> store : toggleMusic()
+store -> music : toggle()
+music -> storage : removeItem("telo-ride.music")
+store -> music : play()
+music -> audio : play(), or make the element if this ride has none yet
+== The next ride, with the setting off ==
+music -> storage : getItem("telo-ride.music")
+storage --> music : "off"
+store -> music : pause(): no element is made
+note over audio, origin : Nothing is fetched while the music is off (L2-176 AC5)
+@enduml

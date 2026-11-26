@@ -1,0 +1,84 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Show Class Done
+
+class ClassResult {
+  +classId: string
+  +title: string
+  +runningSeconds: number
+  +outputKj: number
+  +onTargetPercent: number
+  +effortWatts: readonly number[]
+  +previousBestKj: number | null
+  +saved: boolean
+}
+interface FinishedRide {
+  +set(result: ClassResult): void
+  +peek(): ClassResult | null
+  +clear(): void
+}
+class FinishedRideHolder
+class EffortTotals {
+  -wattSeconds: number[8]
+  -seconds: number[8]
+  +count(effort: number, powerW: number | null, seconds: number): void
+  +watts(): readonly number[]
+}
+class classDoneGuard <<CanActivateFn>> {
+  +(): true | UrlTree
+}
+class classDoneView <<helper>> {
+  +(result: ClassResult): ClassDoneView
+}
+class ClassDoneView {
+  +classTitle: string
+  +verdict: string
+  +best: boolean
+  +output: string
+  +facts: readonly Fact[]
+  +efforts: readonly EffortView[]
+  +unsavedNotice: string | null
+}
+class Fact {
+  +label: string
+  +value: string
+}
+class EffortView {
+  +number: number
+  +watts: number
+  +heightPercent: number
+  +strongest: boolean
+}
+class ClassDonePage {
+  #view: ClassDoneView
+  #done(): void
+}
+class ClassDone <<wz-class-done>> {
+  +view: InputSignal<ClassDoneView>
+  +done: OutputEmitterRef<void>
+}
+
+FinishedRideHolder ..|> FinishedRide
+FinishedRide --> "0..1" ClassResult : holds
+EffortTotals ..> ClassResult : fills effortWatts of
+classDoneGuard ..> FinishedRide : peeks
+ClassDonePage ..> FinishedRide : peeks and clears
+ClassDonePage ..> classDoneView : calls
+classDoneView ..> ClassResult : reads
+classDoneView ..> ClassDoneView : returns
+ClassDoneView *-- "3..4" Fact
+ClassDoneView *-- "8" EffortView
+ClassDonePage ..> ClassDone : renders
+ClassDone ..> ClassDoneView : draws
+@enduml

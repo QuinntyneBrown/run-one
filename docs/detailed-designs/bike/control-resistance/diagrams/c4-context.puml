@@ -1,0 +1,13 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Control resistance
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System(telo, "Telo Ride 1", "One class, on the rider's own bike")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+
+Rel(rider, telo, "Follows the plan, raises or lowers resistance on")
+Rel(telo, bike, "Sets the target resistance on", "Bluetooth LE")
+Rel(bike, telo, "Reports its resistance to", "Bluetooth LE")
+@enduml

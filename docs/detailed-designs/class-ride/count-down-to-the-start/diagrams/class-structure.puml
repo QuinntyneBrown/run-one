@@ -1,0 +1,113 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Count down to the start
+
+enum RidePhase {
+  waiting
+  countdown
+  riding
+  finished
+  rolling-out
+}
+
+interface CountdownStep {
+  +numeral: '3' | '2' | '1' | 'Go!'
+  +lights: 0 | 1 | 2 | 3
+  +go: boolean
+  +over: boolean
+}
+
+class "countdownStep()" as fn <<function>> {
+  +COUNT_MS = 1000
+  +GO_MS = 700
+  +countdownStep(elapsedMs: number): CountdownStep
+}
+
+class Countdown <<service>> {
+  +step: Signal<CountdownStep | null>
+  +goAt: number | null
+  +start(): void
+  +stop(): void
+  -read(): void
+}
+
+class ClassRideStore <<store>> {
+  +phase: Signal<RidePhase>
+  +countdown: Signal<CountdownStep | null>
+  +running: Signal<boolean>
+  +beginCountdown(): void
+  +playVideo(host: HTMLElement): void
+  +raise(): void
+  +lower(): void
+  -go(): void
+  -followBike(ride: ClassDefinition): void
+}
+
+class RideClock <<service>> {
+  +running: Signal<boolean>
+  +start(at?: number): void
+  +pause(): void
+  +resume(): void
+  +elapsedMs(): number
+}
+
+class RideTicker <<service>> {
+  +second: Signal<number>
+  +start(): void
+  +stop(): void
+}
+
+class WorkoutEngine <<service>> {
+  +state: Signal<PlanState | null>
+  +follow(plan: Plan): void
+  +resend(): void
+}
+
+interface MonotonicTime {
+  +now(): number
+}
+
+class ClassCountdown <<component>> {
+  +step: InputSignal<CountdownStep>
+  #status: Signal<string>
+}
+
+interface RideHeader {
+  +pause: boolean
+  +leave: boolean
+}
+
+class "rideHeader()" as headerFn <<function>> {
+  +rideHeader(phase: RidePhase, hold: RideHold): RideHeader
+}
+
+class ClassRidePage <<component>> {
+  #store: ClassRideStore
+}
+
+Countdown ..> fn : reads
+fn ..> CountdownStep : returns
+Countdown ..> MonotonicTime : MONOTONIC_TIME
+RideClock ..> MonotonicTime : MONOTONIC_TIME
+ClassRideStore --> RidePhase : holds
+ClassRideStore --> Countdown : starts, stops
+ClassRideStore --> RideClock : start(goAt)
+ClassRideStore --> RideTicker : start()
+ClassRideStore --> WorkoutEngine : follow(plan)
+ClassRidePage --> ClassRideStore : reads
+ClassRidePage *-- ClassCountdown : projects into the box
+ClassCountdown ..> CountdownStep : draws
+ClassRidePage ..> headerFn : asks
+headerFn ..> RideHeader : returns
+@enduml

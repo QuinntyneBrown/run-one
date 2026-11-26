@@ -1,0 +1,102 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Ride a simulated bike
+
+interface BikeConnection <<api>> {
+  +ble: Signal<BleState>
+  +bike: Signal<BikeInfo | null>
+  +frames: Observable<Uint8Array>
+  +requestBike(): Promise<BikeInfo | null>
+  +connect(): Promise<void>
+  +reconnectRemembered(bike: RememberedBikeRecord): Promise<boolean>
+  +setResistance(level: number): Promise<number>
+  +forgetTarget(): void
+  +reconnectNow(): void
+  +disconnect(): void
+}
+
+interface BluetoothSupport <<api>> {
+  +state: Signal<BluetoothSupportState>
+  +recheck(): Promise<BluetoothSupportState>
+}
+
+interface Ticker <<api>> {
+  +seconds: Observable<number>
+}
+
+class SimulatedBikeConnection <<bluetooth>> {
+  -elapsed: number
+  -revolutions: number
+  -level: number = 8
+  +requestBike(): Promise<BikeInfo>
+  +connect(): Promise<void>
+  +setResistance(level: number): Promise<number>
+  +forgetTarget(): void
+  +disconnect(): void
+  -tick(): void
+}
+
+class WebBluetoothBikeConnection <<bluetooth>>
+
+class SimulatedBluetoothSupport <<bluetooth>> {
+  +state = ready
+}
+
+class SimulatedRiderProfile <<bluetooth>> {
+  +warmUpSeconds = 30
+  +cadenceAt(second: number): number
+}
+
+class EchelonProtocol <<protocol>> {
+  +workout(data: WorkoutData): Uint8Array
+  +resistance(level: number): Uint8Array
+  +setResistance(level: number): Uint8Array
+  +parseSetResistance(bytes: Uint8Array): number | null
+}
+
+class SecondTicker <<engine>>
+
+class "provideBikeConnection()" as provide <<ride>> {
+  +provideBikeConnection(search: string): Provider[]
+}
+
+class "simulated-bike.provider.ts" as devFile <<config>> {
+  +SIMULATOR_ENABLED = true
+  +simulatedBike(): Provider[]
+}
+
+class "simulated-bike.provider.production.ts" as prodFile <<config>> {
+  +SIMULATOR_ENABLED = false
+  +simulatedBike(): Provider[]
+}
+
+class "angular.json" as angular <<config>> {
+  production.fileReplacements
+}
+
+SimulatedBikeConnection ..|> BikeConnection
+WebBluetoothBikeConnection ..|> BikeConnection
+SimulatedBluetoothSupport ..|> BluetoothSupport
+SecondTicker ..|> Ticker
+SimulatedBikeConnection --> Ticker : TICKER
+SimulatedBikeConnection ..> SimulatedRiderProfile
+SimulatedBikeConnection ..> EchelonProtocol
+provide ..> devFile : development
+provide ..> prodFile : production
+angular ..> prodFile : replaces the development file with
+devFile ..> SimulatedBikeConnection : binds
+devFile ..> SimulatedBluetoothSupport : binds
+provide ..> WebBluetoothBikeConnection : binds otherwise
+provide ..> SecondTicker : binds
+@enduml

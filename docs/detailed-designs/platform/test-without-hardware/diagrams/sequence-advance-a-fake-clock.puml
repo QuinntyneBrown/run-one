@@ -1,0 +1,48 @@
+@startuml
+title UML sequence behaviour — Advance a fake clock
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+box "External — CI" #FFF4E5
+  participant "Playwright spec" as spec
+  participant "page.clock" as clock
+end box
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "SecondTicker" as ticker
+  participant "RideClock" as rideClock
+  participant "KeepaliveScheduler" as keepalive
+end box
+box "Device — Browser" #F2F4F7
+  participant "Fake navigator.bluetooth" as ble
+end box
+spec -> clock : install() before the app loads
+spec -> page : Start the class
+page -> ticker : Subscribe to seconds
+spec -> clock : runFor(1000)
+clock -> ticker : Fire the timer once, with no real wait (L2-148 AC2)
+ticker -> rideClock : Tick
+rideClock --> page : Ride time 0:01
+spec -> clock : fastForward("29:58")
+clock -> rideClock : Monotonic time jumps; due timers fire once
+clock -> keepalive : Due keepalive fires
+keepalive -> ble : writeValue(keepalive), recorded
+spec -> clock : runFor(2000)
+clock -> ticker : Fire two ticks
+rideClock --> page : Ride time 30:00; the ride is finished
+page --> spec : Class Done opens
+note over spec, clock : No step waits on wall-clock time (L2-148 AC2)
+@enduml

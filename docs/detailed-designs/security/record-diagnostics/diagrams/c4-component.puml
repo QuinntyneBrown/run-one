@@ -1,0 +1,57 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Record diagnostics
+
+Container_Boundary(ride, "ride application") {
+  Component(routes, "ride.routes.ts", "Lazy parent route, changes", "Exports rideRoutes as a promise; reads the switch once; imports the recording's chunk only when it is on")
+  Component(switch, "diagnosticsRequested", "Pure function, new", "Whether the query holds diagnose")
+  Component(provide, "provideDiagnostics", "Providers, new", "Binds the tokens, rebinds APP_LOGGER last and mounts the host")
+  Component(host, "DiagnosticsHost", "Component, new", "The mark, the dialog element and the panel; orchestrates note, capture and save")
+  Component(store, "ClassRideStore", "Service, changes", "Reports the readouts shown")
+}
+Container_Boundary(componentslib, "components library") {
+  Component(mark, "DiagnosticMark", "Presentation, new", "The button that reads Recording; inputs busy and screen")
+  Component(panel, "DiagnosticPanel", "Presentation, new", "The dialog's content; emits note, capture, save and closed")
+}
+Container_Boundary(domainlib, "domain library") {
+  Component(recorder, "DiagnosticRecorder", "Service, new", "Formats each entry and adds it to the ring; builds the files")
+  Component(buffer, "RecordingBuffer", "Class, new", "Ring of lines: 20,000 entries or 3,000,000 bytes")
+  Component(reading, "frame-reading.ts", "Pure functions, new", "readFrame and readAnswer: decoder name, frame, values and checksum, or dropped with the reason")
+  Component(pick, "telemetryDecoder", "Pure function, new", "Picks the decoder for the bike's kind")
+  Component(reclogger, "RecordingAppLogger", "Service, new", "Writes the console line, then adds it to the recording")
+  Component(capture, "BrowserScreenCapture", "Service, new", "One still of the tab; stops the tracks at once")
+  Component(saver, "BrowserFileSaver", "Service, new", "Downloads a file from an object URL and revokes it")
+  Component(conn, "WebBluetoothBikeConnection", "Service, changes", "Reports received bytes and link events; hands the tap to the queue and FtmsLink")
+  Component(queue, "GattWriteQueue", "Class, changes", "Holds the tap; reports each write as it starts and its outcome")
+  Component(telemetry, "BikeTelemetry", "Service, changes", "Decodes with the same decoder")
+}
+Container_Boundary(apilib, "api library") {
+  Component(tap, "BIKE_LINK_TAP", "Contract and token, new", "received, writing, event")
+  Component(recording, "DIAGNOSTIC_RECORDING", "Contract and token, new", "entries, dropped, captures; readouts, note, keepCapture, files")
+  Component(ports, "SCREEN_CAPTURE and FILE_SAVER", "Contracts and tokens, new", "capture; save")
+  Component(logger, "APP_LOGGER", "Contract and token", "error(area, error)")
+}
+Rel(routes, switch, "Calls once")
+Rel(routes, provide, "Imports dynamically when on")
+Rel(provide, recorder, "Binds both tokens to")
+Rel(provide, reclogger, "Rebinds APP_LOGGER to")
+Rel(provide, host, "Mounts")
+Rel(host, mark, "Renders")
+Rel(host, panel, "Renders in the dialog")
+Rel(host, recording, "Notes, keeps captures and asks files of")
+Rel(host, ports, "Captures and saves through")
+Rel(store, recording, "Injects as optional; reports readouts")
+Rel(conn, tap, "Injects as optional; reports to")
+Rel(queue, tap, "Reports writes to")
+Rel(recorder, tap, "Implements")
+Rel(recorder, recording, "Implements")
+Rel(recorder, buffer, "Adds lines to")
+Rel(recorder, reading, "Reads telemetry with")
+Rel(reading, pick, "Decodes with")
+Rel(telemetry, pick, "Decodes with")
+Rel(reclogger, logger, "Implements")
+Rel(reclogger, recorder, "Calls logged with the redacted line")
+Rel(capture, ports, "Implements")
+Rel(saver, ports, "Implements")
+@enduml

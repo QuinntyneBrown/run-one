@@ -1,0 +1,20 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Test without hardware
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Ext(youtube, "YouTube", "Privacy-enhanced player for the class video")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The four screens, Web Bluetooth, the protocol and the engine")
+  ContainerDb(storage, "Browser storage", "localStorage", "The record and the remembered bike")
+}
+
+Rel(rider, app, "Uses; driven by page objects in a spec", "HTTPS")
+Rel(app, bike, "Writes to and is notified by; faked in the page", "Web Bluetooth")
+Rel(app, youtube, "Loads the player from; answered by YouTubeFixture", "HTTPS")
+Rel(host, app, "Serves; serve-dist.mjs on localhost in a spec", "HTTP")
+Rel(app, storage, "Reads and writes; a fresh browser context per spec", "localStorage")
+@enduml

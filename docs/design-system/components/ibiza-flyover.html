@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ibiza Flyover — Telo Ride 1 design system</title>
+<meta name="description" content="The screen before a ride in Ibiza: the course seen from above, start to finish, while it loads. A bar above, a band below, and no word on the course.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+<style>
+.ds-matrix td .ibiza-flyover__band { min-width: 30rem; }
+</style>
+</head>
+<body id="top">
+<a class="ds-skip" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Telo Ride 1 DS</a><button class="ds-theme-toggle" type="button" aria-pressed="true">☀ Light</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/ride-readout.html">Bike panel</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/class-done.html">Class Done</a></li>
+      <li><a href="../components/video.html">Class video</a></li>
+      <li><a href="../components/container.html">Container</a></li>
+      <li><a href="../components/countdown.html">Countdown</a></li>
+      <li><a href="../components/course.html">Course</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/device-list.html">Device list</a></li>
+      <li><a href="../components/diagnostic-panel.html">Diagnostic panel</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+      <li><a href="../components/finish-banner.html">Finish banner</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/ibiza-flyover.html">Ibiza Flyover</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/lockup.html">Lockup</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/plan-chart.html">Plan chart</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/recording-mark.html">Recording mark</a></li>
+      <li><a href="../components/number-stepper.html">Resistance stepper</a></li>
+      <li><a href="../components/roll-out.html">Roll-out</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/sidebar-nav.html">Sidebar navigation</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/stat.html">Stat</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/the-class.html">The Class</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation.html">Navigation</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+      <li><a href="../patterns/live-ride.html">The shape of a ride</a></li>
+    </ul></details>
+  </nav>
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · The shape of a ride</p>
+      <h1>Ibiza Flyover</h1>
+      <p class="ds-lead">The screen before a ride in Ibiza: the course seen from above, start to finish, while it loads. A bar above, a band below, and no word on the course.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">In the mocks</span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li></ul>
+    </header>
+<section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+<p>Ibiza Flyover is shown only before a ride in Ibiza (L2-179). The camera flies Ibiza Sunset Strip from the grid to the finish line in 9 seconds and lands on the grid; the course loads meanwhile, so the ride has no wait of its own. The rider can <b>Skip flyover</b> or Cancel at any moment.</p>
+<p>It never holds the ride: it gives way if the course cannot be drawn, and it is not shown at all with reduced motion. It borrows a race's shape and nothing else: one rider, no other riders, positions, laps or places (ADR 0049).</p>
+<p>Do not use it before a ride with the class video, and do not use its bar or band on another screen: <a href="app-header.html">App header</a> is the header everywhere else.</p>
+</section>
+
+<section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+<div class="ds-example">
+  <iframe class="ds-frame" src="../../mocks/pages/ibiza-flyover/default.html?chrome=0" height="520" title="Ibiza Flyover two seconds into the flight" loading="lazy"></iframe>
+  <div class="ds-example__caption"><span>Ibiza Flyover two seconds into the flight</span><a href="../../mocks/pages/ibiza-flyover/default.html">pages/ibiza-flyover/default</a></div>
+</div><div class="ds-anatomy">
+<figure class="ds-anatomy__figure"><div class="ds-anatomy__target ds-anatomy__target--wide"><div class="ds-fill"><div class="ibiza-flyover__bar">
+<span aria-label="Telo Ride 1" class="lockup" role="img"><svg aria-hidden="true" class="logo-mark" height="26" viewBox="0 0 48 48" width="26"><path class="logo-mark__ring" d="M37.79 21.57 A14 14 0 1 1 26.43 10.21"/><path class="logo-mark__crank" d="M24 24 L38 10"/><circle class="logo-mark__hub" cx="24" cy="24" r="4.6"/></svg><span class="wordmark">TELO<span class="wordmark__product">Ride 1</span></span></span>
+<a class="btn btn--raised btn--sm ibiza-flyover__skip" href="#"><svg aria-hidden="true" class="icon icon--md" viewBox="0 0 24 24"><path d="m13 19 9-7-9-7z"/><path d="m2 19 9-7-9-7z"/></svg>Skip flyover</a>
+<a aria-label="Cancel" class="icon-btn ibiza-flyover__cancel" href="#"><svg aria-hidden="true" class="icon icon--md" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></a>
+</div></div><div class="ds-fill"><div class="ibiza-flyover__band">
+<div class="ibiza-flyover__where">
+<p class="ibiza-flyover__title">Ibiza Sunset Strip</p>
+<p aria-live="polite" class="ibiza-flyover__caption"><span class="ibiza-flyover__place">The Strip</span> · every effort climbs past the clubs</p>
+</div>
+<p class="ibiza-flyover__status">Echelon EX-5s connected</p>
+</div></div></div></figure>
+<ol class="ds-anatomy__list">
+<li><div><b>Bar</b><small>A row of its own, 56px tall and 64px from 640px: the <a href="lockup.html">lockup</a>, <b>Skip flyover</b> and Cancel.</small></div></li>
+<li><div><b>Skip flyover</b><small>A raised small <a href="button.html">button</a>, 44px tall, pushed to the right. Goes straight to the grid.</small></div></li>
+<li><div><b>Cancel</b><small>A 44px icon button named “Cancel”. Goes back to The Class.</small></div></li>
+<li><div><b>Scene</b><small>The course from above, edge to edge between the bar and the band. Only the loading line may lie on it.</small></div></li>
+<li><div><b>Band</b><small>A row of its own, at least 160px tall on a phone and 144px from 640px.</small></div></li>
+<li><div><b>Title and caption</b><small>The course’s name in the display face, and a caption that names the place the camera is over. The caption is a polite live region.</small></div></li>
+<li><div><b>Status</b><small>What is true of the bike: “Echelon EX-5s connected”, then “Bike ready · lining up” in the accent.</small></div></li>
+</ol>
+</div>
+</section>
+
+<section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+<p>There is one flyover, of the one course. It has no variants.</p>
+</section>
+
+<section class="ds-section" id="sizes" data-na="The flyover takes the whole window; its type steps with the window (see Responsive)."><h2><a href="#sizes">Sizes</a></h2>
+<p class="ds-na">The flyover takes the whole window; its type steps with the window (see Responsive).</p>
+</section>
+
+<section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+<div class="ds-matrix"><table>
+<thead><tr><th scope="col">State</th><th scope="col">Band</th><th scope="col">What it means</th></tr></thead>
+<tbody>
+<tr><th scope="row">default</th><td><div class="ds-fill"><div class="ibiza-flyover__band">
+<div class="ibiza-flyover__where">
+<p class="ibiza-flyover__title">Ibiza Sunset Strip</p>
+<p aria-live="polite" class="ibiza-flyover__caption"><span class="ibiza-flyover__place">The Strip</span> · every effort climbs past the clubs</p>
+</div>
+<p class="ibiza-flyover__status">Echelon EX-5s connected</p>
+</div></div></td><td>Two seconds into the flight. The caption steps through five places, a fifth of the flight each: The waterfront, The Strip, The DJ terrace, The finale, The finish.</td></tr>
+<tr><th scope="row">landed</th><td><div class="ds-fill"><div class="ibiza-flyover__band">
+<div class="ibiza-flyover__where">
+<p class="ibiza-flyover__title">Ibiza Sunset Strip</p>
+<p aria-live="polite" class="ibiza-flyover__caption"><span class="ibiza-flyover__place">The start</span> · your grid for Intervals to the Beat</p>
+</div>
+<p class="ibiza-flyover__status ibiza-flyover__status--ready">Bike ready · lining up</p>
+</div></div></td><td>The camera is on the grid. The status takes the accent and says so in words; the countdown follows.</td></tr>
+<tr><th scope="row">bike-lost</th><td><div class="ds-fill"><div class="ibiza-flyover__band">
+<div class="ibiza-flyover__where">
+<p class="ibiza-flyover__title">Ibiza Sunset Strip</p>
+<p aria-live="polite" class="ibiza-flyover__caption"><span class="ibiza-flyover__place">The DJ terrace</span> · light beams over the crowd</p>
+</div>
+<div class="ibiza-flyover__lost" role="alert"><p class="ibiza-flyover__lost-line"><svg aria-hidden="true" class="icon icon--md" viewBox="0 0 24 24"><path d="m17 17-5 5V12l-5 5"/><path d="m2 2 20 20"/><path d="M14.5 9.5 17 7l-5-5v4.5"/></svg>No answer from the Echelon EX-5s</p><a class="btn btn--primary ibiza-flyover__retry" href="#"><svg aria-hidden="true" class="icon icon--md" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>Try again</a></div>
+</div></div></td><td>The bike stopped answering during the flight: an alert in the band, with <b>Try again</b> (48px).</td></tr>
+</tbody>
+</table></div><p>Before the course can be drawn the scene shows the course’s still under “Loading Ibiza Sunset Strip” (<code>role="status"</code>):</p><div class="ds-example">
+  <iframe class="ds-frame" src="../../mocks/pages/ibiza-flyover/loading.html?chrome=0" height="420" title="Ibiza Flyover before the course can be drawn" loading="lazy"></iframe>
+  <div class="ds-example__caption"><span>Ibiza Flyover before the course can be drawn</span><a href="../../mocks/pages/ibiza-flyover/loading.html">pages/ibiza-flyover/loading</a></div>
+</div>
+</section>
+
+<section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+<ul>
+<li><b>Every width:</b> three rows: bar, scene, band. The scene takes the height the other two leave; the page never scrolls.</li>
+<li><b>Below 640px:</b> the band stacks the title and caption over the status, and keeps clear of the home bar (<code>env(safe-area-inset-bottom)</code>). The title is 36px.</li>
+<li><b>From 640px:</b> the band is one row, the status on the right; the title is 48px, and 60px from 1024px.</li>
+</ul>
+</section>
+
+<section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+<p>The bar and the band stand on the page background (<code>--color-ink</code>) in both themes; the scene is a picture and does not change. The ready status reads <code>--color-volt-fg</code>, the lost-bike line <code>--color-heart-fg</code>.</p><div class="ds-themes"><div data-theme="light"><div class="ds-fill"><div class="ibiza-flyover__band">
+<div class="ibiza-flyover__where">
+<p class="ibiza-flyover__title">Ibiza Sunset Strip</p>
+<p aria-live="polite" class="ibiza-flyover__caption"><span class="ibiza-flyover__place">The start</span> · your grid for Intervals to the Beat</p>
+</div>
+<p class="ibiza-flyover__status ibiza-flyover__status--ready">Bike ready · lining up</p>
+</div></div></div><div data-theme="dark"><div class="ds-fill"><div class="ibiza-flyover__band">
+<div class="ibiza-flyover__where">
+<p class="ibiza-flyover__title">Ibiza Sunset Strip</p>
+<p aria-live="polite" class="ibiza-flyover__caption"><span class="ibiza-flyover__place">The start</span> · your grid for Intervals to the Beat</p>
+</div>
+<p class="ibiza-flyover__status ibiza-flyover__status--ready">Bike ready · lining up</p>
+</div></div></div></div>
+</section>
+
+<section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+<h3>Role and pattern</h3>
+<p>A page: <code>&lt;header&gt;</code> (bar), <code>&lt;main&gt;</code> (scene) and <code>&lt;footer&gt;</code> (band). The course’s name is the page’s <code>&lt;h1&gt;</code>; the picture has <code>role="img"</code> and the name “Ibiza Sunset Strip from above”.</p>
+<h3>Keyboard</h3>
+<div class="ds-table-wrap"><table class="ds-table ds-keys">
+<thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead>
+<tbody>
+<tr><td><kbd>Tab</kbd></td><td>Skip flyover, then Cancel, then Try again when the bike is lost</td></tr>
+<tr><td><kbd>Enter</kbd></td><td>Activates the focused control</td></tr>
+<tr><td><kbd>Esc</kbd></td><td>Cancels: back to The Class</td></tr>
+</tbody>
+</table></div>
+<h3>Focus</h3>
+<p>Focus starts on <b>Skip flyover</b>. The ring is the standard 2px ring, drawn on the bar, never on the picture.</p>
+<h3>Labelling</h3>
+<p>The caption is <code>aria-live="polite"</code>, so each place is read once as it changes. The loading line is <code>role="status"</code>; the lost bike is <code>role="alert"</code>.</p>
+<h3>Contrast</h3>
+<div class="ds-pairs"><div class="ds-pairs-col" data-theme="light"><span class="ds-pairs-col__title">light theme</span><div class="ds-pair"><span>Caption on the band</span><span class="ds-pair__ratio" data-contrast="--color-muted|--color-ink" data-min="4.5"></span></div><div class="ds-pair"><span>Place and title</span><span class="ds-pair__ratio" data-contrast="--color-fg|--color-ink" data-min="4.5"></span></div><div class="ds-pair"><span>Ready status</span><span class="ds-pair__ratio" data-contrast="--color-volt-fg|--color-ink" data-min="4.5"></span></div><div class="ds-pair"><span>Lost-bike line</span><span class="ds-pair__ratio" data-contrast="--color-heart-fg|--color-ink" data-min="4.5"></span></div><div class="ds-pair"><span>Loading line on the photo scrim</span><span class="ds-pair__ratio" data-contrast="--color-on-photo|--color-scrim-photo" data-min="4.5"></span></div></div><div class="ds-pairs-col" data-theme="dark"><span class="ds-pairs-col__title">dark theme</span><div class="ds-pair"><span>Caption on the band</span><span class="ds-pair__ratio" data-contrast="--color-muted|--color-ink" data-min="4.5"></span></div><div class="ds-pair"><span>Place and title</span><span class="ds-pair__ratio" data-contrast="--color-fg|--color-ink" data-min="4.5"></span></div><div class="ds-pair"><span>Ready status</span><span class="ds-pair__ratio" data-contrast="--color-volt-fg|--color-ink" data-min="4.5"></span></div><div class="ds-pair"><span>Lost-bike line</span><span class="ds-pair__ratio" data-contrast="--color-heart-fg|--color-ink" data-min="4.5"></span></div><div class="ds-pair"><span>Loading line on the photo scrim</span><span class="ds-pair__ratio" data-contrast="--color-on-photo|--color-scrim-photo" data-min="4.5"></span></div></div></div>
+<h3>Motion</h3>
+<p>The flight is the screen. With <code>prefers-reduced-motion: reduce</code> the screen is not shown: The Class goes straight to the countdown (L2-179 AC9).</p>
+<h3>Touch</h3>
+<p>Skip flyover and Cancel are 44px tall; Try again is 48px.</p>
+</section>
+
+<section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+<ul>
+<li>The status says only what is true: “Echelon EX-5s connected”, then “Bike ready · lining up”. No made-up progress (“setting warm-up resistance”, “nearly there”).</li>
+<li>A caption is a place and one short phrase, joined by “ · ”: “The Strip · every effort climbs past the clubs”.</li>
+<li>The button is “Skip flyover”, never “Skip” alone. The screen is the “flyover”; the course is “Ibiza Sunset Strip”.</li>
+</ul>
+</section>
+
+<section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+<div class="ds-dodont">
+<figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="ds-fill"><div class="ibiza-flyover__band">
+<div class="ibiza-flyover__where">
+<p class="ibiza-flyover__title">Ibiza Sunset Strip</p>
+<p aria-live="polite" class="ibiza-flyover__caption"><span class="ibiza-flyover__place">The start</span> · your grid for Intervals to the Beat</p>
+</div>
+<p class="ibiza-flyover__status ibiza-flyover__status--ready">Bike ready · lining up</p>
+</div></div></div><figcaption>Give the bar and the band rows of their own, so the course is never hidden.</figcaption></figure>
+<figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><p class="ds-note">The prototype’s frame letterboxes the picture with bars laid over it.</p></div><figcaption>Lay the bar, the band or any word over the course.</figcaption></figure>
+</div>
+<div class="ds-dodont">
+<figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><p class="ds-note">“Echelon EX-5s connected” → “Bike ready · lining up”</p></div><figcaption>Report the bike’s real state.</figcaption></figure>
+<figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><p class="ds-note">“Laying the road from your plan… filling the grid… nearly there”</p></div><figcaption>Step through invented progress on a timer, or show other riders, a grid position or a lap count.</figcaption></figure>
+</div>
+</section>
+
+<section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+<div class="ds-table-wrap"><table class="ds-table">
+<thead><tr><th scope="col">Used by</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+<tbody>
+<tr><td>place</td><td><code>--color-fg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg" data-swatch></i><span data-token="--color-fg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg" data-swatch></i><span data-token="--color-fg"></span></span></td></tr>
+<tr><td>lost-line</td><td><code>--color-heart-fg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-heart-fg" data-swatch></i><span data-token="--color-heart-fg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-heart-fg" data-swatch></i><span data-token="--color-heart-fg"></span></span></td></tr>
+<tr><td>caption, status</td><td><code>--color-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-muted" data-swatch></i><span data-token="--color-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-muted" data-swatch></i><span data-token="--color-muted"></span></span></td></tr>
+<tr><td>loading</td><td><code>--color-on-photo</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-on-photo" data-swatch></i><span data-token="--color-on-photo"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-on-photo" data-swatch></i><span data-token="--color-on-photo"></span></span></td></tr>
+<tr><td>scene</td><td><code>--color-raised</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-raised" data-swatch></i><span data-token="--color-raised"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-raised" data-swatch></i><span data-token="--color-raised"></span></span></td></tr>
+<tr><td>loading</td><td><code>--color-scrim-photo</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-scrim-photo" data-swatch></i><span data-token="--color-scrim-photo"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-scrim-photo" data-swatch></i><span data-token="--color-scrim-photo"></span></span></td></tr>
+<tr><td>status--ready</td><td><code>--color-volt-fg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-volt-fg" data-swatch></i><span data-token="--color-volt-fg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-volt-fg" data-swatch></i><span data-token="--color-volt-fg"></span></span></td></tr>
+<tr><td>bar</td><td><code>--font-size-2xl</code></td><td><span data-theme="light"><span data-token="--font-size-2xl"></span></span></td><td><span data-theme="dark"><span data-token="--font-size-2xl"></span></span></td></tr>
+<tr><td>title</td><td><code>--font-size-4xl</code></td><td><span data-theme="light"><span data-token="--font-size-4xl"></span></span></td><td><span data-theme="dark"><span data-token="--font-size-4xl"></span></span></td></tr>
+<tr><td>title</td><td><code>--font-size-5xl</code></td><td><span data-theme="light"><span data-token="--font-size-5xl"></span></span></td><td><span data-theme="dark"><span data-token="--font-size-5xl"></span></span></td></tr>
+<tr><td>title</td><td><code>--font-size-6xl</code></td><td><span data-theme="light"><span data-token="--font-size-6xl"></span></span></td><td><span data-theme="dark"><span data-token="--font-size-6xl"></span></span></td></tr>
+<tr><td>loading</td><td><code>--font-size-md</code></td><td><span data-theme="light"><span data-token="--font-size-md"></span></span></td><td><span data-theme="dark"><span data-token="--font-size-md"></span></span></td></tr>
+<tr><td>status, lost-line</td><td><code>--font-size-sm</code></td><td><span data-theme="light"><span data-token="--font-size-sm"></span></span></td><td><span data-theme="dark"><span data-token="--font-size-sm"></span></span></td></tr>
+<tr><td>loading, status</td><td><code>--font-weight-medium</code></td><td><span data-theme="light"><span data-token="--font-weight-medium"></span></span></td><td><span data-theme="dark"><span data-token="--font-weight-medium"></span></span></td></tr>
+<tr><td>place</td><td><code>--font-weight-semibold</code></td><td><span data-theme="light"><span data-token="--font-weight-semibold"></span></span></td><td><span data-theme="dark"><span data-token="--font-weight-semibold"></span></span></td></tr>
+<tr><td>loading</td><td><code>--line-height-md</code></td><td><span data-theme="light"><span data-token="--line-height-md"></span></span></td><td><span data-theme="dark"><span data-token="--line-height-md"></span></span></td></tr>
+<tr><td>status, lost-line</td><td><code>--line-height-sm</code></td><td><span data-theme="light"><span data-token="--line-height-sm"></span></span></td><td><span data-theme="dark"><span data-token="--line-height-sm"></span></span></td></tr>
+<tr><td>bar</td><td><code>--space-14</code></td><td><span data-theme="light"><span data-token="--space-14"></span></span></td><td><span data-theme="dark"><span data-token="--space-14"></span></span></td></tr>
+<tr><td>bar</td><td><code>--space-16</code></td><td><span data-theme="light"><span data-token="--space-16"></span></span></td><td><span data-theme="dark"><span data-token="--space-16"></span></span></td></tr>
+<tr><td>caption, lost-line</td><td><code>--space-2</code></td><td><span data-theme="light"><span data-token="--space-2"></span></span></td><td><span data-theme="dark"><span data-token="--space-2"></span></span></td></tr>
+<tr><td>bar, scene, lost</td><td><code>--space-3</code></td><td><span data-theme="light"><span data-token="--space-3"></span></span></td><td><span data-theme="dark"><span data-token="--space-3"></span></span></td></tr>
+<tr><td>band</td><td><code>--space-36</code></td><td><span data-theme="light"><span data-token="--space-36"></span></span></td><td><span data-theme="dark"><span data-token="--space-36"></span></span></td></tr>
+<tr><td>bar, loading, band</td><td><code>--space-4</code></td><td><span data-theme="light"><span data-token="--space-4"></span></span></td><td><span data-theme="dark"><span data-token="--space-4"></span></span></td></tr>
+<tr><td>band</td><td><code>--space-40</code></td><td><span data-theme="light"><span data-token="--space-40"></span></span></td><td><span data-theme="dark"><span data-token="--space-40"></span></span></td></tr>
+<tr><td>bar, band</td><td><code>--space-6</code></td><td><span data-theme="light"><span data-token="--space-6"></span></span></td><td><span data-theme="dark"><span data-token="--space-6"></span></span></td></tr>
+<tr><td>bar, band</td><td><code>--space-8</code></td><td><span data-theme="light"><span data-token="--space-8"></span></span></td><td><span data-theme="dark"><span data-token="--space-8"></span></span></td></tr>
+<tr><td>skip, cancel</td><td><code>--target-comfortable</code></td><td><span data-theme="light"><span data-token="--target-comfortable"></span></span></td><td><span data-theme="dark"><span data-token="--target-comfortable"></span></span></td></tr>
+<tr><td>retry</td><td><code>--target-ride</code></td><td><span data-theme="light"><span data-token="--target-ride"></span></span></td><td><span data-theme="dark"><span data-token="--target-ride"></span></span></td></tr>
+<tr><td>title</td><td><code>--text-display</code></td><td><span data-theme="light"><span data-token="--text-display"></span></span></td><td><span data-theme="dark"><span data-token="--text-display"></span></span></td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+<pre><code>&lt;div class="app ibiza-flyover"&gt;
+  &lt;div class="ibiza-flyover__bar"&gt;
+&lt;span aria-label="Telo Ride 1" class="lockup" role="img"&gt;&lt;svg aria-hidden="true" class="logo-mark" height="26" viewBox="0 0 48 48" width="26"&gt;…&lt;/svg&gt;&lt;span class="wordmark"&gt;TELO&lt;span class="wordmark__product"&gt;Ride 1&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;a class="btn btn--raised btn--sm ibiza-flyover__skip" href="#"&gt;&lt;svg aria-hidden="true" class="icon icon--md" viewBox="0 0 24 24"&gt;…&lt;/svg&gt;Skip flyover&lt;/a&gt;
+&lt;a aria-label="Cancel" class="icon-btn ibiza-flyover__cancel" href="#"&gt;&lt;svg aria-hidden="true" class="icon icon--md" viewBox="0 0 24 24"&gt;…&lt;/svg&gt;&lt;/a&gt;
+&lt;/div&gt;
+  &lt;main id="main" class="ibiza-flyover__scene"&gt;…the course from above…&lt;/main&gt;
+  &lt;div class="ibiza-flyover__band"&gt;
+&lt;div class="ibiza-flyover__where"&gt;
+&lt;p class="ibiza-flyover__title"&gt;Ibiza Sunset Strip&lt;/p&gt;
+&lt;p aria-live="polite" class="ibiza-flyover__caption"&gt;&lt;span class="ibiza-flyover__place"&gt;The Strip&lt;/span&gt; · every effort climbs past the clubs&lt;/p&gt;
+&lt;/div&gt;
+&lt;p class="ibiza-flyover__status"&gt;Echelon EX-5s connected&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;</code></pre><div class="ds-table-wrap"><table class="ds-table">
+<thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead>
+<tbody>
+<tr><td><code>.ibiza-flyover</code> on <code>.app</code></td><td>The three rows; nothing scrolls.</td></tr>
+<tr><td><code>.ibiza-flyover__skip</code>, <code>__cancel</code></td><td>44px targets; Cancel moves right when Skip is gone (<code>__cancel--alone</code>).</td></tr>
+<tr><td><code>.ibiza-flyover__loading</code></td><td>The loading line over the still, on the photo scrim.</td></tr>
+<tr><td><code>.ibiza-flyover__status--ready</code></td><td>The status in the accent once the bike is ready.</td></tr>
+<tr><td><code>.ibiza-flyover__lost</code>, <code>__retry</code></td><td>The lost-bike alert and its 48px action, in the status’s place.</td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+<p>Mocks this component was extracted from:</p>
+<ul>
+<li><a href="../../mocks/pages/ibiza-flyover/default.html">pages/ibiza-flyover/default</a></li>
+<li><a href="../../mocks/pages/ibiza-flyover/loading.html">pages/ibiza-flyover/loading</a></li>
+<li><a href="../../mocks/pages/ibiza-flyover/landed.html">pages/ibiza-flyover/landed</a></li>
+<li><a href="../../mocks/pages/ibiza-flyover/bike-lost.html">pages/ibiza-flyover/bike-lost</a></li>
+</ul>
+<p>Drift fixed during extraction: the prototype’s 40px Skip and Cancel are 44px; its bars over the picture became rows of their own; its timed status steps were dropped. The picture is the design’s target still and shows a loop and a marina the built course does not have (a rule for the product: the app supplies its own view). No <code>recording</code> mock exists for this screen yet (L2.md, <i>Mock gaps</i>).</p>
+</section>
+    <footer class="ds-footer"><span>Telo Ride 1 design system · extracted from <a href="../../mocks/index.html">docs/mocks</a> on 24 November 2026</span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Show the finish banner
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The five screens, Web Bluetooth, the protocol and the engine")
+  ContainerDb(storage, "Browser storage", "localStorage", "The record: ride count, best output and last output")
+}
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Ext(youtube, "YouTube", "Privacy-enhanced player for the class video")
+
+Rel(rider, app, "Watches the finish banner for 3.2 seconds", "HTTPS")
+Rel(app, storage, "Writes the record at 20:00, before the banner shows", "localStorage")
+Rel(app, bike, "Reads telemetry", "Web Bluetooth")
+Rel(app, youtube, "Keeps the player playing", "IFrame Player API")
+@enduml

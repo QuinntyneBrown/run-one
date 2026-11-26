@@ -1,0 +1,138 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Fly over the course
+
+class RidePage <<component>> {
+  #showing: Signal<'flyover' | 'ride'>
+  #onFlyoverDone(): void
+}
+
+class "opensOnFlyover()" as opensFn <<function>> {
+  +opensOnFlyover(way: 'video' | 'ibiza', reducedMotion: boolean): boolean
+}
+
+enum FlyoverStage {
+  loading
+  flying
+  landed
+}
+
+class FlyoverStore <<store>> {
+  +stage: Signal<FlyoverStage>
+  +share: Signal<number | null>
+  +caption: Signal<FlyoverPlace | null>
+  +status: Signal<string>
+  +bikeLost: Signal<boolean>
+  +canSkip: Signal<boolean>
+  +done: OutputEmitter<void>
+  +skip(): void
+  +cancel(): void
+  +retry(): void
+  -land(): void
+}
+
+interface FlyoverPlace {
+  +place: string
+  +line: string
+}
+
+class "flyoverAt()" as fn <<function>> {
+  +FLIGHT_MS = 9000
+  +LANDED_MS = 900
+  +GIVE_UP_MS = 10000
+  +flyoverAt(elapsedMs: number): FlyoverFlight
+}
+
+interface FlyoverFlight {
+  +share: number
+  +place: 0 | 1 | 2 | 3 | 4
+  +over: boolean
+}
+
+class CourseSession <<service>> {
+  +drawn: Signal<boolean>
+  +unavailable: Signal<boolean>
+  +attach(host: ViewContainerRef): void
+  +detach(host: ViewContainerRef): void
+  -scene: ComponentRef<CourseScene> | null
+}
+
+class CourseSceneHost <<directive>> {
+  +name: InputSignal<string>
+  +elapsed: InputSignal<number>
+  +running: InputSignal<boolean>
+  +flyover: InputSignal<number | null>
+}
+
+class CourseScene <<component>> {
+  +label: InputSignal<string>
+  +elapsed: InputSignal<number>
+  +running: InputSignal<boolean>
+  +flyover: InputSignal<number | null>
+  +drawn: OutputEmitter<Backend>
+  +unavailable: OutputEmitter<void>
+}
+
+interface CourseFrame {
+  +time: number
+  +crank: number
+  +reducedMotion: boolean
+  +flyover: number | null
+}
+
+class "flyoverCamera()" as camFn <<function>> {
+  +flyoverCamera(share: number, finish: number, into: FlyoverCamera): FlyoverCamera
+}
+
+class IbizaFlyover <<component>> {
+  +name: InputSignal<string>
+  +loading: InputSignal<boolean>
+  +caption: InputSignal<FlyoverPlace | null>
+  +landed: InputSignal<boolean>
+  +status: InputSignal<string>
+  +lost: InputSignal<string | null>
+  +canSkip: InputSignal<boolean>
+  +skip: OutputEmitter<void>
+  +cancel: OutputEmitter<void>
+  +retry: OutputEmitter<void>
+}
+
+class IbizaFlyoverPage <<component>> {
+  #store: FlyoverStore
+  +done: OutputEmitter<void>
+}
+
+interface BikeConnection {
+  +ble: Signal<BleState>
+  +bike: Signal<BikeInfo | null>
+  +reconnectNow(): void
+}
+
+RidePage ..> opensFn : asks once
+RidePage *-- IbizaFlyoverPage : shows first
+RidePage *-- CourseSession : provides
+IbizaFlyoverPage *-- FlyoverStore : provides
+IbizaFlyoverPage *-- IbizaFlyover : renders
+IbizaFlyoverPage *-- CourseSceneHost : projects
+FlyoverStore --> FlyoverStage : holds
+FlyoverStore ..> fn : reads
+fn ..> FlyoverFlight : returns
+FlyoverStore ..> FlyoverPlace : FLYOVER_PLACES
+FlyoverStore --> CourseSession : drawn, unavailable
+FlyoverStore ..> BikeConnection : BIKE_CONNECTION
+CourseSceneHost --> CourseSession : attach(), detach()
+CourseSession o-- CourseScene : owns one
+CourseScene ..> CourseFrame : draws
+CourseFrame ..> camFn : flyover selects the camera
+@enduml

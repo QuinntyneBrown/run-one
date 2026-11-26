@@ -1,0 +1,55 @@
+@startuml
+title UML sequence behaviour — Show the class targets
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+  participant "ClassRideStore" as store
+  participant "powerStat" as helper
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "ClassSegment" as seg
+  participant "ClassStat" as stat
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "BikeTelemetry" as telemetry
+  participant "WorkoutEngine" as engine
+  participant "PowerModel" as model
+end box
+box "Device — Smart bike" #F2F4F7
+  participant "Smart bike" as bike
+end box
+rider -> bike : Pedal at 91 rpm on resistance 13
+bike -> telemetry : Notification with cadence and resistance
+telemetry -> telemetry : Estimate power: 233 W
+engine -> store : PlanState: Recover, 0:30 left, target power 231 W
+store -> helper : powerStat(233, 231)
+helper -> model : onTarget(233, 231)
+alt within 10 % of the target (L2-089 AC2)
+  model --> helper : true
+  helper --> store : value "233", hint "On target", tone on
+  store --> page : power
+else outside 10 %
+  model --> helper : false
+  helper --> store : value, hint the signed difference such as "-39 W", tone under or over
+  store --> page : power
+end
+store --> page : cadence = "91", hint "Aim 90", or no hint with no aim (L2-089 AC3)
+page -> stat : Power and Cadence, the words carry the state (L2-089 AC6)
+page -> seg : index, remaining, progress
+seg --> rider : "Recover", timer "0:30", progress bar, resistance profile (L2-089 AC1)
+stat --> rider : "233 W On target" and "91 rpm Aim 90"
+@enduml

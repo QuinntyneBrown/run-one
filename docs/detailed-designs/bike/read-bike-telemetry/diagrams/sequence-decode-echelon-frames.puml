@@ -1,0 +1,57 @@
+@startuml
+title UML sequence behaviour — Decode Echelon frames
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRideStore" as store
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "WebBluetoothBikeConnection" as conn
+  participant "BikeTelemetry" as telemetry
+  participant "EchelonFrameDecoder" as decoder
+  participant "PowerModel" as power
+end box
+box "Device — Smart bike" #F2F4F7
+  participant "Echelon bike" as bike
+end box
+rider -> bike : Pedals
+bike -> conn : Notify F0 D2 01 0C CF
+conn -> telemetry : frames emits the bytes
+telemetry -> decoder : decode(bytes, at)
+decoder --> telemetry : resistance 12 (L2-020 AC1)
+bike -> conn : Notify F0 D1 09 00 05 00 00 00 00 00 50 00 1F
+conn -> telemetry : frames emits the bytes
+telemetry -> decoder : decode(bytes, at)
+decoder --> telemetry : cadence 80 rpm (L2-020 AC2)
+telemetry -> telemetry : Restart the 5-second cadence timer
+telemetry -> power : estimate(80, 12)
+power --> telemetry : 193 W (L2-023 AC1)
+telemetry --> store : cadence, resistance and powerW signals change
+store --> rider : Readouts show the values within 250 ms (L2-134 AC1)
+alt frame under 4 bytes, byte 0 not F0, unknown type, short D1, or D0
+  bike -> conn : Notify the frame
+  conn -> telemetry : frames emits the bytes
+  telemetry -> decoder : decode(bytes, at)
+  decoder --> telemetry : null, no error (L2-020 AC3, AC4)
+end
+opt no D1 frame for 5 seconds while connected
+  telemetry -> telemetry : expireCadence(): cadence becomes null
+  telemetry -> power : estimate(null, 12)
+  power --> telemetry : null (L2-023 AC2)
+  telemetry --> store : cadence and powerW are null
+  store --> rider : Cadence and Power read "—" (L2-020 AC5)
+end
+@enduml

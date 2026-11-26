@@ -1,0 +1,66 @@
+@startuml
+title UML sequence behaviour — Explain a blocked browser
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "TheClassPage" as page
+  participant "LinkCopy" as link
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "BrowserNotice" as notice
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "WebBluetoothSupport" as support
+  participant "BrowserClipboard" as clip
+end box
+box "Device — Browser" #F2F4F7
+  participant "window" as window
+end box
+rider -> page : Open The Class as a returning rider
+page -> support : Read state()
+support -> window : Read isSecureContext, then "bluetooth" in navigator
+window --> support : Secure context first (L2-009), then Web Bluetooth (L2-008)
+support --> page : ready, unsupported-browser or insecure-context
+alt unsupported-browser (L2-008 AC2)
+  page -> notice : Render "Open Telo Ride 1 in Chrome or Edge." with Copy link
+  notice --> rider : Alert under the header; class, video and record stay readable
+  rider -> notice : Press Copy link
+  notice -> page : act
+  page -> link : copy()
+  link -> clip : copy(page address) (L2-008 AC3)
+  clip -> window : navigator.clipboard.writeText(address)
+  alt written
+    window --> clip : Written
+    clip --> link : Resolved
+    link --> page : copied() is true for 2 s
+    page --> rider : Button shows "Copied" with a check, then "Copy link" again
+  else refused, or no clipboard
+    clip --> link : Rejected
+    link --> page : copied() stays false
+    page --> rider : Button still reads "Copy link"
+  end
+else insecure-context (L2-009 AC1)
+  page -> support : secureUrl()
+  support --> page : Same host and path on https://
+  page -> notice : Render "Open the secure version of this page." with Open over HTTPS
+  notice --> rider : Alert under the header with the link
+else ready (L2-008 AC4, L2-009 AC3)
+  page --> rider : No notice
+end
+opt blocked (L2-010 AC1)
+  page --> rider : Header "No bike · Connect"; start button "Connect your bike", disabled, with its hint
+end
+@enduml

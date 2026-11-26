@@ -1,0 +1,47 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Fly over the course
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(bike, "Smart bike", "Echelon or FTMS")
+
+Container_Boundary(ride, "Ride app — ride application") {
+  Component(ridePage, "RidePage", "Angular component (designed)", "The /ride route's component: Ibiza Flyover, then Class Ride")
+  Component(opens, "opensOnFlyover()", "Pure helper (designed)", "In Ibiza and without reduced motion")
+  Component(flyPage, "IbizaFlyoverPage", "Angular component (designed)", "The flyover's screen")
+  Component(flyStore, "FlyoverStore", "Store (designed)", "loading, flying, landed; skip, cancel, retry")
+  Component(session, "CourseSession", "Service (designed)", "Owns the one CourseScene and lends it")
+  Component(sceneHost, "CourseSceneHost", "Directive (changed)", "Borrows the scene; passes the flight's share")
+  Component(ridePageC, "ClassRidePage", "Angular component (exists)", "Class Ride, opening on the countdown")
+  Component(store, "ClassRideStore", "Store (changed)", "Sends the first level; phase waiting")
+}
+Container_Boundary(components, "Ride app — components library") {
+  Component(view, "wz-ibiza-flyover", "Presentation component (designed)", "Bar, scene slot and band")
+}
+Container_Boundary(domain, "Ride app — domain library") {
+  Component(rule, "flyoverAt()", "Pure function (designed)", "Share flown and place, from elapsed time")
+  Component(conn, "BikeConnection", "Service (exists)", "BIKE_CONNECTION: ble, bike, reconnectNow()")
+}
+Container_Boundary(world, "Ride app — world library") {
+  Component(scene, "CourseScene", "Angular component (changed)", "The canvas, the frame loop and the renderer")
+  Component(camera, "flyoverCamera(), chaseCamera()", "Pure helpers (designed, exists)", "The camera from above and behind the rider")
+}
+
+Rel(rider, flyPage, "Watches the flyover on")
+Rel(ridePage, opens, "Asks once")
+Rel(ridePage, flyPage, "Shows first, in Ibiza")
+Rel(ridePage, ridePageC, "Shows on done")
+Rel(ridePage, store, "beginCountdown() on done")
+Rel(flyPage, flyStore, "Reads from")
+Rel(flyPage, view, "Renders")
+Rel(flyPage, sceneHost, "Projects into the scene slot")
+Rel(ridePageC, sceneHost, "Projects into the course's box")
+Rel(sceneHost, session, "attach() and detach()")
+Rel(session, scene, "Creates once; destroys with RidePage")
+Rel(scene, camera, "Places the camera through the renderer")
+Rel(flyStore, rule, "Reads")
+Rel(flyStore, session, "Reads drawn and unavailable")
+Rel(flyStore, conn, "Reads ble and bike; reconnectNow()")
+Rel(conn, bike, "Links to", "Web Bluetooth")
+@enduml

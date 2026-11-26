@@ -1,0 +1,39 @@
+<div class="class-intensity" role="group" aria-labelledby="class-intensity-label">
+  <span class="class-intensity__label" id="class-intensity-label">Intensity</span>
+  <span class="class-intensity__value">{{ value() }}/10</span>
+  <button
+    class="class-intensity__btn class-intensity__btn--raise"
+    type="button"
+    aria-label="Raise intensity"
+    [disabled]="disabled() || value() >= 10"
+    (click)="raise.emit()"
+  >
+    <svg class="icon icon--lg" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M5 12h14" />
+      <path d="M12 5v14" />
+    </svg>
+  </button>
+  <input
+    class="class-intensity__slider"
+    type="range"
+    min="0"
+    max="10"
+    step="1"
+    aria-label="Intensity"
+    [value]="value()"
+    [attr.aria-valuetext]="value() + ' of 10'"
+    [disabled]="disabled()"
+    (input)="slide($event)"
+  />
+  <button
+    class="class-intensity__btn class-intensity__btn--lower"
+    type="button"
+    aria-label="Lower intensity"
+    [disabled]="disabled() || value() <= 0"
+    (click)="lower.emit()"
+  >
+    <svg class="icon icon--lg" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M5 12h14" />
+    </svg>
+  </button>
+</div>

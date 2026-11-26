@@ -1,0 +1,45 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Wait for a lost bike
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+
+Container_Boundary(ride, "ride application") {
+  Component(page, "ClassRidePage", "Angular page", "Renders the alert; disables Resume and the stepper")
+  Component(store, "ClassRideStore", "Page-scoped store", "bikeLost, followBike(), reconnect()")
+}
+Container_Boundary(components, "components library") {
+  Component(lost, "ClassLost", "wz-class-lost", "Alert: Lost the bike, body and Reconnect")
+  Component(resist, "ClassResist", "wz-class-resist", "Stepper, disabled while lost")
+}
+Container_Boundary(domain, "domain library") {
+  Component(clock, "RideClock", "engine service", "Holds the ride clock")
+  Component(engine, "WorkoutEngine", "engine service", "resend() sends the current segment's level")
+  Component(rc, "ResistanceController", "engine service", "canControl is false while lost")
+  Component(wb, "WebBluetoothBikeConnection", "bluetooth service", "Sets ble; sends the kept target first after a reconnect")
+  Component(recon, "DeviceReconnector", "bluetooth helper", "Retries every 3 s; retryNow()")
+}
+Container_Boundary(api, "api library") {
+  Component(conn, "BIKE_CONNECTION", "Contract and token", "ble signal and reconnectNow()")
+  Component(tick, "TICKER", "Contract and token", "A beat once a second")
+  Component(vp, "VideoPlayer", "Contract", "pause, seekTo, play")
+}
+
+Rel(rider, page, "Presses Reconnect or Leave")
+Rel(page, lost, "Renders while bikeLost")
+Rel(page, resist, "Sets disabled")
+Rel(page, store, "Reads bikeLost; calls reconnect()")
+Rel(store, conn, "Reads ble; calls reconnectNow()")
+Rel(store, tick, "Checks the bike once a second on")
+Rel(store, clock, "Pauses and resumes")
+Rel(store, vp, "Pauses and plays")
+Rel(store, rc, "Reads canControl")
+Rel(store, engine, "Calls resend() when the bike is back")
+Rel(engine, rc, "Sends the segment's level through")
+Rel(rc, conn, "Reads ble; calls setResistance()")
+Rel(wb, conn, "Implements")
+Rel(wb, recon, "Retries through")
+Rel(wb, bike, "Reconnects and writes the level", "Web Bluetooth")
+@enduml

@@ -1,0 +1,56 @@
+@startuml
+title UML sequence behaviour — Fail a spec on an unexpected call
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+box "External — CI" #FFF4E5
+  participant "Playwright spec" as spec
+  participant "guard fixture" as guard
+end box
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "Any screen" as page
+end box
+box "Device — Browser" #F2F4F7
+  participant "Fake navigator.bluetooth" as ble
+  participant "Network" as net
+end box
+spec -> guard : Start, automatically for every spec
+guard -> page : Listen for pageerror
+guard -> net : Route every host other than localhost
+spec -> page : Run the behaviour
+opt a Bluetooth call the spec did not offer
+  page -> ble : Call a member, service or characteristic not offered
+  ble --> page : Reject
+  ble -> guard : Report "unexpected" with the call
+end
+opt a request to another origin
+  page -> net : Request a host other than localhost
+  net -> guard : Not answered by YouTubeFixture
+  guard -> net : Abort; note "request off localhost"
+end
+opt a localhost request no fixture answers
+  page -> net : Request with no declared answer
+  net -> guard : Listed as unanswered
+end
+opt an uncaught error in the page
+  page -> guard : pageerror
+end
+spec -> guard : The test body ends
+guard -> guard : Collect page errors, foreign and unanswered requests, unexpected calls
+alt the list is empty
+  guard --> spec : Pass
+else any entry
+  guard --> spec : Fail, listing each problem (L2-148 AC1)
+end
+@enduml

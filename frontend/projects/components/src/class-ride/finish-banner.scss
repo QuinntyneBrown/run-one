@@ -1,0 +1,115 @@
+// Block finish-banner (docs/design-system/components/finish-banner.html, docs/mocks/pages/class-ride/finish): the band
+// lies across the whole of the video's or the course's box, under the Music button, and takes no pointer events
+// (L2-181 AC1). The band is the inverse surface in both themes.
+@keyframes finish-banner-in {
+  from {
+    translate: -100% 0;
+  }
+  to {
+    translate: 0 0;
+  }
+}
+
+@keyframes finish-banner-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+:host {
+  display: contents;
+}
+
+.finish-banner {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.finish-banner__band {
+  flex-shrink: 0;
+  width: 120%;
+  rotate: -3deg;
+  background: var(--color-bg-inverse);
+  color: var(--color-ink);
+  animation: finish-banner-in var(--duration-base) var(--ease-enter) both;
+}
+
+.finish-banner__chequer {
+  height: var(--space-5);
+  background: conic-gradient(
+      var(--color-ink) 25%,
+      transparent 0 50%,
+      var(--color-ink) 0 75%,
+      transparent 0
+    )
+    0 0 / var(--space-5) var(--space-5);
+}
+
+.finish-banner__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-2) var(--space-6);
+
+  @media (min-width: 40rem) {
+    padding-block: var(--space-4);
+  }
+}
+
+.finish-banner__title {
+  font: var(--text-display);
+  text-transform: uppercase;
+
+  @media (min-width: 40rem) {
+    font-size: var(--font-size-score);
+  }
+
+  @media (min-width: 64rem) {
+    font-size: var(--font-size-score-lg);
+  }
+}
+
+.finish-banner__result {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  white-space: nowrap;
+  font-family: var(--font-family-display);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-display);
+  font-feature-settings: 'tnum' 1;
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-none);
+
+  @media (min-width: 40rem) {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+.finish-banner__output {
+  font-size: var(--font-size-4xl);
+  color: var(--finish-banner-accent);
+
+  @media (min-width: 40rem) {
+    font-size: var(--font-size-6xl);
+  }
+}
+
+.finish-banner__time {
+  color: color-mix(in srgb, currentColor 65%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .finish-banner__band {
+    animation-name: finish-banner-fade;
+  }
+}

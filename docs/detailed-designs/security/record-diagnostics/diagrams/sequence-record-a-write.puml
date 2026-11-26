@@ -1,0 +1,65 @@
+@startuml
+title UML sequence behaviour — Record a write and its outcome
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "ResistanceController" as controller
+  participant "WebBluetoothBikeConnection" as conn
+  participant "EchelonLink" as link
+  participant "GattWriteQueue" as queue
+  participant "DiagnosticRecorder" as recorder
+  participant "RecordingAppLogger" as logger
+  participant "ConsoleAppLogger" as consolelogger
+end box
+box "Device — Browser" #F2F4F7
+  participant "navigator.bluetooth" as ble
+  participant "console" as console
+end box
+box "Device — Smart bike" #F2F4F7
+  participant "Bike" as bike
+end box
+controller -> conn : setResistance(12)
+conn -> link : setResistance(12)
+link -> queue : enqueue(write, 0, SentBytes: the characteristic, F0 B1 01 0C AE, target resistance 12)
+queue -> queue : Wait for the writes before it, and the gap
+queue -> recorder : BIKE_LINK_TAP?.writing(characteristic, bytes, 12)
+recorder -> recorder : Number the write; add one TX line with the number, the hex and target resistance 12 (L2-178 AC5)
+recorder --> queue : The function to call when the write settles
+queue -> ble : writeValueWithResponse(bytes)
+ble -> bike : Write
+alt the bike acknowledges
+  bike --> ble : Acknowledge
+  ble --> queue : Resolve
+  queue -> recorder : settled()
+  recorder -> recorder : Add one ACK line: the same number, ok and the milliseconds since writing() (L2-178 AC5)
+  queue --> link : Acknowledgement time
+  link --> conn : Acknowledgement time
+  conn --> controller : Acknowledgement time
+else the write fails
+  ble --> queue : Reject with NetworkError
+  queue -> recorder : settled(error)
+  recorder -> recorder : Add one ACK line: the same number, failed and the error as quoted text (L2-178 AC5)
+  queue --> link : Reject
+  link --> conn : Reject
+  conn -> conn : onDrop(error); report(error)
+  conn -> logger : APP_LOGGER.error("bluetooth", error)
+  logger -> consolelogger : error("bluetooth", error)
+  consolelogger -> console : console.error("[bluetooth] NetworkError: <message>") (L2-115 AC4)
+  logger -> recorder : logged(logLine("bluetooth", error)): one ERR line with the same redacted text (L2-178 AC7)
+  conn -> recorder : BIKE_LINK_TAP?.event("dropped"), then event("ble", "disconnected") (L2-178 AC6)
+  conn --> controller : Reject
+end
+note over queue, recorder : A keepalive, an initialisation command and an FTMS control point command take the same path, without a target resistance
+@enduml

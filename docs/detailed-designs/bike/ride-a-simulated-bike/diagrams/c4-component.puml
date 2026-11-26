@@ -1,0 +1,34 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Ride a simulated bike
+
+Container_Boundary(ride, "ride application") {
+  Component(routes, "ride.routes.ts", "Lazy parent route", "Provides the bike connection to every screen")
+  Component(provide, "provideBikeConnection()", "Provider function", "Selects the simulated or the Web Bluetooth binding")
+  Component(flag, "simulated-bike.provider.ts", "Build-time file", "SIMULATOR_ENABLED and simulatedBike(); replaced in production")
+  Component(screens, "Connect Bike, The Class, Class Ride", "Pages and stores", "Use the tokens, never an implementation")
+}
+Container_Boundary(domain, "domain library") {
+  Component(sim, "SimulatedBikeConnection", "bluetooth/", "Emits D1 and D2 frames once a second; stores the level")
+  Component(support, "SimulatedBluetoothSupport", "bluetooth/", "Reports ready without Web Bluetooth")
+  Component(profile, "SimulatedRiderProfile", "bluetooth/ helper", "Cadence for each second")
+  Component(protocol, "EchelonProtocol", "protocol/", "Encodes D1 and D2; parses B1")
+  Component(ticker, "SecondTicker", "engine/", "One beat a second")
+  Component(telemetry, "BikeTelemetry", "engine/ service", "Decodes frames as from a real bike")
+}
+Container_Boundary(api, "api library") {
+  Component(tokens, "BIKE_CONNECTION, BLUETOOTH_SUPPORT, TICKER", "Injection tokens", "Contracts every screen depends on")
+}
+
+Rel(routes, provide, "Calls once, when the route loads")
+Rel(provide, flag, "Reads SIMULATOR_ENABLED; spreads simulatedBike()")
+Rel(flag, sim, "Binds to BIKE_CONNECTION")
+Rel(flag, support, "Binds to BLUETOOTH_SUPPORT")
+Rel(provide, ticker, "Binds to TICKER")
+Rel(screens, tokens, "Inject")
+Rel(sim, tokens, "Realizes BikeConnection; injects TICKER")
+Rel(sim, profile, "Reads cadence from")
+Rel(sim, protocol, "Encodes and parses frames with")
+Rel(telemetry, tokens, "Reads frames through BIKE_CONNECTION")
+@enduml

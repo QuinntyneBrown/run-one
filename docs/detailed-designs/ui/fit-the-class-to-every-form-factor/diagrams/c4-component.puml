@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Fit The Class to every form factor
+
+Person(rider, "Rider", "Rides a smart bike at home")
+Container_Boundary(ride, "ride application") {
+  Component(page, "TheClassPage", "Angular component, lazy route /", "A column as tall as the window: the header over the the-class block")
+  Component(tokens, "tokens.css", "Global stylesheet", "~--the-class-aside-width, ~--layout-margin, ~--space-40")
+  Component(index, "index.html", "Document", "Viewport meta with viewport-fit=cover")
+}
+Container_Boundary(components, "components library") {
+  Component(block, "TheClass", "Angular component, wz-the-class", "Draws the the-class block and declares the start button once")
+  Component(sheet, "the-class.scss", "Component stylesheet", "One column below lg; two columns on one screen from lg, tighter under 800 px tall")
+  Component(plan, "ClassProfile", "Angular component, wz-class-profile", "The resistance profile of What the bike will do")
+  Component(button, "Button", "Angular component, wz-button", "The start button")
+}
+Rel(rider, page, "Views and starts the class from")
+Rel(page, block, "Gives the height under the header to")
+Rel(block, sheet, "Is laid out by")
+Rel(block, plan, "Places in the-class~__plan")
+Rel(block, button, "Renders in the-class~__action and the-class~__footer")
+Rel(sheet, tokens, "Reads the aside width and page margin from")
+Rel(sheet, index, "Needs viewport-fit=cover for env(safe-area-inset-bottom) from")
+@enduml

@@ -1,0 +1,63 @@
+@startuml
+title UML sequence behaviour — Fly over the course and land
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "RidePage" as ridePage
+  participant "ClassRideStore" as store
+  participant "IbizaFlyoverPage" as page
+  participant "FlyoverStore" as fly
+  participant "CourseSession" as session
+  participant "ClassRidePage" as classRide
+end box
+box "Frontend — Ride app (world library)" #ECFDF3
+  participant "CourseScene" as scene
+end box
+box "Device and host" #F2F4F7
+  participant "Smart bike" as bike
+  participant "Static host" as host
+end box
+rider -> ridePage : Presses the start button on The Class with Ibiza Sunset Strip chosen
+ridePage -> store : Create; phase waiting
+store -> bike : The warm-up's target resistance, through WorkoutEngine (L2-175 AC1)
+ridePage -> session : Create
+session -> host : import("@telo/world"); CourseScene fetches the course's files once
+ridePage -> ridePage : opensOnFlyover("ibiza", reduced motion false): true
+ridePage -> page : Show Ibiza Flyover
+page -> session : CourseSceneHost.attach(): the scene in the flyover's scene slot
+fly --> page : stage loading
+page --> rider : Still, "Loading Ibiza Sunset Strip", "Echelon EX-5s connected" (L2-179 AC6)
+host --> scene : The files
+scene --> session : drawn
+session --> fly : drawn: true
+fly -> fly : stage flying; the 9 seconds start on MONOTONIC_TIME
+loop each frame of the flight
+  fly --> page : share from flyoverAt(); caption for a fifth each (AC2)
+  page -> scene : flyover: share, running: false
+  scene --> rider : The course from above, between the bar and the band (AC1)
+end
+fly -> fly : share 1: land()
+fly --> page : stage landed: "The start · your grid for Intervals to the Beat", "Bike ready · lining up"
+page -> scene : flyover: null: the chase camera on the grid (AC3)
+page --> rider : The landing, said once (AC11); Skip flyover gone
+fly -> fly : 900 ms pass
+fly --> ridePage : done
+ridePage -> page : Destroy; CourseSceneHost.detach(): the scene is kept
+ridePage -> classRide : Show Class Ride
+classRide -> session : CourseSceneHost.attach(): the same scene in the course's box
+ridePage -> store : beginCountdown()
+classRide --> rider : The countdown over the course, already drawn (L2-180)
+@enduml

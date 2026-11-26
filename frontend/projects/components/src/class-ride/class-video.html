@@ -1,0 +1,20 @@
+<div class="class-video">
+  <img class="photo photo--yt" [src]="cover()" [alt]="'Video: ' + title()" />
+  <div class="class-video__player"></div>
+  <!-- What lies over the picture: the countdown (L2-180 AC1). -->
+  <ng-content select="[slot=overlay]" />
+  <!-- The ride's controls on the box's left edge: the intensity (L2-183 AC1), over the picture and "Paused". -->
+  <div class="class-video__controls">
+    <ng-content select="[slot=controls]" />
+  </div>
+  @if (paused()) {
+    <div class="class-video__paused" aria-hidden="true">
+      <p class="class-video__paused-label">Paused</p>
+    </div>
+  }
+</div>
+@if (unavailable()) {
+  <wz-inline-message class="class-video__notice" tone="warn" role="status"
+    >The video can’t play. The bike will still follow the class.</wz-inline-message
+  >
+}

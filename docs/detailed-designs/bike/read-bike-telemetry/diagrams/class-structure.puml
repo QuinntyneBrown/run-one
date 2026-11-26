@@ -1,0 +1,85 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Read bike telemetry
+
+interface BikeConnection <<api>> {
+  +ble: Signal<BleState>
+  +bike: Signal<BikeInfo | null>
+  +frames: Observable<Uint8Array>
+}
+
+interface TelemetrySample <<api>> {
+  +at: number
+  +cadence?: number
+  +resistance?: number
+  +powerW?: number
+}
+
+class EchelonFrameDecoder <<protocol>> {
+  +decode(bytes: Uint8Array, at: number): TelemetrySample | null
+}
+
+class IndoorBikeDataDecoder <<protocol>> {
+  +decode(bytes: Uint8Array, at: number): TelemetrySample | null
+}
+
+class BikeTelemetry <<engine>> {
+  +cadence: Signal<number | null>
+  +resistance: Signal<number | null>
+  +powerW: Signal<number | null>
+  +powerIsEstimate: Signal<boolean>
+  +accept(sample: TelemetrySample): void
+  -decode(bytes: Uint8Array): void
+  -expireCadence(): void
+}
+
+class PowerModel <<engine>> {
+  +estimate(cadence: number | null, level: number | null): number | null
+  +target(cadenceAim: number, level: number): number
+}
+
+class RideTotals <<engine>> {
+  +runningSeconds: Signal<number>
+  +outputKj: Signal<number>
+  +avgPowerW: Signal<number | null>
+  +onRunningSecond(seconds: number): void
+}
+
+class RideTicker <<engine>> {
+  +second: Signal<number>
+  +ticks: Observable<number>
+}
+
+class ClassRideStore <<ride>> {
+  +power: Signal<StatView>
+  +cadence: Signal<StatView>
+  +level: Signal<number | null>
+}
+
+class "formatMetric()" as formatMetric <<components>> {
+  +formatMetric(value: number | null, digits: number): string
+}
+
+BikeTelemetry --> BikeConnection : reads frames (BIKE_CONNECTION)
+BikeTelemetry ..> EchelonFrameDecoder : kind echelon
+BikeTelemetry ..> IndoorBikeDataDecoder : kind ftms
+EchelonFrameDecoder ..> TelemetrySample : creates
+IndoorBikeDataDecoder ..> TelemetrySample : creates
+BikeTelemetry ..> PowerModel : estimates power
+RideTotals --> BikeTelemetry : reads powerW
+ClassRideStore --> BikeTelemetry
+ClassRideStore --> RideTotals : ticks
+ClassRideStore --> RideTicker : subscribes
+ClassRideStore ..> formatMetric
+@enduml

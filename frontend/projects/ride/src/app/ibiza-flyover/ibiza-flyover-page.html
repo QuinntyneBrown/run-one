@@ -1,0 +1,25 @@
+<wz-ibiza-flyover
+  [name]="course.name"
+  [still]="course.still"
+  [loading]="store.stage() === 'loading'"
+  [caption]="store.caption()"
+  [landed]="store.stage() === 'landed'"
+  [status]="store.status()"
+  [bikeLost]="store.bikeLost()"
+  [lostLine]="store.lostLine()"
+  [canSkip]="store.canSkip()"
+  (skip)="store.skip()"
+  (cancelled)="store.cancel()"
+  (retry)="store.retry()"
+>
+  <ng-container
+    ngProjectAs="[slot=scene]"
+    [wzCourseScene]="course.name"
+    label="Ibiza Sunset Strip from above"
+    [segments]="ride.plan.segments"
+    [elapsed]="0"
+    [speedKmh]="null"
+    [running]="false"
+    [flyover]="store.share()"
+  />
+</wz-ibiza-flyover>

@@ -1,0 +1,83 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Structure the frontend workspace
+
+class "angular.json" as Angular <<config>> {
+  newProjectRoot: projects
+  prefix: wz
+  ride: application
+  api, domain, components, video: library
+}
+
+class "tsconfig.json" as Tsconfig <<config>> {
+  paths: @telo/api
+  paths: @telo/domain
+  paths: @telo/components
+  paths: @telo/video
+  strictStandalone: true
+  strictTemplates: true
+}
+
+class "eslint.config.js" as Eslint <<config>> {
+  no-restricted-imports per project
+  consistent-type-imports
+  no-restricted-properties: navigator.bluetooth
+  prefer-on-push-component-change-detection
+  prefer-standalone
+  component-selector: wz
+  component-max-inline-declarations: 0
+}
+
+class "app.config.ts" as AppConfig <<config>> {
+  provideZonelessChangeDetection()
+  provideRouter(routes, withComponentInputBinding())
+  provideBrowserGlobalErrorListeners()
+}
+
+class ride <<application>> {
+  pages, stores, routes
+}
+class components <<library>> {
+  presentation components
+}
+class domain <<library>> {
+  protocol/
+  bluetooth/
+  engine/
+  storage/
+  browser/
+}
+class video <<library>> {
+  YouTubeVideoPlayer
+}
+class api <<library>> {
+  contracts, types, injection tokens
+}
+
+ride ..> components : imports
+ride ..> domain : imports
+ride ..> video : import()
+ride ..> api : imports
+components ..> api : import type only
+domain ..> api : imports
+video ..> api : imports
+Angular *-- ride
+Angular *-- components
+Angular *-- domain
+Angular *-- video
+Angular *-- api
+Tsconfig ..> api : aliases each library
+Eslint ..> ride : enforces the direction
+AppConfig --* ride
+@enduml

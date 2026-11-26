@@ -1,0 +1,22 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName Arial
+actor Rider
+participant "wz-class-intensity" as Control
+participant ClassRideStore as Store
+participant RideIntensity as Intensity
+participant WorkoutEngine as Engine
+participant ResistanceController as Resistance
+participant "BIKE_CONNECTION" as Bike
+
+Rider -> Control : presses + (5/10 → 6/10)
+Control -> Store : raise
+Store -> Intensity : set(intensity + 1)
+Store -> Store : announce "Intensity 6 of 10"
+Intensity --> Engine : value changes (effect)
+Engine -> Engine : intensityLevel(13, 6) = 14
+Engine -> Resistance : applyPlanLevel(14)
+Resistance -> Bike : setResistance(14)
+Engine --> Store : state.targetPower for level 14
+@enduml

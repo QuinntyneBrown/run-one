@@ -1,0 +1,57 @@
+@startuml
+title UML sequence behaviour — Get the bike back
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+  participant "ClassRideStore" as store
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "WorkoutEngine" as engine
+  participant "WebBluetoothBikeConnection" as conn
+  participant "RideClock" as clock
+end box
+box "Frontend — Ride app (video library)" #ECFDF3
+  participant "YouTubeVideoPlayer" as player
+end box
+box "Device — Smart bike" #F2F4F7
+  participant "Smart bike" as bike
+end box
+rider -> bike : Pedal to wake the bike
+alt the rider presses "Reconnect"
+  rider -> page : Press "Reconnect"
+  page -> store : reconnect()
+  store -> conn : reconnectNow() (L2-017 AC3)
+else the 3-second retry comes round
+  conn -> conn : Retry the same bike
+end
+conn -> bike : Connect and initialise, without the chooser
+bike --> conn : First notification
+conn -> bike : Write the kept target resistance before anything else (L2-017 AC4)
+conn --> store : ble = connected; bikeLost becomes false
+store --> page : The alert goes; the stepper is enabled
+store -> store : followBike() on the next TICKER beat: pausedByBike = false
+store -> engine : resend()
+engine -> conn : setResistance(current segment's level), through ResistanceController (L2-027 AC4)
+conn -> bike : Write the segment's level (L2-092 AC3)
+alt the rider had not paused
+  store -> clock : resume()
+  store -> player : seekTo(sync offset + elapsed), then play()
+  page --> rider : The ride carries on from where it stopped (L2-092 AC3)
+else the rider had paused before the loss (L2-092 AC4)
+  page --> rider : The ride stays paused; "Resume" is enabled
+end
+@enduml

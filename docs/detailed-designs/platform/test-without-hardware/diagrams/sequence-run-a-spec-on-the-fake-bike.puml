@@ -1,0 +1,49 @@
+@startuml
+title UML sequence behaviour — Run a spec on the fake bike
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+box "External — CI" #FFF4E5
+  participant "Playwright spec" as spec
+  participant "test fixture" as test
+  participant "Page object" as po
+end box
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ConnectBikePage and ConnectBikeStore" as page
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "WebBluetoothBikeConnection" as conn
+end box
+box "Device — Browser" #F2F4F7
+  participant "Fake navigator.bluetooth" as ble
+end box
+spec -> test : Import test and expect; start in Chromium (L2-148 AC3)
+test -> ble : FakeBluetooth.install(page) with addInitScript (L2-148 AC1)
+spec -> test : bluetooth.offer(echelonBike)
+spec -> po : open() and pair()
+po -> page : Go to /connect and press the pair button
+page -> conn : requestBike() then connect()
+conn -> ble : requestDevice, GATT connect, startNotifications
+ble --> test : Report each call through the page binding
+conn -> ble : writeValue(initialisation bytes)
+ble --> test : Record the write as hex (L2-148 AC1)
+spec -> test : bluetooth.notify(ECHELON_NOTIFY, frame)
+test -> ble : Dispatch characteristicvaluechanged (L2-148 AC1)
+ble -> conn : Notification
+conn --> page : ble is connected
+spec -> po : Read the screen through locators
+po --> spec : Visible state
+spec -> test : expect(bluetooth.writes()) to equal the documented bytes
+test --> spec : Pass
+@enduml

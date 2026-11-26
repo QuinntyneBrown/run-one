@@ -1,0 +1,86 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Treat device data as untrusted
+
+class BikeInfo <<type>> {
+  +id: string
+  +name: string
+  +identifier: string | null
+  +kind: BikeKind
+}
+
+class "bikeIdentity" as bikeIdentity <<function>> {
+  +DEVICE_NAME_MAX = 64
+  +bikeIdentity(name: string | undefined, id: string): BikeIdentity
+}
+
+class BikeIdentity <<type>> {
+  +name: string
+  +identifier: string | null
+}
+
+class RememberedBikeRecord <<type>> {
+  +id: string
+  +name: string
+}
+class RememberedBikeStore {
+  +get(): RememberedBikeRecord | null
+  +save(bike: RememberedBikeRecord): void
+  +forget(): void
+  -parse(value: unknown): RememberedBikeRecord | null
+}
+
+class RideRecordStore <<new>> {
+  +current: Signal<RecordData | null>
+  +add(outputKj: number): RecordOutcome
+}
+
+class RecordRule <<new>> {
+  +parse(value: unknown): RecordData | null
+}
+
+class WebBluetoothBikeConnection {
+  +bike: Signal<BikeInfo | null>
+  +frames: Observable<Uint8Array>
+}
+
+class EchelonFrameDecoder <<decoder>> {
+  +decode(bytes: Uint8Array, at: number): TelemetrySample | null
+}
+
+class IndoorBikeDataDecoder <<decoder>> {
+  +decode(bytes: Uint8Array, at: number): TelemetrySample | null
+}
+
+class BikeTelemetry {
+  -decode(bytes: Uint8Array): void
+}
+
+class ConnectDevice <<wz-connect-device>> {
+  +name: input<string>
+  +identifier: input<string | null>
+  +state: input<ConnectDeviceState>
+}
+
+bikeIdentity ..> BikeIdentity : returns
+WebBluetoothBikeConnection ..> bikeIdentity : names the device with
+WebBluetoothBikeConnection --> BikeInfo : holds
+RememberedBikeStore ..> RememberedBikeRecord : parses and stores
+RememberedBikeRecord ..> BikeInfo : id and name of
+RideRecordStore ..> RecordRule : reads through
+BikeTelemetry --> WebBluetoothBikeConnection : subscribes to frames
+BikeTelemetry ..> EchelonFrameDecoder : decodes with
+BikeTelemetry ..> IndoorBikeDataDecoder : decodes with
+ConnectDevice ..> BikeInfo : renders as text
+@enduml

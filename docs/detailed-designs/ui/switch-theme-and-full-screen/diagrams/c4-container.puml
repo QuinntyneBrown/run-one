@@ -1,0 +1,13 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Switch theme and full screen
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The four screens, Web Bluetooth, the protocol and the engine")
+}
+Rel(rider, app, "Presses Full screen in a header of", "Fullscreen API")
+Rel(host, app, "Serves index.html and tokens.css to", "HTTPS")
+@enduml

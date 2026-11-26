@@ -1,0 +1,52 @@
+@startuml
+title UML sequence behaviour — Load the class video
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "ClassVideo" as cover
+end box
+box "Frontend — Ride app (video library)" #ECFDF3
+  participant "YouTubeVideoPlayer" as player
+end box
+box "Device — Browser" #F2F4F7
+  participant "Chrome or Edge" as browser
+end box
+box "External — YouTube" #FFF4E5
+  participant "i.ytimg.com" as ytimg
+  participant "www.youtube.com" as yt
+  participant "www.youtube-nocookie.com" as nocookie
+end box
+rider -> page : Start the class
+page -> cover : Bind the video id
+cover -> browser : Request the cover image
+browser -> browser : Check img-src: i.ytimg.com is listed (L2-131 AC1)
+browser -> ytimg : GET /vi/QUoToFsMNig/hqdefault.jpg (L2-131 AC3)
+ytimg --> cover : Cover image
+page -> player : Create through VIDEO_PLAYER_FACTORY
+player -> browser : Add a script element for iframe_api
+browser -> browser : Check script-src: www.youtube.com is listed (L2-131 AC1)
+browser -> yt : GET /iframe_api (L2-131 AC3)
+yt --> player : IFrame API
+player -> browser : Create the player with host www.youtube-nocookie.com
+browser -> browser : Check frame-src: www.youtube-nocookie.com is listed (L2-131 AC1)
+browser -> nocookie : GET /embed/QUoToFsMNig (L2-131 AC3)
+nocookie --> player : Player frame ready
+player --> page : Ready
+page --> rider : Show the class video
+@enduml

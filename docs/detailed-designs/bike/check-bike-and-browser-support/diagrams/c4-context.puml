@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Check bike and browser support
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System(telo, "Telo Ride 1", "One class, on the rider's own bike")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+
+Rel(rider, telo, "Opens in a browser and reads which bikes work")
+Rel(telo, bike, "Reaches only from Chrome or Edge on a secure page", "Web Bluetooth")
+Rel(host, telo, "Serves, redirects http to https and sends HSTS", "HTTPS")
+@enduml

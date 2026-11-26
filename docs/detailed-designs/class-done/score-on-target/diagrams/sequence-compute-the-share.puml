@@ -1,0 +1,35 @@
+@startuml
+title UML sequence behaviour — Compute the on-target share
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRideStore" as store
+  participant "ClassDonePage" as done
+  participant "classDoneView" as view
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "RideTicker" as ticker
+  participant "OnTargetCounter" as counter
+end box
+ticker -> store : tick(1800), the plan's length
+store -> counter : percent()
+counter -> counter : round(onTargetSeconds ÷ aimedSeconds × 100) (L2-170 AC2)
+counter --> store : Whole percentage, 84 for the cast's ride
+store -> done : ClassResult with onTargetPercent, through FINISHED_RIDE
+done -> view : classDoneView(result)
+view --> done : Fact "On target" with "84%"
+done --> rider : "On target" and "84%" among the facts (L2-078 AC2)
+@enduml

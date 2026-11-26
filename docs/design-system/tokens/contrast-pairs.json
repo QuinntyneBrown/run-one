@@ -1,0 +1,581 @@
+{
+  "$comment": "Foreground/background pairs checked by check_contrast.py in both themes. 4.5:1 is WCAG 2.2 AA text (1.4.3); 3:1 is large text, UI edges and focus (1.4.11, 2.4.11); 1 marks a decorative pairing listed for completeness.",
+  "pairs": [
+    {
+      "fg": "--color-fg",
+      "bg": "--color-ink",
+      "min": 4.5,
+      "note": "text on page"
+    },
+    {
+      "fg": "--color-muted",
+      "bg": "--color-ink",
+      "min": 4.5,
+      "note": "secondary text on page"
+    },
+    {
+      "fg": "--color-faint",
+      "bg": "--color-ink",
+      "min": 4.5,
+      "note": "tertiary text and hints on the page"
+    },
+    {
+      "fg": "--color-fg",
+      "bg": "--color-panel",
+      "min": 4.5,
+      "note": "text on panels: bike panel cells, the blocker"
+    },
+    {
+      "fg": "--color-muted",
+      "bg": "--color-panel",
+      "min": 4.5,
+      "note": "secondary text on panels"
+    },
+    {
+      "fg": "--color-faint",
+      "bg": "--color-panel",
+      "min": 4.5,
+      "note": "tertiary text on panels: units in the bike panel"
+    },
+    {
+      "fg": "--color-fg",
+      "bg": "--color-raised",
+      "min": 4.5,
+      "note": "text on raised fills: the Music button, raised buttons, step buttons"
+    },
+    {
+      "fg": "--color-muted",
+      "bg": "--color-raised",
+      "min": 4.5,
+      "note": "secondary text on raised fills"
+    },
+    {
+      "fg": "--color-faint",
+      "bg": "--color-raised",
+      "min": 4.5,
+      "note": "tertiary text on raised fills: the start button that cannot start"
+    },
+    {
+      "fg": "--color-volt-fg",
+      "bg": "--color-ink",
+      "min": 4.5,
+      "note": "accent text on the page: the ready status on Ibiza Flyover, the connected bike icon"
+    },
+    {
+      "fg": "--color-gold-fg",
+      "bg": "--color-ink",
+      "min": 4.5,
+      "note": "a new best output on the page (Class Done)"
+    },
+    {
+      "fg": "--color-rest-fg",
+      "bg": "--color-ink",
+      "min": 4.5,
+      "note": "recovery text on the page"
+    },
+    {
+      "fg": "--color-heart-fg",
+      "bg": "--color-ink",
+      "min": 4.5,
+      "note": "the lost-bike line and icon on the page (Ibiza Flyover, The Class header)"
+    },
+    {
+      "fg": "--color-warn-fg",
+      "bg": "--color-ink",
+      "min": 4.5,
+      "note": "warning icons and the under-target hint on the page"
+    },
+    {
+      "fg": "--color-ok-fg",
+      "bg": "--color-ink",
+      "min": 4.5,
+      "note": "success text on the page"
+    },
+    {
+      "fg": "--color-volt-fg-hover",
+      "bg": "--color-ink",
+      "min": 4.5,
+      "note": "hovered links on page"
+    },
+    {
+      "fg": "--color-volt-fg",
+      "bg": "--color-panel",
+      "min": 4.5,
+      "note": "accent text on panels: On target in the bike panel"
+    },
+    {
+      "fg": "--color-gold-fg",
+      "bg": "--color-panel",
+      "min": 4.5,
+      "note": "gold text on panels"
+    },
+    {
+      "fg": "--color-rest-fg",
+      "bg": "--color-panel",
+      "min": 4.5,
+      "note": "recovery text on panels"
+    },
+    {
+      "fg": "--color-heart-fg",
+      "bg": "--color-panel",
+      "min": 4.5,
+      "note": "danger text and icons on panels (the blocker)"
+    },
+    {
+      "fg": "--color-warn-fg",
+      "bg": "--color-panel",
+      "min": 4.5,
+      "note": "the under-target hint and warning icons on panels (bike panel, browser notice)"
+    },
+    {
+      "fg": "--color-ok-fg",
+      "bg": "--color-panel",
+      "min": 4.5,
+      "note": "success text on panels"
+    },
+    {
+      "fg": "--color-volt-fg-hover",
+      "bg": "--color-panel",
+      "min": 4.5,
+      "note": "hovered links on cards"
+    },
+    {
+      "fg": "--color-gold-fg",
+      "bg": "--color-raised",
+      "min": 4.5,
+      "note": "gold text on a raised fill"
+    },
+    {
+      "fg": "--color-heart-fg",
+      "bg": "--color-raised",
+      "min": 4.5,
+      "note": "error text in a raised well"
+    },
+    {
+      "fg": "--color-on-fill",
+      "bg": "--color-volt",
+      "min": 4.5,
+      "note": "primary button label: Start class, Pair, Done"
+    },
+    {
+      "fg": "--color-on-fill",
+      "bg": "--color-volt-hover",
+      "min": 4.5,
+      "note": "primary button label (hover)"
+    },
+    {
+      "fg": "--color-ink",
+      "bg": "--color-fg",
+      "min": 4.5,
+      "note": "the finish banner: words on its band (the inverse surface)"
+    },
+    {
+      "fg": "--color-volt",
+      "bg": "--color-ink",
+      "min": 3,
+      "note": "effort bars, the chosen Ride with edge and the strongest effort on the page"
+    },
+    {
+      "fg": "--color-volt",
+      "bg": "--color-panel",
+      "min": 3,
+      "note": "effort bars on panels (the segment cell)"
+    },
+    {
+      "fg": "--color-line-strong",
+      "bg": "--color-ink",
+      "min": 3,
+      "note": "input and control borders on page (1.4.11)"
+    },
+    {
+      "fg": "--color-line-strong",
+      "bg": "--color-panel",
+      "min": 3,
+      "note": "input and control borders on cards (1.4.11)"
+    },
+    {
+      "fg": "--color-focus-ring",
+      "bg": "--color-ink",
+      "min": 3,
+      "note": "focus ring next to ink (2.4.11)"
+    },
+    {
+      "fg": "--color-focus-ring",
+      "bg": "--color-panel",
+      "min": 3,
+      "note": "focus ring next to panel (2.4.11)"
+    },
+    {
+      "fg": "--color-focus-ring",
+      "bg": "--color-raised",
+      "min": 3,
+      "note": "focus ring next to raised (2.4.11)"
+    },
+    {
+      "fg": "--color-on-photo",
+      "bg": "--color-scrim-strong",
+      "min": 4.5,
+      "note": "words on the strong scrim over a picture: the countdown line, the roll-out card (composited over white: worst case)"
+    },
+    {
+      "fg": "--color-info-fg",
+      "bg": "--color-info-bg",
+      "min": 4.5,
+      "note": "info surface title"
+    },
+    {
+      "fg": "--color-fg",
+      "bg": "--color-info-bg",
+      "min": 4.5,
+      "note": "info surface body text"
+    },
+    {
+      "fg": "--color-muted",
+      "bg": "--color-info-bg",
+      "min": 4.5,
+      "note": "info surface secondary text"
+    },
+    {
+      "fg": "--color-info-icon",
+      "bg": "--color-info-bg",
+      "min": 3,
+      "note": "info surface icon"
+    },
+    {
+      "fg": "--color-fg-on-info",
+      "bg": "--color-info-solid",
+      "min": 4.5,
+      "note": "label on solid info badge or button"
+    },
+    {
+      "fg": "--color-fg-on-info",
+      "bg": "--color-info-solid-hover",
+      "min": 4.5,
+      "note": "label on solid info (hover)"
+    },
+    {
+      "fg": "--color-info-solid",
+      "bg": "--color-panel",
+      "min": 3,
+      "note": "solid info edge on cards"
+    },
+    {
+      "fg": "--color-info-border",
+      "bg": "--color-panel",
+      "min": 1,
+      "note": "info surface border (decorative; icon + text carry meaning)"
+    },
+    {
+      "fg": "--color-success-fg",
+      "bg": "--color-success-bg",
+      "min": 4.5,
+      "note": "success surface title"
+    },
+    {
+      "fg": "--color-fg",
+      "bg": "--color-success-bg",
+      "min": 4.5,
+      "note": "success surface body text"
+    },
+    {
+      "fg": "--color-muted",
+      "bg": "--color-success-bg",
+      "min": 4.5,
+      "note": "success surface secondary text"
+    },
+    {
+      "fg": "--color-success-icon",
+      "bg": "--color-success-bg",
+      "min": 3,
+      "note": "success surface icon"
+    },
+    {
+      "fg": "--color-fg-on-success",
+      "bg": "--color-success-solid",
+      "min": 4.5,
+      "note": "label on solid success badge or button"
+    },
+    {
+      "fg": "--color-fg-on-success",
+      "bg": "--color-success-solid-hover",
+      "min": 4.5,
+      "note": "label on solid success (hover)"
+    },
+    {
+      "fg": "--color-success-solid",
+      "bg": "--color-panel",
+      "min": 3,
+      "note": "solid success edge on cards"
+    },
+    {
+      "fg": "--color-success-border",
+      "bg": "--color-panel",
+      "min": 1,
+      "note": "success surface border (decorative; icon + text carry meaning)"
+    },
+    {
+      "fg": "--color-warning-fg",
+      "bg": "--color-warning-bg",
+      "min": 4.5,
+      "note": "warning surface title"
+    },
+    {
+      "fg": "--color-fg",
+      "bg": "--color-warning-bg",
+      "min": 4.5,
+      "note": "warning surface body text"
+    },
+    {
+      "fg": "--color-muted",
+      "bg": "--color-warning-bg",
+      "min": 4.5,
+      "note": "warning surface secondary text"
+    },
+    {
+      "fg": "--color-warning-icon",
+      "bg": "--color-warning-bg",
+      "min": 3,
+      "note": "warning surface icon"
+    },
+    {
+      "fg": "--color-fg-on-warning",
+      "bg": "--color-warning-solid",
+      "min": 4.5,
+      "note": "label on solid warning badge or button"
+    },
+    {
+      "fg": "--color-fg-on-warning",
+      "bg": "--color-warning-solid-hover",
+      "min": 4.5,
+      "note": "label on solid warning (hover)"
+    },
+    {
+      "fg": "--color-warning-solid",
+      "bg": "--color-panel",
+      "min": 3,
+      "note": "solid warning edge on cards"
+    },
+    {
+      "fg": "--color-warning-border",
+      "bg": "--color-panel",
+      "min": 1,
+      "note": "warning surface border (decorative; icon + text carry meaning)"
+    },
+    {
+      "fg": "--color-danger-fg",
+      "bg": "--color-danger-bg",
+      "min": 4.5,
+      "note": "danger surface title"
+    },
+    {
+      "fg": "--color-fg",
+      "bg": "--color-danger-bg",
+      "min": 4.5,
+      "note": "danger surface body text"
+    },
+    {
+      "fg": "--color-muted",
+      "bg": "--color-danger-bg",
+      "min": 4.5,
+      "note": "danger surface secondary text"
+    },
+    {
+      "fg": "--color-danger-icon",
+      "bg": "--color-danger-bg",
+      "min": 3,
+      "note": "danger surface icon"
+    },
+    {
+      "fg": "--color-fg-on-danger",
+      "bg": "--color-danger-solid",
+      "min": 4.5,
+      "note": "label on solid danger badge or button"
+    },
+    {
+      "fg": "--color-fg-on-danger",
+      "bg": "--color-danger-solid-hover",
+      "min": 4.5,
+      "note": "label on solid danger (hover)"
+    },
+    {
+      "fg": "--color-danger-solid",
+      "bg": "--color-panel",
+      "min": 3,
+      "note": "solid danger edge on cards"
+    },
+    {
+      "fg": "--color-danger-border",
+      "bg": "--color-panel",
+      "min": 1,
+      "note": "danger surface border (decorative; icon + text carry meaning)"
+    },
+    {
+      "fg": "--color-heart",
+      "bg": "--color-panel",
+      "min": 3,
+      "note": "danger edge on panels, invalid input border"
+    },
+    {
+      "fg": "--color-heart",
+      "bg": "--color-ink",
+      "min": 3,
+      "note": "invalid input border on page"
+    },
+    {
+      "fg": "--color-fg-inverse",
+      "bg": "--color-bg-inverse",
+      "min": 4.5,
+      "note": "tooltip text on the inverse surface"
+    },
+    {
+      "fg": "--color-heart-fg",
+      "bg": "--color-danger-bg",
+      "min": 4.5,
+      "note": "button: Quiet danger hover"
+    },
+    {
+      "fg": "--color-volt",
+      "bg": "--color-scrim-strong",
+      "min": 3,
+      "note": "Go! on the strong scrim (large text)"
+    },
+    {
+      "fg": "--color-warn-fg",
+      "bg": "--color-raised",
+      "min": 3,
+      "note": "warning icon on a raised fill"
+    },
+    {
+      "fg": "--color-volt-fg",
+      "bg": "--color-raised",
+      "min": 3,
+      "note": "progress fill on its track (progress bar)"
+    },
+    {
+      "fg": "--color-rest-fg",
+      "bg": "--color-raised",
+      "min": 3,
+      "note": "recovery progress fill on its track"
+    },
+    {
+      "fg": "--color-ok-fg",
+      "bg": "--color-raised",
+      "min": 3,
+      "note": "done progress fill on its track"
+    },
+    {
+      "fg": "--color-raised",
+      "bg": "--color-panel",
+      "min": 1,
+      "note": "skeleton on a panel, decorative (skeleton)"
+    },
+    {
+      "fg": "--color-raised",
+      "bg": "--color-ink",
+      "min": 1,
+      "note": "skeleton on the canvas, decorative (skeleton)"
+    },
+    {
+      "fg": "--color-bg-inverse",
+      "bg": "--color-ink",
+      "min": 3,
+      "note": "tooltip edge against the page"
+    },
+    {
+      "fg": "--color-bg-inverse",
+      "bg": "--color-panel",
+      "min": 3,
+      "note": "tooltip edge against a panel"
+    },
+    {
+      "fg": "--color-info-icon",
+      "bg": "--color-panel",
+      "min": 3,
+      "note": "toast: info icon"
+    },
+    {
+      "fg": "--color-success-icon",
+      "bg": "--color-panel",
+      "min": 3,
+      "note": "toast: success icon"
+    },
+    {
+      "fg": "--color-warning-icon",
+      "bg": "--color-panel",
+      "min": 3,
+      "note": "toast: warning icon"
+    },
+    {
+      "fg": "--color-danger-icon",
+      "bg": "--color-panel",
+      "min": 3,
+      "note": "toast: danger icon"
+    },
+    {
+      "fg": "--color-rest",
+      "bg": "--color-panel",
+      "min": 3,
+      "note": "recovery bars in the plan chart on panels (the segment cell)"
+    },
+    {
+      "fg": "--color-rest",
+      "bg": "--color-ink",
+      "min": 3,
+      "note": "recovery bars in the plan chart on the page (The Class)"
+    },
+    {
+      "fg": "--color-plan-easy",
+      "bg": "--color-panel",
+      "min": 1,
+      "note": "warm-up and cool-down bars (slate at 50%): decorative; the kind is in the segment name and the plan note"
+    },
+    {
+      "fg": "--color-on-photo",
+      "bg": "--color-scrim-photo",
+      "min": 3,
+      "note": "the countdown numeral on its scrim (large text; composited over white: worst case)"
+    },
+    {
+      "fg": "--color-on-photo",
+      "bg": "--color-scrim-photo",
+      "min": 4.5,
+      "note": "Loading Ibiza Sunset Strip on its scrim over the still"
+    },
+    {
+      "fg": "--color-heart",
+      "bg": "--color-scrim-strong",
+      "min": 1,
+      "note": "a lit countdown light on the strong scrim: not required to read the countdown, which the numeral says in text (2.89:1 over white, the worst case)"
+    },
+    {
+      "fg": "--finish-banner-accent",
+      "bg": "--color-bg-inverse",
+      "min": 3,
+      "note": "the finish banner: output numerals on its band (large text, L2-181 AC9)"
+    },
+    {
+      "fg": "rgb(243 240 234 / 0.72)",
+      "bg": "--color-scrim-strong",
+      "min": 4.5,
+      "note": "the roll-out card: body text, on-photo at 72%"
+    },
+    {
+      "fg": "--color-volt-fg",
+      "bg": "--color-ink",
+      "min": 3,
+      "note": "the chosen Ride with mark on the page"
+    },
+    {
+      "fg": "--color-gold-fg",
+      "bg": "--color-ink",
+      "min": 3,
+      "note": "the output numerals of a new best (large text)"
+    },
+    {
+      "fg": "--color-muted",
+      "bg": "--color-ink",
+      "min": 4.5,
+      "note": "Ibiza Flyover: caption and status on the bar and band"
+    }
+  ]
+}

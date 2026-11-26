@@ -1,0 +1,56 @@
+@startuml
+title UML sequence behaviour — Load once for the flyover and the ride (designed; not built)
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "RidePage" as ridepage
+  participant "ClassRideStore" as store
+  participant "CourseSession" as session
+  participant "IbizaFlyoverPage" as flyover
+  participant "ClassRidePage" as page
+end box
+box "Frontend — Ride app (world library)" #ECFDF3
+  participant "CourseScene" as scene
+  participant "ThreeCourseRenderer" as renderer
+end box
+box "Static host — the app's own origin" #FFF4E5
+  participant "Static host" as origin
+end box
+rider -> ridepage : Press the start button with "Ibiza Sunset Strip" chosen
+ridepage -> store : Create
+store -> store : WorkoutEngine.follow(plan), clock not started:\nthe first level is sent at once (L2-175 AC1)
+ridepage -> session : Create
+session -> origin : import('@telo/world'), once
+session -> scene : Create the one CourseScene
+scene -> renderer : start(canvas, nextFrame, segments)
+renderer -> origin : ibiza.course.json, ibiza.glb, riders/rider.glb, once
+alt the flyover is shown
+  ridepage -> flyover : Show
+  flyover -> session : attach(its container)
+  flyover --> rider : The still and "Loading Ibiza Sunset Strip" until the first frame (L2-179 AC6)
+  flyover -> session : detach on landing, on Skip flyover, or after 10 s undrawn (L2-179 AC8)
+else reduced motion, or the course cannot be drawn (L2-179 AC8, AC9)
+  note over flyover : Not shown
+end
+ridepage -> page : Show Class Ride on the countdown
+page -> session : attach(the box's container): the same scene, no second fetch, no second build
+alt the first frame is not yet drawn
+  page --> rider : "Loading Ibiza Sunset Strip" under the countdown (L2-180 AC4)
+end
+note over store : The clock starts at 0:00 on "Go!",\nwhether or not the course is drawn (L2-175 AC1)
+scene --> session : drawn, at the clock's second (L2-175 AC3)
+session --> page : drawn() is true: the loading line goes
+@enduml

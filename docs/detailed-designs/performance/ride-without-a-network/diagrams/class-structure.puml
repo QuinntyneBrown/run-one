@@ -1,0 +1,91 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Ride without a network
+
+class ClassRideStore <<store>> {
+  +videoUnavailable: Signal<boolean>
+  -start(ride: ClassDto): void
+  -preloadClassDone(): void
+  -finish(ride: ClassDto): void
+}
+
+class RideClock {
+  +elapsedMs(): number
+}
+
+class WorkoutEngine {
+  +follow(plan: Plan): void
+}
+
+class RideTotals {
+  +outputKj: Signal<number>
+}
+
+interface BikeConnection {
+  +ble: Signal<BleState>
+  +setResistance(level: number): Promise<number>
+}
+
+interface VideoPlayer {
+  +state: Signal<PlayerState>
+}
+
+enum PlayerState {
+  loading
+  playing
+  paused
+  error
+}
+
+class YouTubeVideoPlayer <<network>>
+
+interface RideRecord {
+  +add(outputKj: number): RecordOutcome
+}
+class RideRecordStore <<storage>> {
+  key: telo-ride.record
+}
+interface FinishedRide {
+  +set(result: ClassResult): void
+  +peek(): ClassResult | null
+}
+class FinishedRideHolder <<in memory>>
+class RememberedBikeStore <<storage>> {
+  key: telo-ride.bike
+}
+
+class "Class definition" as ClassDefinition <<data>> {
+  plan held before the clock starts
+  source: open question 1
+}
+
+class Router <<Angular>> {
+  +navigateByUrl(url: string): Promise<boolean>
+}
+
+ClassRideStore --> RideClock
+ClassRideStore --> WorkoutEngine
+ClassRideStore --> RideTotals
+ClassRideStore --> BikeConnection
+ClassRideStore --> VideoPlayer : reads state only
+ClassRideStore --> RideRecord : add at the finish
+ClassRideStore --> FinishedRide : set at the finish
+RideRecordStore ..|> RideRecord
+FinishedRideHolder ..|> FinishedRide
+ClassRideStore --> Router : opens /done
+ClassRideStore ..> ClassDefinition : starts from
+VideoPlayer --> PlayerState
+YouTubeVideoPlayer ..|> VideoPlayer
+RideRecordStore .. RememberedBikeStore : same storage, same pattern
+@enduml

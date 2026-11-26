@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Open the app
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The four screens, Web Bluetooth, the protocol and the engine")
+  ContainerDb(storage, "Browser storage", "localStorage", "The record and the remembered bike")
+}
+
+Rel(rider, app, "Opens at /", "Chrome or Edge")
+Rel(app, host, "Loads the initial bundle and each screen's chunk from", "HTTPS")
+Rel(app, storage, "Reads the remembered bike and the record from", "localStorage")
+@enduml

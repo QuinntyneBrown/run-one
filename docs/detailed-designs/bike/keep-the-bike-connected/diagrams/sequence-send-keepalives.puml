@@ -1,0 +1,58 @@
+@startuml
+title UML sequence behaviour — Send keepalives
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "WebBluetoothBikeConnection" as conn
+  participant "EchelonLink" as link
+  participant "KeepaliveScheduler" as keep
+  participant "SecondTicker" as ticker
+  participant "GattWriteQueue" as queue
+end box
+box "Device — Browser" #F2F4F7
+  participant "performance.now()" as clock
+end box
+box "Device — Smart bike" #F2F4F7
+  participant "Echelon EX-5s" as bike
+end box
+rider -> bike : Pedal; the bike is connected and initialised
+conn -> link : connected()
+link -> keep : start()
+keep -> clock : now()
+clock --> keep : Start of the first gap
+keep -> ticker : Subscribe to seconds
+loop each tick, visible or hidden tab
+  ticker --> keep : Tick
+  keep -> clock : now()
+  clock --> keep : Elapsed since the last keepalive
+  alt 900 ms or more have passed (L2-016 AC1, AC2)
+    keep -> link : send()
+    link -> queue : Enqueue F0 A0 01 01 92
+    queue -> bike : Write to 0bf669f2 with response, after any pending write
+    bike --> queue : Acknowledged
+  else a burst of ticks
+    keep -> keep : Skip; the rate comes from the clock, not the tick count
+  end
+end
+opt the write fails
+  queue --> keep : Rejected
+  keep -> conn : onFailure(error): treated as a drop (L2-017 AC1)
+end
+bike --> conn : gattserverdisconnected
+conn -> link : close()
+link -> keep : stop()
+keep -> ticker : Unsubscribe; no keepalive until the bike reconnects (L2-016 AC3)
+@enduml

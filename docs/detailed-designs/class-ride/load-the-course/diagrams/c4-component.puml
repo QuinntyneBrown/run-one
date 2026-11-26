@@ -1,0 +1,44 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Load the course
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+
+Container_Boundary(ride, "ride application") {
+  Component(provide, "provideClassRide", "Route providers", "Binds COURSE_RENDERER to a dynamic import of the world library")
+  Component(session, "CourseSession", "Service of RidePage (designed; not built)", "Owns the one CourseScene for the flyover and the ride")
+  Component(scenehost, "CourseSceneHost", "Directive", "Shows the scene in the box; re-emits drawn and unavailable")
+  Component(store, "ClassRideStore", "Store", "courseDrawn, courseUnavailable; sends the first level at once")
+  Component(page, "ClassRidePage", "Angular page", "Binds loading and unavailable to the box")
+}
+Container_Boundary(components, "components library") {
+  Component(box, "ClassCourse", "wz-class-course", "Still, Loading line, the cannot-be-drawn notice")
+}
+Container_Boundary(world, "world library") {
+  Component(scene, "CourseScene", "wz-course-scene", "Starts the renderer; watches the graphics context")
+  Component(loader, "loadCourseRenderer", "Function", "Imports Three.js and the renderer on demand")
+  Component(renderer, "ThreeCourseRenderer", "CourseRenderer", "start(): fetches, parses, builds, compiles")
+  Component(parse, "parseCourse", "Pure function", "Refuses a malformed course file")
+  Component(body, "RiderBody.load", "Loader", "Refuses a file that holds no rider")
+}
+Container_Boundary(swb, "service worker") {
+  Component(assets, "assets group", "ngsw-config.json, lazy", "The courses, riders and machines folders")
+}
+
+Rel(rider, page, "Opens a ride in Ibiza")
+Rel(session, scene, "Creates once")
+Rel(scenehost, session, "attach and detach the scene's view")
+Rel(scene, provide, "Asks COURSE_RENDERER")
+Rel(provide, loader, "import('@telo/world')")
+Rel(loader, renderer, "Creates for courses/ibiza")
+Rel(scene, renderer, "start(canvas, nextFrame, segments)")
+Rel(renderer, parse, "Passes ibiza.course.json through")
+Rel(renderer, body, "Loads riders/rider.glb")
+Rel(renderer, assets, "fetch and GLTFLoader", "same origin")
+Rel(assets, host, "Fetches once, then serves the kept copy", "HTTPS")
+Rel(scenehost, store, "showCourse() or failCourse(), through the page")
+Rel(page, store, "Reads courseDrawn and courseUnavailable")
+Rel(page, box, "loading, unavailable")
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Keep the ride clock true
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The four screens, Web Bluetooth, the protocol and the engine")
+}
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+
+Rel(rider, app, "Reads the clock and the readouts", "HTTPS")
+Rel(app, bike, "Receives notifications about once a second", "Web Bluetooth")
+Rel(app, bike, "Writes each segment's level within 500 ms of its start", "Web Bluetooth")
+@enduml

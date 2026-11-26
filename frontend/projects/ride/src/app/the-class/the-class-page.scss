@@ -1,0 +1,29 @@
+@use '../../styles/page';
+
+// The Class's page: the header over the the-class block, in the height of the window (docs/mocks/pages/the-class/).
+.the-class-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  background: var(--color-ink);
+  color: var(--color-fg);
+}
+
+.the-class-page__scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+// In the class's place when it breaks a rule and is not offered (the-class/cannot-load): the message over Reload.
+.the-class__unavailable {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-4);
+  padding-block: var(--space-6);
+
+  &:focus {
+    outline: none; // focused by the skip link, never by a pointer
+  }
+}

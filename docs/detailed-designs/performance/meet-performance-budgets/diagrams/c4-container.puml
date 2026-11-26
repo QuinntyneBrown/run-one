@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Meet performance budgets
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The four screens, Web Bluetooth, the protocol and the engine")
+}
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+System_Ext(youtube, "YouTube", "Privacy-enhanced player for the class video")
+
+Rel(rider, app, "Opens The Class; rides on Class Ride")
+Rel(app, host, "Initial bundle at most 300 KB gzipped; one chunk per screen", "HTTPS")
+Rel(app, youtube, "IFrame API and embed, after the screen has rendered", "HTTPS")
+@enduml

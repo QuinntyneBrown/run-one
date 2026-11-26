@@ -1,0 +1,56 @@
+@startuml
+title UML sequence behaviour — Connect the simulated bike
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "provideBikeConnection()" as provide
+  participant "ConnectBikeStore" as store
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "SimulatedBikeConnection" as sim
+  participant "SecondTicker" as ticker
+  participant "EchelonProtocol" as protocol
+  participant "BikeTelemetry" as telemetry
+end box
+box "Device — Browser" #F2F4F7
+  participant "navigator.bluetooth" as ble
+end box
+rider -> provide : Opens the app with ?simulate
+alt development build
+  provide -> provide : SIMULATOR_ENABLED is true and the query has simulate
+  provide -> sim : Bind BIKE_CONNECTION (L2-024 AC1)
+  rider -> store : Presses "Pair Echelon EX-5s" on Connect Bike
+  store -> sim : pair() calls requestBike()
+  sim --> store : Echelon EX-5s, EX5S-0bf669f1, no chooser (L2-024 AC1)
+  store -> sim : connect()
+  sim -> ticker : Subscribe to seconds
+  sim --> store : ble is connected
+  store --> rider : The bike shows as connected
+  loop once a second
+    ticker -> sim : Next second
+    sim -> protocol : workout(elapsed, revolutions, cadence)
+    protocol --> sim : D1 frame
+    sim -> protocol : resistance(level)
+    protocol --> sim : D2 frame
+    sim -> telemetry : frames emits D1, then D2 (L2-024 AC1)
+  end
+else production build
+  provide -> provide : SIMULATOR_ENABLED is false; ?simulate is ignored (L2-024 AC3)
+  rider -> store : Presses "Pair Echelon EX-5s" on Connect Bike
+  store -> ble : requestDevice() through WebBluetoothBikeConnection
+  ble --> rider : The browser's chooser opens
+end
+@enduml

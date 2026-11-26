@@ -1,0 +1,200 @@
+<div class="class-ride">
+  @if (store.ride(); as ride) {
+    <!-- The header stays above the lost-bike alert, so Leave stays in reach (class-ride__header, L2-092 AC2). -->
+    <wz-class-header
+      class="class-ride__header"
+      [title]="ride.title"
+      mode="Solo"
+      [elapsed]="store.elapsed()"
+      [total]="ride.lengthSeconds"
+    >
+      <!-- No Pause before "Go!", and none after the finish: there is no ride to hold (L2-180 AC6). -->
+      @if (store.header().pause) {
+        <button
+          wz-button
+          variant="raised"
+          size="sm"
+          slot="end"
+          type="button"
+          class="class-ride__action"
+          [attr.aria-label]="store.state().action"
+          [disabled]="store.state().actionDisabled"
+          (click)="store.paused() ? store.resume() : store.pause()"
+        >
+          @if (store.state().action === 'Resume') {
+            <svg class="class-ride__icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"
+              />
+            </svg>
+            <span class="class-ride__pause-label">Resume</span>
+          } @else {
+            <svg class="class-ride__icon" viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="14" y="3" width="5" height="18" rx="1" />
+              <rect x="5" y="3" width="5" height="18" rx="1" />
+            </svg>
+            <span class="class-ride__pause-label">Pause</span>
+          }
+        </button>
+      }
+      <!-- Leave goes to the class and asks for no confirmation (L2-093 AC1); leaving the page stops the ride. -->
+      @if (store.header().leave) {
+        <a
+          wz-button
+          size="sm"
+          slot="end"
+          class="class-ride__action class-ride__leave"
+          aria-label="Leave class"
+          routerLink="/"
+        >
+          <svg class="class-ride__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m16 17 5-5-5-5" />
+            <path d="M21 12H9" />
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          </svg>
+        </a>
+      }
+      <wz-fullscreen-button slot="end" />
+    </wz-class-header>
+    <main id="main" class="class-ride__body" tabindex="-1">
+      <h1 class="visually-hidden">{{ ride.title }} · solo class ride</h1>
+      <div class="class-ride__stage">
+        <!-- In Ibiza the course takes the video's box, and no video player is loaded (L2-087 AC6, L2-174 AC1). -->
+        @if (store.way === 'ibiza') {
+          <wz-class-course
+            [name]="course.name"
+            [still]="course.still"
+            [loading]="!store.courseDrawn()"
+            [unavailable]="store.courseUnavailable()"
+            [youtubeUnavailable]="store.youtubeUnavailable()"
+            [paused]="store.state().pausedOverlay"
+          >
+            <ng-container
+              ngProjectAs="[slot=scene]"
+              [wzCourseScene]="course.name"
+              [segments]="ride.plan.segments"
+              [elapsed]="store.courseSeconds()"
+              [speedKmh]="store.speedKmh()"
+              [running]="store.running()"
+              (drawn)="store.showCourse()"
+              (unavailable)="store.failCourse()"
+            />
+            <wz-class-sound
+              slot="sound"
+              [sound]="store.sound()"
+              [video]="store.soundVideo()"
+              [musicAvailable]="store.musicAvailable()"
+              (soundChange)="store.chooseSound($event)"
+              (videoChange)="store.chooseVideo($event)"
+            />
+            <wz-class-intensity
+              slot="controls"
+              [value]="store.intensity()"
+              [disabled]="store.stepperOff()"
+              (changed)="store.setIntensity($event)"
+              (raise)="store.setIntensity(store.intensity() + 1)"
+              (lower)="store.setIntensity(store.intensity() - 1)"
+            />
+            @if (store.youtube(); as youtube) {
+              <wz-class-inset
+                slot="inset"
+                [audio]="youtube.audio"
+                (frame)="store.playInset($event)"
+              />
+            }
+            @if (store.countdown(); as step) {
+              <wz-class-countdown slot="overlay" [step]="step" />
+            }
+            @if (store.finished(); as result) {
+              <wz-finish-banner
+                slot="overlay"
+                [outputKj]="result.outputKj"
+                [elapsedSeconds]="result.elapsedSeconds"
+              />
+            }
+            @if (store.rollOut(); as rollOut) {
+              <wz-class-rollout
+                slot="overlay"
+                [title]="rollOut.title"
+                [progress]="rollOut.progress"
+              />
+            }
+          </wz-class-course>
+        } @else {
+          <wz-class-video
+            [videoId]="ride.video.videoId"
+            [title]="ride.title"
+            [unavailable]="store.videoUnavailable()"
+            [paused]="store.state().pausedOverlay"
+            (frame)="store.playVideo($event)"
+          >
+            <wz-class-intensity
+              slot="controls"
+              [value]="store.intensity()"
+              [disabled]="store.stepperOff()"
+              (changed)="store.setIntensity($event)"
+              (raise)="store.setIntensity(store.intensity() + 1)"
+              (lower)="store.setIntensity(store.intensity() - 1)"
+            />
+            @if (store.countdown(); as step) {
+              <wz-class-countdown slot="overlay" [step]="step" />
+            }
+            @if (store.finished(); as result) {
+              <wz-finish-banner
+                slot="overlay"
+                [outputKj]="result.outputKj"
+                [elapsedSeconds]="result.elapsedSeconds"
+              />
+            }
+            @if (store.rollOut(); as rollOut) {
+              <wz-class-rollout
+                slot="overlay"
+                [title]="rollOut.title"
+                [progress]="rollOut.progress"
+              />
+            }
+          </wz-class-video>
+        }
+        @if (store.plan(); as plan) {
+          <wz-class-bike>
+            <wz-class-segment
+              [segments]="ride.plan.segments"
+              [index]="plan.index"
+              [remaining]="plan.remainingMs / 1000"
+              [progress]="plan.progress"
+            />
+            <wz-class-stat
+              label="Power"
+              unit="W"
+              [value]="store.power().value"
+              [hint]="store.power().hint"
+              [tone]="store.power().tone"
+            />
+            <wz-class-stat
+              label="Cadence"
+              unit="rpm"
+              [value]="store.cadence().value"
+              [hint]="store.cadence().hint"
+            />
+            <wz-class-resist
+              [level]="store.level()"
+              [disabled]="store.stepperOff()"
+              (lower)="store.lower()"
+              (raise)="store.raise()"
+            />
+          </wz-class-bike>
+        }
+        @if (store.byHand()) {
+          <!-- The bike gives no control of its resistance: the rider sets it (class-ride/by-hand, L2-014 AC3). -->
+          <wz-inline-message class="class-ride__notice" tone="warn" role="status"
+            >The class can’t set this bike’s resistance. Set it by hand.</wz-inline-message
+          >
+        }
+      </div>
+    </main>
+    @if (store.state().lostAlert) {
+      <!-- The ride waits for the bike (L2-092 AC1). -->
+      <wz-class-lost [body]="store.lostBody()" (reconnect)="store.reconnect()" />
+    }
+  }
+</div>

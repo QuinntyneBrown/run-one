@@ -1,0 +1,39 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Show the finish banner
+
+Person(rider, "Rider", "Rides a smart bike at home")
+
+Container_Boundary(ride, "Ride app — ride application") {
+  Component(page, "ClassRidePage", "Angular component (changed)", "Projects the banner into the box; header with Full screen only")
+  Component(store, "ClassRideStore", "Store (changed)", "Finishes the ride, writes the record, holds the phase")
+  Component(header, "rideHeader()", "Pure helper (designed)", "Neither Pause nor Leave once finished")
+  Component(stats, "powerStat(), cadenceStat()", "Pure helpers (changed)", "No line under a readout outside riding")
+}
+Container_Boundary(components, "Ride app — components library") {
+  Component(banner, "wz-finish-banner", "Presentation component (designed)", "Chequered band, Finish!, output and time, a status for screen readers")
+  Component(box, "wz-class-video / wz-class-course", "Presentation components (changed)", "The box, with an overlay slot")
+  Component(segment, "wz-class-segment", "Presentation component (exists)", "Cool-down, 0:00, bar full")
+}
+Container_Boundary(domain, "Ride app — domain library") {
+  Component(ending, "RideEnding", "Service (designed)", "Reads rideEndingAt() against the clock source")
+  Component(clock, "RideClock, RideTicker", "Services (exist)", "Held at 20:00")
+  Component(recorder, "RideRecorder, EffortTally", "Helpers (exist)", "The ride's output, on-target share and efforts")
+  Component(record, "RideRecordStore", "Service (exists)", "RIDE_RECORD: the record on the device")
+}
+ContainerDb(storage, "Browser storage", "localStorage", "The record")
+
+Rel(rider, page, "Sees the finish banner on")
+Rel(page, store, "Reads phase, finished and plan from")
+Rel(page, header, "Asks for the header's buttons")
+Rel(page, stats, "Reads Power and Cadence through")
+Rel(page, box, "Projects the banner into")
+Rel(page, banner, "Renders with the output and the time")
+Rel(page, segment, "Renders the held cool-down")
+Rel(store, clock, "Pauses and stops at 20:00")
+Rel(store, recorder, "Reads the result from")
+Rel(store, record, "add(outputKj) at once")
+Rel(record, storage, "Writes", "localStorage")
+Rel(store, ending, "Starts and reads")
+@enduml

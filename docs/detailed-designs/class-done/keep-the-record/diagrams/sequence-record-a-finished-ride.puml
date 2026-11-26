@@ -1,0 +1,47 @@
+@startuml
+title UML sequence behaviour — Record a finished ride
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRideStore" as rideStore
+  participant "ClassDonePage" as done
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "RideRecordStore" as store
+  participant "RecordRule" as rule
+end box
+box "Device — Browser" #F2F4F7
+  database "localStorage" as storage
+end box
+rider -> rideStore : Ride until the clock reaches 30:00
+rideStore -> store : add(output in whole kJ) (L2-093 AC2)
+store -> rule : next(current, outputKj)
+rule -> rule : Count + 1; last = this output; best = this output when higher or first (L2-168 AC1)
+rule --> store : RecordData with three numbers (L2-168 AC5)
+store -> store : Set current to the new record
+store -> storage : setItem("telo-ride.record", json)
+alt write succeeds
+  storage --> store : Stored
+  store --> rideStore : RecordOutcome previousBestKj, saved true
+  rideStore -> done : ClassResult through FINISHED_RIDE
+  done --> rider : Class Done with the result
+else storage is full or blocked (L2-168 AC4)
+  storage --> store : Throws
+  store --> rideStore : RecordOutcome previousBestKj, saved false
+  rideStore -> done : ClassResult through FINISHED_RIDE
+  done --> rider : Class Done with the result and the not-saved notice
+end
+@enduml

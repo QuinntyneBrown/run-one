@@ -1,0 +1,13 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Keep the bike connected
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System(telo, "Telo Ride 1", "One class, on the rider's own bike")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+
+Rel(rider, telo, "Reads the bike status; presses Reconnect")
+Rel(telo, bike, "Reconnects without the chooser, sends keepalives, retries after a drop", "Bluetooth LE GATT")
+Rel(bike, telo, "Advertises, notifies and reports disconnects to", "Bluetooth LE")
+@enduml

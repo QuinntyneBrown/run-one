@@ -1,0 +1,63 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Score on target
+
+class OnTargetCounter {
+  -onTargetSeconds: number
+  -aimedSeconds: number
+  +count(powerW: number | null, targetPowerW: number | null, seconds: number): void
+  +percent(): number
+}
+class PowerModel <<helper>> {
+  +{static} estimate(cadence: number | null, level: number | null): number | null
+  +{static} target(cadenceAim: number, level: number): number
+  +{static} onTarget(power: number, target: number): boolean
+}
+class PlanState {
+  +index: number
+  +segment: Segment
+  +remainingMs: number
+  +progress: number
+  +targetPower: number | null
+}
+class Segment {
+  +kind: SegmentKind
+  +duration: number
+  +level: number
+  +cadenceAim: number | null
+}
+class WorkoutEngine {
+  +state: Signal<PlanState | null>
+  +follow(plan: Plan): void
+}
+class BikeTelemetry {
+  +powerW: Signal<number | null>
+}
+class ClassRideStore {
+  -record(second: number): void
+  -finish(): void
+}
+class ClassResult {
+  +onTargetPercent: number
+}
+
+ClassRideStore ..> WorkoutEngine : reads state
+ClassRideStore ..> BikeTelemetry : reads powerW
+ClassRideStore ..> OnTargetCounter : counts and reads
+ClassRideStore ..> ClassResult : fills
+WorkoutEngine --> PlanState : exposes
+PlanState --> Segment
+PlanState ..> PowerModel : targetPower from
+OnTargetCounter ..> PowerModel : onTarget
+@enduml

@@ -1,0 +1,50 @@
+@startuml
+title UML sequence behaviour — Keep the screen awake and guard the tab
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+  participant "ClassRideStore" as store
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "BrowserScreenWakeLock" as wake
+end box
+box "Device — Browser" #F2F4F7
+  participant "navigator.wakeLock" as nav
+  participant "document and window" as doc
+end box
+rider -> page : Start the class
+store -> wake : hold()
+wake -> doc : Listen for visibilitychange
+opt the browser offers the Screen Wake Lock API
+  wake -> nav : request("screen") (L2-133 AC3)
+  nav --> wake : Sentinel
+end
+rider -> doc : Hide the tab
+nav -> nav : The browser releases the lock
+rider -> doc : Show the tab
+doc -> wake : visibilitychange, visible
+wake -> nav : request("screen") again (L2-133 AC3)
+nav --> wake : New sentinel
+rider -> doc : Close or reload the tab mid-ride
+doc -> page : beforeunload
+page -> doc : preventDefault() while a ride is running or paused (L2-133 AC4)
+doc --> rider : The browser asks to confirm leaving
+rider -> page : Ride to 30:00, or leave
+store -> wake : release() (L2-133 AC3)
+wake -> nav : Release the sentinel
+wake -> doc : Remove the listener
+@enduml

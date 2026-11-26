@@ -1,0 +1,57 @@
+@startuml
+title UML sequence behaviour — Finish on the banner
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+  participant "ClassRideStore" as store
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "wz-finish-banner" as banner
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "RideTicker" as ticker
+  participant "RideClock" as clock
+  participant "RideRecorder, EffortTally" as recorder
+  participant "RideRecordStore" as record
+  participant "RideEnding" as ending
+end box
+box "Device — Browser" #F2F4F7
+  database "localStorage" as ls
+end box
+ticker -> store : Tick: second 1200, the plan's length
+store -> recorder : Count the last second of the ride
+store -> clock : pause() at 20:00 (L2-181 AC4)
+store -> ticker : stop()
+store -> recorder : Read outputKj, onTargetShare and the efforts' watts
+recorder --> store : The ride's totals
+store -> record : read().bestKj, then add(outputKj) (L2-181 AC3, L2-168)
+record -> ls : Write the record: rides, best output and last output
+ls --> record : Written, or refused
+record --> store : saved
+store -> store : Keep the ClassResult; phase becomes finished
+store -> ending : start()
+ending --> store : state: banner
+store --> page : finished: 351 kJ, 1200 s; plan held at Cool-down, 0:00
+page -> banner : Render "Finish!" and "351 kJ output · 20:00" over the box (AC1, AC2)
+banner --> rider : The band slides in; "Finished. 351 kJ." said once (AC6)
+page --> rider : Header with Full screen only (AC5); Power and Cadence with no line (AC4)
+ending -> ending : Timer at 3,200 ms; read the state from MONOTONIC_TIME
+ending --> store : state: roll-out
+store -> store : phase becomes rolling-out
+store --> page : finished: null
+page --> rider : The banner goes; the roll-out follows (L2-182)
+@enduml

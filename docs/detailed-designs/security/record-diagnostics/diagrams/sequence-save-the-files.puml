@@ -1,0 +1,59 @@
+@startuml
+title UML sequence behaviour — Save the files
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Person diagnosing" as person
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "DiagnosticPanel" as panel
+end box
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "DiagnosticsHost" as host
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "DiagnosticRecorder" as recorder
+  participant "RecordingBuffer" as buffer
+  participant "BrowserFileSaver" as saver
+end box
+box "Device — Browser" #F2F4F7
+  participant "Downloads" as downloads
+end box
+panel --> person : Say what the recording holds, before anything is saved (L2-178 AC16)
+person -> panel : Press Save files
+panel -> host : save output
+host -> recorder : DIAGNOSTIC_RECORDING.files()
+recorder -> buffer : lines()
+buffer --> recorder : The lines held, oldest first
+recorder -> recorder : recordingHeader: format, started, saved, address, browser, limits, dropped (L2-178 AC17)
+recorder --> host : telo-ride-1-recording-20261123T180000Z.log, then each capture's .png
+loop each file
+  host -> saver : FILE_SAVER.save(file)
+  saver -> saver : URL.createObjectURL(file.blob)
+  saver -> downloads : Click an a element with download and the file's name
+  saver -> saver : URL.revokeObjectURL(url) (L2-178 AC20)
+  alt the browser takes the file
+    saver --> host : Return
+  else the browser cannot save it
+    saver --> host : Throw FileSaveError
+  end
+end
+alt each file was handed over
+  host -> panel : Status "Saved 3 files: the recording and 2 screen captures." (L2-178 AC15)
+else a FileSaveError was thrown
+  host -> panel : Status "The files couldn’t be saved. Try again."
+  note over recorder, buffer : The recording is kept as it was (L2-178 AC15)
+end
+panel --> person : Show the status in the dialog
+note over host, downloads : No request leaves the page; the Content Security Policy is unchanged (L2-178 AC15, L2-131, L2-132)
+@enduml

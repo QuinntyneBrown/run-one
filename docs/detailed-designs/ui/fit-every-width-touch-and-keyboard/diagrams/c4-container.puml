@@ -1,0 +1,13 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Fit every width, touch and keyboard
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The four screens, Web Bluetooth, the protocol and the engine")
+}
+Rel(rider, app, "Taps, tabs and resizes", "320 to 2560 px")
+Rel(host, app, "Serves index.html, tokens.css and styles.scss to", "HTTPS")
+@enduml

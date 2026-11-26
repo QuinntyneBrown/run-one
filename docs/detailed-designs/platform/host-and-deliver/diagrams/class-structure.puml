@@ -1,0 +1,91 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Host and deliver
+
+class "ci.yml" as Workflow <<config>> {
+  on: push, pull_request
+  concurrency: cancel-in-progress
+  permissions: contents read
+}
+
+class "lint job" as Lint <<job>> {
+  timeout-minutes: 5
+  npm run format:check
+  npm run lint
+}
+
+class "build job" as Build <<job>> {
+  timeout-minutes: 5
+  npm run build
+}
+
+class "acceptance job" as Acceptance <<job>> {
+  timeout-minutes: 5
+  npx playwright test --grep @critical
+}
+
+class "deploy job" as Deploy <<job>> {
+  needs: lint, build, acceptance
+  if: push to main, TELO_RIDE_STATIC_WEB_APP set
+  stamps ngsw-worker.js with the commit
+  Azure/static-web-apps-deploy
+}
+
+class "Static host" as Host <<config>> {
+  product: Azure Static Web Apps (Free)
+  HTTPS only, http redirected
+}
+
+class "staticwebapp.config.json" as HostConfig <<config>> {
+  navigationFallback: /index.html, exclude assets
+  globalHeaders: L2-131 header set, HSTS, no-cache
+  routes: hashed files immutable, worker policy
+  mimeTypes
+}
+
+class "angular.json (ride, production)" as Angular <<config>> {
+  outputPath: dist/ride
+  outputHashing: all
+  budgets: initial, anyComponentStyle
+}
+
+class "playwright.config.ts" as Playwright <<config>> {
+  retries: 0
+  workers: 100% in CI
+  webServer: ng build ride && serve-dist.mjs
+}
+
+class "serve-dist.mjs" as Serve <<script>> {
+  +serve(port, folder)
+  follows the build's staticwebapp.config.json
+}
+
+class "verify.mjs" as Verify <<script>> {
+  format, lint, unit tests, build, specs
+  runs locally only
+}
+
+Workflow *-- Lint
+Workflow *-- Build
+Workflow *-- Acceptance
+Workflow *-- Deploy
+Build ..> Angular : builds with
+Acceptance ..> Playwright : runs
+Playwright ..> Serve : starts
+Deploy ..> Host : uploads dist/ride/browser to
+Serve ..> HostConfig : reads from the build
+Host ..> HostConfig : reads from the build
+Angular ..> HostConfig : copies from public/
+Verify ..> Workflow : repeats locally, plus unit tests
+@enduml

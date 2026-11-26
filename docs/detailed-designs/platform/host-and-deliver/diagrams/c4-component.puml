@@ -1,0 +1,24 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Host and deliver
+
+System_Ext(host, "Static host", "Azure Static Web Apps: serves the app's files over HTTPS as the build's configuration says")
+System_Ext(ci, "CI", "GitHub Actions: lint, production build, critical acceptance paths")
+Container_Boundary(ride, "ride application") {
+  Component(build, "Production build", "ng build ride", "dist/ride/browser: index.html, hashed bundles and staticwebapp.config.json, within budgets")
+  Component(index, "index.html", "Document", "base href / so every route resolves the same bundles")
+  Component(router, "Router and ride.routes.ts", "Angular router", "Matches /connect, /, /ride, /done; any other address is Page not found")
+}
+Container_Boundary(e2e, "frontend/e2e and frontend/scripts (outside the workspace projects)") {
+  Component(specs, "Specs tagged @critical", "Playwright", "One critical acceptance path per feature")
+  Component(serve, "serve-dist.mjs", "Node script", "Local stand-in for the host: follows the build's staticwebapp.config.json")
+}
+Rel(ci, build, "Builds with npm run build")
+Rel(ci, specs, "Runs with --grep @critical")
+Rel(specs, serve, "Run against")
+Rel(serve, build, "Serves")
+Rel(ci, host, "Deploys the build to")
+Rel(host, index, "Answers an address that matches no file with")
+Rel(index, router, "Boots")
+@enduml

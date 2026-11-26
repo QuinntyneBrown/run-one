@@ -1,0 +1,49 @@
+@startuml
+title UML sequence behaviour — Announce a state change, not a tick
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "ClassHeader" as hdr
+  participant "ClassLost" as lost
+end box
+box "Device — Browser" #F2F4F7
+  participant "LiveAnnouncer live region" as live
+  participant "Screen reader" as sr
+end box
+rider -> page : Ride the class
+loop every second
+  page -> hdr : elapsed input changes
+  hdr --> sr : role="timer" text and aria-label update, no live region
+  sr --> rider : Silence (L2-141 AC2)
+end
+rider -> page : Press Pause
+page -> live : announce the paused state once, polite (L2-141 AC2)
+live --> sr : Live region text changes
+sr --> rider : Speaks the paused announcement once
+rider -> page : Press Resume
+page -> live : announce the resumed state once, polite (L2-141 AC2)
+sr --> rider : Speaks the resumed announcement once
+opt the bike stops answering
+  page -> lost : Render wz-class-lost
+  lost --> sr : role="alert" enters the document
+  sr --> rider : Speaks "Lost the bike" and its text at once (L2-141 AC2)
+end
+rider -> sr : Read the power reading
+sr --> rider : The watts and "On target" in words, not colour alone (L2-141 AC3)
+@enduml

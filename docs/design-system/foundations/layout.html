@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Layout — Telo Ride 1 design system</title>
+<meta name="description" content="Five screens, each a full-height shell. The Class fits an 11-inch tablet in landscape with no scrolling; portrait is one column that scrolls.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+<style>
+.ds-ffs { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); align-items: start; margin-block: var(--space-4); }
+.ds-ff { margin: 0; }
+.ds-ff__clip { --scale: 0.25; width: calc(var(--w) * var(--scale) * 1px); height: calc(var(--h) * var(--scale) * 1px); max-width: 100%; overflow: hidden; border: var(--border-width-hairline) solid var(--color-line); border-radius: var(--radius-md); }
+.ds-ff__clip iframe { border: 0; transform: scale(var(--scale)); transform-origin: 0 0; pointer-events: none; }
+.ds-ff figcaption { margin-top: var(--space-2); font: var(--text-caption); color: var(--color-fg-muted); }
+</style>
+</head>
+<body id="top">
+<a class="ds-skip" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Telo Ride 1 DS</a><button class="ds-theme-toggle" type="button" aria-pressed="true">☀ Light</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/ride-readout.html">Bike panel</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/class-done.html">Class Done</a></li>
+      <li><a href="../components/video.html">Class video</a></li>
+      <li><a href="../components/container.html">Container</a></li>
+      <li><a href="../components/countdown.html">Countdown</a></li>
+      <li><a href="../components/course.html">Course</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/device-list.html">Device list</a></li>
+      <li><a href="../components/diagnostic-panel.html">Diagnostic panel</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+      <li><a href="../components/finish-banner.html">Finish banner</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/ibiza-flyover.html">Ibiza Flyover</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/lockup.html">Lockup</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/plan-chart.html">Plan chart</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/recording-mark.html">Recording mark</a></li>
+      <li><a href="../components/number-stepper.html">Resistance stepper</a></li>
+      <li><a href="../components/roll-out.html">Roll-out</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/sidebar-nav.html">Sidebar navigation</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/stat.html">Stat</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/the-class.html">The Class</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation.html">Navigation</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+      <li><a href="../patterns/live-ride.html">The shape of a ride</a></li>
+    </ul></details>
+  </nav>
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Foundation</p>
+      <h1>Layout</h1>
+      <p class="ds-lead">Five screens, each a full-height shell. The Class fits an 11-inch tablet in landscape with no scrolling; portrait is one column that scrolls.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#grid">Columns, gutters, margins</a></li><li><a href="#screens">The five screens</a></li><li><a href="#form-factors">Form factors</a></li><li><a href="#shape-of-a-ride">The shape of a ride</a></li><li><a href="#usage">Usage</a></li><li><a href="#tokens">Tokens</a></li></ul>
+    </header>
+<section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+<p>Every screen is a column as tall as the window (<code>.app</code>): a header, then one region that either scrolls or is laid out to fit. There is no sidebar, no navigation and no page grid shared between screens: each screen’s layout is its own block, built from the tokens below. See <a href="../components/container.html">Container</a> for the shell’s classes.</p>
+</section>
+
+<section class="ds-section" id="grid"><h2><a href="#grid">Columns, gutters, margins</a></h2>
+<p>The column grid is 4 columns below 768px, 8 from 768px and 12 from 1024px. Gutters are 16px, 24px from 768px and 32px from 1024px; the margin from the window’s edge is 16px, 24px from 640px and 32px from 1024px. The tokens change at those widths; components read them.</p><div class="ds-grid-demo" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span></div><div class="ds-table-wrap"><table class="ds-table">
+<thead><tr><th scope="col">Width</th><th scope="col">Columns</th><th scope="col">Gutter</th><th scope="col">Margin</th></tr></thead>
+<tbody>
+<tr><td>0–639px</td><td>4</td><td>16px</td><td>16px</td></tr>
+<tr><td>640–767px</td><td>4</td><td>16px</td><td>24px</td></tr>
+<tr><td>768–1023px</td><td>8</td><td>24px</td><td>24px</td></tr>
+<tr><td>from 1024px</td><td>12</td><td>32px</td><td>32px</td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ds-section" id="screens"><h2><a href="#screens">The five screens</a></h2>
+<div class="ds-table-wrap"><table class="ds-table">
+<thead><tr><th scope="col">Screen</th><th scope="col">Layout</th><th scope="col">Scrolls?</th></tr></thead>
+<tbody>
+<tr><td>Connect Bike</td><td>The bike’s photo and the pairing column; one column below 1024px, two from there.</td><td>When it must.</td></tr>
+<tr><td>The Class</td><td>Below 1024px: one column, the start button pinned to the foot. From 1024px: video and plan on the left, a fixed side column (380px, 420px from 1280px) on the right.</td><td>Below 1024px. Not from 1024px.</td></tr>
+<tr><td>Ibiza Flyover</td><td>Three rows: bar, scene, band.</td><td>Never.</td></tr>
+<tr><td>Class Ride</td><td>Header, the video’s or the course’s box, the bike panel.</td><td>Not in a landscape window from 768px.</td></tr>
+<tr><td>Class Done</td><td>One column, at most the narrow container.</td><td>When it must.</td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ds-section" id="form-factors"><h2><a href="#form-factors">Form factors</a></h2>
+<p>The Class at the four sizes the design’s <i>Form Factors</i> canvas draws, and Class Ride in landscape. These are the mocks themselves, scaled to a quarter.</p><div class="ds-ffs"><figure class="ds-ff"><div class="ds-ff__clip" style="--w: 1194; --h: 834;"><iframe src="../../mocks/pages/the-class/returning.html?chrome=0" width="1194" height="834" title="11-inch tablet, landscape" loading="lazy" tabindex="-1"></iframe></div><figcaption>11-inch tablet, landscape · 1194 × 834 · <a href="../../mocks/pages/the-class/returning.html">the-class/returning</a></figcaption></figure><figure class="ds-ff"><div class="ds-ff__clip" style="--w: 1440; --h: 900;"><iframe src="../../mocks/pages/the-class/returning.html?chrome=0" width="1440" height="900" title="Desktop" loading="lazy" tabindex="-1"></iframe></div><figcaption>Desktop · 1440 × 900 · <a href="../../mocks/pages/the-class/returning.html">the-class/returning</a></figcaption></figure><figure class="ds-ff"><div class="ds-ff__clip" style="--w: 834; --h: 1194;"><iframe src="../../mocks/pages/the-class/returning.html?chrome=0" width="834" height="1194" title="Tablet, portrait" loading="lazy" tabindex="-1"></iframe></div><figcaption>Tablet, portrait · 834 × 1194 · <a href="../../mocks/pages/the-class/returning.html">the-class/returning</a></figcaption></figure><figure class="ds-ff"><div class="ds-ff__clip" style="--w: 390; --h: 844;"><iframe src="../../mocks/pages/the-class/returning.html?chrome=0" width="390" height="844" title="Phone" loading="lazy" tabindex="-1"></iframe></div><figcaption>Phone · 390 × 844 · <a href="../../mocks/pages/the-class/returning.html">the-class/returning</a></figcaption></figure><figure class="ds-ff"><div class="ds-ff__clip" style="--w: 1194; --h: 834;"><iframe src="../../mocks/pages/class-ride/default.html?chrome=0" width="1194" height="834" title="Class Ride, landscape" loading="lazy" tabindex="-1"></iframe></div><figcaption>Class Ride, landscape · 1194 × 834 · <a href="../../mocks/pages/class-ride/default.html">class-ride/default</a></figcaption></figure><figure class="ds-ff"><div class="ds-ff__clip" style="--w: 1194; --h: 834;"><iframe src="../../mocks/pages/ibiza-flyover/default.html?chrome=0" width="1194" height="834" title="Ibiza Flyover, landscape" loading="lazy" tabindex="-1"></iframe></div><figcaption>Ibiza Flyover, landscape · 1194 × 834 · <a href="../../mocks/pages/ibiza-flyover/default.html">ibiza-flyover/default</a></figcaption></figure></div>
+</section>
+
+<section class="ds-section" id="shape-of-a-ride"><h2><a href="#shape-of-a-ride">The shape of a ride</a></h2>
+<p>Ibiza Flyover is the course edge to edge between a bar and a band, so no word lies on the course. On Class Ride the countdown, the finish banner and the roll-out lie inside the video’s or the course’s box, above the bike panel and its stepper; Class Ride keeps its layout through all of them. See <a href="../patterns/live-ride.html">The shape of a ride</a>.</p>
+</section>
+
+<section class="ds-section" id="usage"><h2><a href="#usage">Usage</a></h2>
+<ul><li>A screen fits or scrolls as one; never nest a scrolling region inside a scrolling page.</li><li>Anything pinned to the foot keeps clear of the home bar with <code>env(safe-area-inset-bottom)</code>.</li>
+<li>A fixed side column takes its width from a token (<code>--the-class-aside-width</code>), and the rest is <code>minmax(0, 1fr)</code>.</li><li>Text blocks keep a measure: <code>--layout-text-*</code> for cards and notices, <code>--layout-measure</code> for prose.</li></ul>
+</section>
+
+<section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+<p>Every token of this category, with its live value. No other foundation page lists them.</p><div class="ds-table-wrap"><table class="ds-table">
+<thead><tr><th scope="col">Token</th><th scope="col">Value (light)</th><th scope="col">Dark, where it differs</th><th scope="col">Use</th></tr></thead>
+<tbody>
+<tr><td><code>--layout-columns</code></td><td><span class="ds-swatch-cell" data-theme="light"><span data-token="--layout-columns"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><span data-token="--layout-columns"></span></span></td><td></td></tr>
+<tr><td><code>--layout-gutter</code></td><td><span class="ds-swatch-cell" data-theme="light"><span data-token="--layout-gutter"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><span data-token="--layout-gutter"></span></span></td><td></td></tr>
+<tr><td><code>--layout-margin</code></td><td><span class="ds-swatch-cell" data-theme="light"><span data-token="--layout-margin"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><span data-token="--layout-margin"></span></span></td><td>px-4, sm:px-6, lg:px-8</td></tr>
+<tr><td><code>--layout-container-max</code></td><td><span data-token="--layout-container-max"></span></td><td></td><td>max-w-7xl</td></tr>
+<tr><td><code>--layout-container-narrow</code></td><td><span data-token="--layout-container-narrow"></span></td><td></td><td>max-w-5xl</td></tr>
+<tr><td><code>--layout-container-form</code></td><td><span data-token="--layout-container-form"></span></td><td></td><td>max-w-3xl</td></tr>
+<tr><td><code>--layout-measure</code></td><td><span data-token="--layout-measure"></span></td><td></td><td></td></tr>
+<tr><td><code>--layout-text-sm</code></td><td><span data-token="--layout-text-sm"></span></td><td></td><td>max-w-sm: a centred overlay card</td></tr>
+<tr><td><code>--layout-text-md</code></td><td><span data-token="--layout-text-md"></span></td><td></td><td>max-w-md: a lead paragraph beside a photo</td></tr>
+<tr><td><code>--layout-text-lg</code></td><td><span data-token="--layout-text-lg"></span></td><td></td><td>max-w-lg</td></tr>
+<tr><td><code>--layout-text-xl</code></td><td><span data-token="--layout-text-xl"></span></td><td></td><td>max-w-xl: a page lead, a form column</td></tr>
+<tr><td><code>--layout-text-2xl</code></td><td><span data-token="--layout-text-2xl"></span></td><td></td><td>max-w-2xl: standings and class plans</td></tr>
+<tr><td><code>--layout-panel-narrow</code></td><td><span data-token="--layout-panel-narrow"></span></td><td></td><td>notices and empty states that stand in for a screen</td></tr>
+<tr><td><code>--layout-sidebar-width</code></td><td><span data-token="--layout-sidebar-width"></span></td><td></td><td></td></tr>
+<tr><td><code>--layout-topbar-height</code></td><td><span data-token="--layout-topbar-height"></span></td><td></td><td>app header: 36px controls + 2 × 10px</td></tr>
+<tr><td><code>--layout-header-height</code></td><td><span data-token="--layout-header-height"></span></td><td></td><td>Shape -----------------------------------------------------------------------------------</td></tr>
+<tr><td><code>--control-height-sm</code></td><td><span data-token="--control-height-sm"></span></td><td></td><td>h-9: header links, icon buttons, segmented options</td></tr>
+<tr><td><code>--control-height-md</code></td><td><span data-token="--control-height-md"></span></td><td></td><td>h-10: buttons and inputs</td></tr>
+<tr><td><code>--control-height-lg</code></td><td><span data-token="--control-height-lg"></span></td><td></td><td>h-12: page actions</td></tr>
+<tr><td><code>--control-height-xl</code></td><td><span data-token="--control-height-xl"></span></td><td></td><td>h-14: the one big start action</td></tr>
+<tr><td><code>--the-class-aside-width</code></td><td><span data-token="--the-class-aside-width"></span></td><td></td><td>lg: grid-cols-[minmax(0,1fr)_380px]</td></tr>
+<tr><td><code>--the-class-aside-width-xl</code></td><td><span data-token="--the-class-aside-width-xl"></span></td><td></td><td>xl: 420px</td></tr>
+<tr><td><code>--class-done-figure-room</code></td><td><span data-token="--class-done-figure-room"></span></td><td></td><td>above the strongest bar, for its upright figure</td></tr>
+<tr><td><code>--class-done-chart-height</code></td><td><span data-token="--class-done-chart-height"></span></td><td></td><td>the 17 efforts, h-48</td></tr>
+<tr><td><code>--class-done-action-width</code></td><td><span data-token="--class-done-action-width"></span></td><td></td><td>Done from 640px, sm:w-72</td></tr>
+</tbody>
+</table></div>
+</section>
+    <footer class="ds-footer"><span>Telo Ride 1 design system · extracted from <a href="../../mocks/index.html">docs/mocks</a> on 24 November 2026</span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<div class="class-rollout">
+  <p class="class-rollout__title">{{ title() }}</p>
+  <p class="class-rollout__body" role="status">Easy spin. Your summary is coming up.</p>
+  <div
+    class="class-rollout__bar"
+    role="progressbar"
+    aria-label="Class Done opens in a moment"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    [attr.aria-valuenow]="percent()"
+  >
+    <span class="class-rollout__fill"></span>
+  </div>
+</div>
