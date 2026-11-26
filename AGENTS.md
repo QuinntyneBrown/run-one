@@ -1,53 +1,37 @@
 ## Purpose
 
-> Telo Ride 1, from the Telo family, is the focused edition of Telo Ride: one class, nothing
-> else. It pairs with a smart bike at home over Bluetooth, plays the class video, or draws the
-> Ibiza Sunset Strip course to music if the rider chooses it, and sets the bike's resistance for
-> every interval while the rider pedals. Connect the bike, take the class,
-> see your number, and come back to beat it.
+> Telo Run 1, from the Telo family, is Telo Ride 1 for running: one class, nothing else. It pairs
+> with a treadmill at home over Bluetooth, plays the class video, or draws the Ibiza Sunset Strip
+> course if the runner chooses it, and sets the belt speed for every sprint and recovery while the
+> runner runs. Connect the treadmill, take the class, see your number, and come back to beat it.
 
-**Direction.** Telo Ride 1 is Telo Ride with everything but one class taken away. It has five
-screens and no menus:
+**Direction.** Telo Run 1 is identical to Telo Ride 1 except that it is for running: a treadmill
+in the bike's place and a runner in the same world. It has five screens and no menus:
 
-1. **Connect Bike**: pair the bike once; it is remembered. A new rider starts here.
-2. **The Class**: the home screen and the only class, **Intervals to the Beat** (GCN Training,
-   `intervals-to-the-beat`, 20:00): its video, title, length, a chart of what the bike will do,
-   the choice to ride with the class video or in Ibiza (**Ibiza Sunset Strip**, the only course,
-   built in Blender from the class's plan), and one start button ("Connect your bike" when no
-   bike is connected). A returning rider also sees their ride count, best output and last output.
-3. **Ibiza Flyover**: before a ride in Ibiza only, the course seen from above, start to finish,
-   while it loads; the camera lands on the grid. The rider can skip it or cancel. It never holds
-   the ride: it gives way if the course cannot be drawn, and is not shown with reduced motion.
-4. **Class Ride**: a countdown ("3, 2, 1, Go!"), then the video in sync, or the course drawn as
-   the rider rides, while the class's plan sets target resistance; the rider just pedals. An
-   intensity control from 0 to 10, like a volume control, makes every interval from then on
-   harder or easier (5 is the class as it is). In Ibiza the rider chooses the sound: one track,
-   *Beautiful Boom Bap* (Music_Unlimited, Pixabay), the marketing film's music, self-hosted; no
-   music; a YouTube video in the course's top-right corner (a default video or the class video,
-   in time with the ride); or that video's audio alone (ADR 0050). Always solo, so the rider can
-   pause, leave or finish.
-   At 20:00 a finish banner shows the output, the target resistance eases off, and the video or
-   the course carries on for a few seconds (the roll-out) before Class Done opens on its own.
-5. **Class Done**: the ride's output in kJ (in gold for a new best), time, average watts, how much
-   of the ride was on target, and the class's efforts. When the ride ended at an intensity other
-   than the rider's default, it asks whether that should be the default, kept on the device.
-   **Done** returns to The Class.
+1. **Connect Treadmill**: pair the treadmill once; it is remembered. A new runner starts here.
+2. **The Class**: the home screen and the only class, its video, title, length, a chart of what
+   the treadmill will do, the choice to run it with the class video or in Ibiza (**Ibiza Sunset
+   Strip**, the only course), and one start button ("Connect your treadmill" when none is
+   connected). A returning runner also sees their run count, best distance and last distance.
+3. **Ibiza Flyover**: before a run in Ibiza only, the course seen from above, start to finish,
+   while it loads; the camera lands on the grid. The runner can skip it or cancel.
+4. **Class Run**: a countdown ("3, 2, 1, Go!"), then the video in sync, or the course drawn as
+   the runner runs, while the class's plan sets the belt speed; the runner just runs. Stride
+   (steps per minute) is shown against the plan's target, with pace and the distance run. At
+   20:00 a finish banner shows the distance, the belt slows to a walk, and the video or the
+   course carries on for a few seconds (the walk-off) before Class Done opens on its own.
+5. **Class Done**: the run's distance in km (in gold for a new best), time, average pace, how much
+   of the run was on stride, and the class's sprints. **Done** returns to The Class.
 
-A ride borrows a race's shape and nothing else: the flyover, the countdown and the finish banner
-are for one rider alone, with no other riders, positions, laps or places (ADR 0049).
+Everything else Telo Ride 1 has, Telo Run 1 has in the same place: the intensity control from 0 to
+10, the sound of a run in Ibiza, the intensity question on Class Done, and the diagnostic
+recording behind `?diagnose`. A run is for one runner alone, with no other runners, positions,
+laps or places (ADR 0049). Before adding or changing anything, ask how it serves connecting the
+treadmill and taking the one class; if it does not, do not build it, and if a request works
+against it, say so.
 
-Telo Ride 1 has no class library, races, maps or worlds beyond Ibiza Sunset Strip, music beyond
-that one track and the YouTube video the rider chooses in Ibiza, group classes or live races, XP, rider
-levels, stars or unlocks, sign-in, or custom workout. One thing sits behind configuration and is
-no part of the rider's app: the diagnostic recording (L2-178, ADR 0048), on only when the app is
-opened with `?diagnose`, for finding why a bike will not connect, report pedalling or take a
-target resistance. Before adding or changing anything, ask how
-it serves connecting the bike and taking the one class; if it does not, do not build it, and if a
-request works against it, say so.
-
-The mission, Telo Ride 1's single L0 requirement, is not written yet. When it is, it goes in
-`docs/specs/L0.md` and this section quotes it word for word; everything then points back to it.
-Do not invent a mission in its place.
+The mission, Telo Run 1's single L0 requirement, is not written yet. When it is, it goes in
+`docs/specs/L0.md` and this section quotes it word for word. Do not invent a mission in its place.
 
 ## Design
 
@@ -56,52 +40,55 @@ with `docs/mocks/manifest.json` listing them. `docs/specs/`, the ADRs, `docs/det
 and the code follow the mocks. When a mock changes, the requirement, the ADR it touches and the
 detailed design are brought in line with it in that order, before any code.
 
-The mocks copy the **Telo Ride 1** prototype in Magic Patterns (the *Echelon Bike Telemetry
-Dashboard* OS): the frames Connect Bike, The Class, Ibiza Flyover, Class Ride and Class Done, and
-the canvas *The Class · Form Factors*. Its own design threads hold the decisions behind it.
-`docs/mocks/README.md` says where the mocks depart from the prototype, and why.
+The mocks copy the **Telo Run 1** prototype in Magic Patterns (the *Echelon Bike Telemetry
+Dashboard* OS, `vnjsCrjBAfcZGnW9rHMoch`): the frames Connect Treadmill, The Class, Ibiza Flyover,
+Class Run and Class Done. `docs/mocks/README.md` says what running changes, where the mocks depart
+from the prototype and why, and the questions still open (where the stride comes from, what the
+belt does when the link drops, the class video, the course's length).
 
-- **Wordmark:** **TELO RIDE 1**, the Telo Ride lockup with "RIDE 1" in signal orange, on every
-  screen. It is "1", never "One" or "I".
+- **The design system is Telo Ride 1's, unchanged.** `docs/design-system/` is the same tokens,
+  fonts and components, and its class names (`class-ride__…`, `class-bike`, `ride-with`) stay.
+  Do not fork or rename it for Run 1.
+- **Wordmark:** **TELO RUN 1**, the Telo lockup with "RUN 1" in signal orange, on every screen.
+  It is "1", never "One" or "I".
 - **11" tablet in landscape (1194 × 834) and desktop (1024 px wide and up):** The Class fits on
-  one screen with no scrolling; the video takes the height left and stays 16:9, and the class
-  details and start button sit in a fixed column on the right. Class Ride does not scroll on any
-  landscape screen 768 px wide or more.
+  one screen with no scrolling. Class Run does not scroll on any landscape screen 768 px wide or
+  more.
 - **Phone and tablet in portrait:** one column that scrolls, with the start button pinned to the
   bottom and clear of the home bar.
-- **The shape of a ride:** Ibiza Flyover is the course edge to edge between a bar and a band, so
-  no word lies on the course. On Class Ride the countdown, the finish banner and the roll-out lie
-  inside the video's or the course's box, above the bike panel and its stepper.
+- **The shape of a run:** Ibiza Flyover is the course edge to edge between a bar and a band. On
+  Class Run the countdown, the finish banner and the walk-off lie inside the video's or the
+  course's box, above the treadmill panel and its stepper.
 
 Before a screen is built or changed, its states are drawn in `docs/mocks/`. The mocks' numbers
-(6 rides, a 342 kJ best, a 351 kJ finish) are the cast, not rules.
+(6 runs, a 3.34 km best, a 3.36 km finish) are the cast, not rules.
 
-The prototype disagrees with the mocks in places, and there the mocks stand. It was drawn for an
-earlier class, 30 Minute HIIT Cardio, and later for one called 20 Minute HIIT on a 3.2 km loop,
-and it has no music; the mocks draw Intervals to the Beat, the course as built and the Music
-button. The prototype's newest Class Ride (the video or the course edge to edge under the
-readouts, no stepper, efforts called "drops") is not in the mocks and is not adopted: only the
-flyover, the countdown, the finish banner, easing off and the roll-out are (ADR 0049;
-`docs/specs/L2.md`, open questions 39 and 40).
+## Carried over from Telo Ride 1
 
-## Carried over from Telo Ride
+This repository began as a copy of Telo Ride 1 (`QuinntyneBrown/ride-one`), without its
+`docs/videos/` and `docs/screenshots/`. **So far only the mocks, their README and this file's
+Purpose and Design are Telo Run 1's.** Everything else still describes and builds Telo Ride 1, the
+bike app: `docs/specs/`, the ADRs, `docs/journeys.md`, `docs/detailed-journeys.md`,
+`docs/detailed-designs/`, `docs/design-system/`'s own pages, the root `README.md`, `tools/`, the
+`frontend/` code (the `ride` application, the bike's protocol, engine and simulated bike) and its
+tests. The sections below this one are Ride 1's rules, and they stand for Run 1 with the treadmill
+read for the bike.
 
-This repository began as a copy of Telo Ride. Telo Ride's other features are removed from its
-code and tests: races, the class library and the other seven courses, sign-in, progression, group
-classes and live races, feedback, the custom workout, the `marketing` application and the backend
-(ADRs 0036 to 0043), and World loading, the `world` library's other worlds and their music
-(ADR 0047). The code holds all five screens, with the flyover, the countdown, the finish
-banner and the roll-out built (ADR 0049, journey 39). The ADRs
-before 0036 still describe Telo Ride; `docs/specs/`,
-`docs/journeys.md`, `docs/detailed-journeys.md`, `docs/mocks/` and `docs/detailed-designs/` are
-rewritten for Telo Ride 1.
+- Bring the rest in line in the order the Design section gives: the open questions in
+  `docs/mocks/README.md` first, then `docs/specs/`, the ADRs (a new one for the treadmill and what
+  the belt may be told to do), the detailed designs, and only then the code, slice by slice.
+- A treadmill moves the person on it. Nothing that commands the belt (start, speed, the ramp,
+  stop, what happens when the link drops) is written without its requirement and ADR, and a
+  person checks it on the machine before release. No agent runs it against real hardware.
+- Until a doc is rewritten for Telo Run 1 it says Ride, bike, resistance, output and efforts.
+  When it is rewritten, it says so, and uses the mocks' words.
 
-- Keep and build on what the five screens need: the Bluetooth link, the protocol, the engine, the
-  simulated bike, the video library, the solo class ride and its result, and, for riding in
-  Ibiza, the Ibiza Sunset Strip course, its Blender build and the course renderer in `world`.
-- Do not extend a feature Telo Ride 1 leaves out. Removing one is a change of its own, with its
-  requirement, docs and tests cut down in the same change, and an ADR where it reverses one.
-- When a doc is rewritten for Telo Ride 1, it says so and drops what Telo Ride 1 leaves out.
+Use the mocks' words in code, docs and UI; no synonyms. The belt's reported speed is "speed", the
+requested one "target speed", in km/h; the runner's steps per minute are their "stride"; the
+screens are Connect Treadmill, The Class, Ibiza Flyover, Class Run and Class Done; a run's result
+is its "distance" in km, and the class's hard intervals are its "sprints". The course seen from
+above is the "flyover", the three seconds before the clock starts the "countdown", the banner at
+20:00 the "finish banner", and the seconds after it the "walk-off".
 
 ## Where things are
 

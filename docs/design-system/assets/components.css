@@ -1248,7 +1248,7 @@ textarea.input { height: auto; min-height: var(--space-28); padding-block: var(-
 /* The 17 efforts: one bar each, height = watts / peak; the peak in signal orange */
 .class-done__efforts { margin-top: var(--space-12); }
 .class-done__efforts-title { font-size: var(--font-size-sm); line-height: var(--line-height-sm); font-weight: var(--font-weight-medium); color: var(--color-muted); }
-.class-done__chart { margin-top: var(--space-4); display: grid; height: var(--class-done-chart-height); grid-template-columns: repeat(17, minmax(0, 1fr)); align-items: end; gap: var(--space-1); }
+.class-done__chart { margin-top: var(--space-4); display: grid; height: var(--class-done-chart-height); grid-template-columns: repeat(var(--class-done-efforts, 17), minmax(0, 1fr)); align-items: end; gap: var(--space-1); }
 @media (min-width: 40rem) { .class-done__chart { gap: var(--space-2); } }
 .class-done__effort { display: flex; height: 100%; min-width: 0; flex-direction: column; justify-content: flex-end; }
 .class-done__watts { margin-bottom: var(--space-1-5); text-align: center; font-family: var(--font-family-display); font-weight: var(--font-weight-bold); letter-spacing: var(--letter-spacing-display); font-feature-settings: 'tnum' 1; font-size: var(--font-size-xs); line-height: var(--line-height-xs); color: var(--color-muted); }

@@ -1,6 +1,6 @@
 {
-  "project": "Telo Ride 1",
-  "source": "Magic Patterns OS vnjsCrjBAfcZGnW9rHMoch, prototype “Telo Ride 1” 26KV6fJjK53f6bW6xiGNjP",
+  "project": "Telo Run 1",
+  "source": "Magic Patterns OS vnjsCrjBAfcZGnW9rHMoch, prototype “Telo Run 1” pgrYab933NWX1NZCj29RWU",
   "required_states": {
     "page": [
       "default",
@@ -22,9 +22,9 @@
   },
   "screens": [
     {
-      "id": "connect-bike",
+      "id": "connect-treadmill",
       "kind": "page",
-      "title": "Connect Bike",
+      "title": "Connect Treadmill",
       "route": "/connect",
       "requirements": [
         "L2-007",
@@ -50,8 +50,8 @@
         "recording"
       ],
       "not_applicable": {
-        "loading": "‘searching’ is the loading state: the card spins while the browser’s list of bikes is open.",
-        "empty": "The supported bikes list is fixed, and a search that finds nothing is the browser’s own chooser.",
+        "loading": "‘searching’ is the loading state: the card spins while the browser’s list of treadmills is open.",
+        "empty": "The supported treadmills list is fixed, and a search that finds nothing is the browser’s own chooser.",
         "error": "The failures are their own states: bluetooth-off, unsupported-browser, needs-https, chooser-blocked and chooser-failed."
       }
     },
@@ -74,7 +74,7 @@
       "states": [
         "default",
         "returning",
-        "no-bike",
+        "no-treadmill",
         "ibiza",
         "video-unavailable",
         "cannot-draw",
@@ -85,16 +85,16 @@
         "recording"
       ],
       "not_applicable": {
-        "loading": "Telo Ride 1 has one class, bundled with the app; nothing loads before the page shows. The video player fills its box when YouTube answers.",
-        "empty": "There is always the one class. A rider with no rides yet is the default state, which simply has no stats.",
-        "error": "The failures are their own states: no-bike, video-unavailable, cannot-draw, needs-chromium, needs-https and cannot-load."
+        "loading": "Telo Run 1 has one class, bundled with the app; nothing loads before the page shows. The video player fills its box when YouTube answers.",
+        "empty": "There is always the one class. A runner with no runs yet is the default state, which simply has no stats.",
+        "error": "The failures are their own states: no-treadmill, video-unavailable, cannot-draw, needs-chromium, needs-https and cannot-load."
       }
     },
     {
       "id": "ibiza-flyover",
       "kind": "page",
       "title": "Ibiza Flyover",
-      "route": "/ride",
+      "route": "/run",
       "requirements": [
         "L2-175",
         "L2-178",
@@ -104,19 +104,19 @@
         "default",
         "loading",
         "landed",
-        "bike-lost",
+        "treadmill-lost",
         "recording"
       ],
       "not_applicable": {
-        "empty": "The flyover always has the course’s name and the bike; there is nothing to be empty of.",
-        "error": "Its one failure is the lost bike (bike-lost). A course that cannot be drawn shows no error here: Class Ride opens on the countdown instead (L2-179 AC8)."
+        "empty": "The flyover always has the course’s name and the treadmill; there is nothing to be empty of.",
+        "error": "Its one failure is the lost treadmill (treadmill-lost). A course that cannot be drawn shows no error here: Class Run opens on the countdown instead (L2-179 AC8)."
       }
     },
     {
-      "id": "class-ride",
+      "id": "class-run",
       "kind": "page",
-      "title": "Class Ride",
-      "route": "/ride",
+      "title": "Class Run",
+      "route": "/run",
       "requirements": [
         "L2-014",
         "L2-023",
@@ -169,16 +169,16 @@
         "countdown-disconnected",
         "finish",
         "finish-ibiza",
-        "rolling-on",
-        "rolling-on-ibiza",
+        "walking-off",
+        "walking-off-ibiza",
         "finish-by-hand",
-        "rolling-on-by-hand",
+        "walking-off-by-hand",
         "recording"
       ],
       "not_applicable": {
-        "loading": "The ride itself never loads: it starts from The Class with the bike connected and the plan in memory. In Ibiza the course loads in its box while the ride runs, which is the state ibiza-loading.",
-        "empty": "A ride always has its plan, its clock and the bike’s readings.",
-        "error": "A ride has three failures, each its own state: the lost bike (disconnected), the video that cannot play (video-unavailable) and the bike that gives no control (by-hand)."
+        "loading": "The run itself never loads: it starts from The Class with the treadmill connected and the plan in memory. In Ibiza the course loads in its box while the run runs, which is the state ibiza-loading.",
+        "empty": "A run always has its plan, its clock and the treadmill’s readings.",
+        "error": "A run has three failures, each its own state: the lost treadmill (disconnected), the video that cannot play (video-unavailable) and the treadmill that gives no control (by-hand)."
       }
     },
     {
@@ -205,8 +205,8 @@
       ],
       "not_applicable": {
         "loading": "The result is computed on the device when the class ends; the page has it before it opens.",
-        "empty": "Class Done only opens after a ride, so it always has an output and eight efforts.",
-        "error": "Telo Ride 1 saves the ride on the device and sends it nowhere, so there is no failure to show."
+        "empty": "Class Done only opens after a run, so it always has an distance and eight sprints.",
+        "error": "Telo Run 1 saves the run on the device and sends it nowhere, so there is no failure to show."
       }
     },
     {
@@ -231,7 +231,7 @@
       "kind": "dialog",
       "title": "Diagnostic recording",
       "route": "?diagnose",
-      "opens_from": "class-ride",
+      "opens_from": "class-run",
       "requirements": [
         "L2-178"
       ],

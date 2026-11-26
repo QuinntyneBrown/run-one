@@ -2,6 +2,12 @@
   <img src="docs/design-system/assets/logo.svg" alt="Telo Ride 1" width="353" height="80">
 </p>
 
+> **Telo Run 1.** This repository is Telo Ride 1, copied to become **Telo Run 1**: the same
+> product for running, on a treadmill, with a runner in the same Ibiza. The design is done: see the
+> [mocks](docs/mocks/index.html) and [what running changes](docs/mocks/README.md). Everything below
+> this note, and the code, still describes Telo Ride 1, the bike app, until the specs, the
+> designs and the code are brought in line with the mocks ([AGENTS.md](AGENTS.md)).
+
 # Telo Ride 1
 
 [![CI](https://github.com/QuinntyneBrown/ride-one/actions/workflows/ci.yml/badge.svg)](https://github.com/QuinntyneBrown/ride-one/actions/workflows/ci.yml)
