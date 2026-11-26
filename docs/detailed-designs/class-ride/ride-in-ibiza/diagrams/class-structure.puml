@@ -1,0 +1,155 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Ride in Ibiza
+
+class CourseSceneHost <<directive>> {
+  +name: InputSignal<string>
+  +segments: InputSignal<Segment[]>
+  +elapsed: InputSignal<number>
+  +speedKmh: InputSignal<number | null>
+  +running: InputSignal<boolean>
+  +drawn: Output<void>
+  +unavailable: Output<void>
+}
+
+class CourseScene <<component>> {
+  +label: InputSignal<string>
+  +segments: InputSignal<Segment[]>
+  +elapsed: InputSignal<number>
+  +speedKmh: InputSignal<number | null>
+  +running: InputSignal<boolean>
+  +reducedMotion: InputSignal<boolean | null>
+  +drawn: Output<Backend>
+  +unavailable: Output<void>
+  #shown: Signal<boolean>
+}
+
+class FrameScheduler <<service>> {
+  +now: Signal<number>
+  +startLoop(): () => void
+  +measurePeriod(frames: number): Promise<number>
+  +nextFrame(): Promise<void>
+  +requestDraw(draw: () => void): void
+}
+
+class SceneDriver {
+  -crank: number
+  -time: number | null
+  +frame(now: number, input: SceneInput): void
+}
+
+interface SceneInput {
+  +elapsed: number
+  +speedKmh: number | null
+  +running: boolean
+  +reducedMotion: boolean
+}
+
+interface CourseFrame {
+  +time: number
+  +crank: number
+  +reducedMotion: boolean
+}
+
+interface CourseRenderer {
+  +backend: Backend
+  +start(canvas, nextFrame, segments): Promise<boolean>
+  +resize(width: number, height: number, pixelRatio: number): void
+  +draw(frame: CourseFrame): void
+  +setFramePeriod(ms: number): void
+  +pauseBudget(): void
+  +dispose(): void
+}
+
+class ThreeCourseRenderer {
+  -camera: PerspectiveCamera
+  -you: RiderModel
+  -disposables: Disposable[]
+  -ride(cyclist, metres, lane): number
+  -aim(metres: number): void
+  -choose(): void
+}
+
+class Course {
+  +length: number
+  +duration: number
+  +stages: CourseStage[]
+  +end: number
+  +stageAt(seconds: number): CourseStage
+  +metresAt(seconds: number): number
+  +place(metres, lane, into): CoursePlace
+}
+
+interface CourseStage {
+  +kind: SegmentKind
+  +start: number
+  +duration: number
+  +level: number
+  +cadenceAim: number
+  +from: number
+  +to: number
+}
+
+interface CoursePlace {
+  +x: number
+  +y: number
+  +z: number
+  +heading: number
+  +pitch: number
+}
+
+interface ChaseCamera {
+  +behind: number
+  +above: number
+}
+
+class RiderBody {
+  +seated: AnimationClip
+  +standing: AnimationClip
+  +{static} load(url: string): Promise<RiderBody>
+  +make(fine: boolean): RiderBodyParts
+  +dispose(): void
+}
+
+class CourseCyclistKit {
+  +made: number
+  +make(jersey, number, lit, detail): RiderModel
+  +roll(metres: number): void
+}
+
+class SunShadow {
+  +mesh: Mesh
+  +cast(group: Object3D): void
+  +at(place: CoursePlace, metres: number, course: Course): void
+  +draw(renderer, scene): void
+  +detail(tier: number): void
+  +dispose(): void
+}
+
+CourseSceneHost --> CourseScene : binds
+CourseScene --> FrameScheduler
+CourseScene *-- SceneDriver
+CourseScene --> CourseRenderer : loads through COURSE_RENDERER
+SceneDriver ..> SceneInput : reads
+SceneDriver --> CourseRenderer : draw
+SceneDriver ..> CourseFrame : builds
+ThreeCourseRenderer ..|> CourseRenderer
+ThreeCourseRenderer *-- Course
+ThreeCourseRenderer *-- CourseCyclistKit
+ThreeCourseRenderer *-- SunShadow
+ThreeCourseRenderer ..> ChaseCamera : chaseCamera(metres, finish)
+CourseCyclistKit --> RiderBody
+Course "1" *-- "33" CourseStage
+Course ..> CoursePlace : writes
+@enduml

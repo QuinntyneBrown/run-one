@@ -1,0 +1,40 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Read bike telemetry
+
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+
+Container_Boundary(ride, "ride application") {
+  Component(store, "ClassRideStore", "Page-scoped store", "Maps live metrics to the readouts and reports running seconds")
+}
+Container_Boundary(components, "components library") {
+  Component(stat, "ClassStat, ClassResist", "Presentation components", "Draw Power, Cadence and Resistance")
+  Component(format, "formatMetric()", "Pure helper", "A number, or the dash for an unknown value")
+}
+Container_Boundary(domain, "domain library") {
+  Component(conn, "WebBluetoothBikeConnection", "bluetooth/", "Publishes each notification as raw bytes")
+  Component(echelon, "EchelonFrameDecoder", "protocol/", "Decodes D1 cadence and D2 resistance")
+  Component(ftms, "IndoorBikeDataDecoder", "protocol/", "Decodes cadence and power by the flags")
+  Component(telemetry, "BikeTelemetry", "engine/ service", "Merges samples into cadence, resistance and power signals")
+  Component(power, "PowerModel", "engine/ helper", "Estimates power and computes target power")
+  Component(totals, "RideTotals", "engine/ service", "Adds each running second's power to output")
+  Component(ticker, "RideTicker", "engine/ service", "Publishes each whole second of a running ride")
+}
+Container_Boundary(api, "api library") {
+  Component(token, "BIKE_CONNECTION", "Injection token", "The BikeConnection contract and TelemetrySample type")
+}
+
+Rel(bike, conn, "Notifies", "GATT")
+Rel(telemetry, token, "Injects; reads frames and bike().kind")
+Rel(conn, token, "Is bound to")
+Rel(telemetry, echelon, "Decodes Echelon frames with")
+Rel(telemetry, ftms, "Decodes FTMS notifications with")
+Rel(telemetry, power, "Estimates missing power with")
+Rel(totals, telemetry, "Reads powerW")
+Rel(store, ticker, "Subscribes to ticks")
+Rel(store, totals, "Calls onRunningSecond()")
+Rel(store, telemetry, "Reads cadence, resistance, powerW")
+Rel(store, format, "Formats values with")
+Rel(stat, store, "Receives values as inputs from the page of")
+@enduml

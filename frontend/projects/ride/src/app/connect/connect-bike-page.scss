@@ -1,0 +1,103 @@
+// Block connect: Connect Bike's layout (docs/mocks/pages/connect-bike/). The header, then the body in the height that
+// is left: two columns from lg with the photo first, centred; below lg the photo follows the content. The screen
+// scrolls as one when it is taller than the window.
+.connect {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow-y: auto;
+}
+
+// The lockup and Full screen above the content (L2-144 AC1).
+.connect__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+
+  @media (min-width: 40rem) {
+    padding-inline: var(--space-6);
+  }
+
+  @media (min-width: 64rem) {
+    padding-inline: var(--space-8);
+  }
+}
+
+.connect__body {
+  flex: 1;
+  display: grid;
+  align-items: center;
+  gap: var(--space-10);
+  width: 100%;
+  max-width: var(--layout-container-narrow);
+  margin-inline: auto;
+  padding: 0 var(--space-4) var(--space-10);
+
+  &:focus {
+    outline: none; // focused by the skip link, never by a pointer
+  }
+
+  @media (min-width: 40rem) {
+    padding-inline: var(--space-6);
+  }
+
+  @media (min-width: 64rem) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-16);
+  }
+}
+
+.connect__media {
+  order: 99;
+
+  @media (min-width: 64rem) {
+    order: 0;
+  }
+}
+
+.connect__photo {
+  display: block;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: auto;
+  max-width: var(--layout-text-md);
+  border-radius: var(--radius-2xl);
+  object-fit: cover;
+
+  @media (min-width: 64rem) {
+    max-width: none;
+  }
+}
+
+.connect__title {
+  font-size: var(--font-size-3xl);
+  line-height: var(--line-height-3xl);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-tight);
+
+  @media (min-width: 40rem) {
+    font-size: var(--font-size-4xl);
+    line-height: var(--line-height-4xl);
+  }
+}
+
+.connect__lead {
+  margin-top: var(--space-3);
+  max-width: var(--layout-text-md);
+  color: var(--color-muted);
+}
+
+.connect__pair {
+  margin-top: var(--space-8);
+}
+
+.connect__pair-btn {
+  margin-top: var(--space-4);
+
+  &:disabled {
+    opacity: 1;
+    background: var(--color-raised);
+    color: var(--color-muted);
+  }
+}

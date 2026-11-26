@@ -1,0 +1,43 @@
+@startuml
+title UML sequence behaviour — Skip to content
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "AppShell" as shell
+  participant "Screen page" as page
+end box
+box "Device — Browser" #F2F4F7
+  participant "Document" as doc
+end box
+rider -> doc : Open any address
+doc -> shell : Bootstrap wz-root
+shell -> page : Render the lazy route in the router outlet
+page --> doc : main#main with tabindex="-1"
+rider -> doc : Press Tab
+doc -> shell : Focus "Skip to content", the first focusable element (L2-140 AC4)
+shell --> rider : Skip link slides into view with a focus ring (L2-140 AC1)
+rider -> shell : Press Enter
+shell -> shell : skipToMain(event), preventDefault so the route stays
+shell -> doc : getElementById("main")
+alt main exists
+  doc --> shell : main element
+  shell -> page : main.focus() (L2-140 AC4)
+  page --> rider : Focus is in the main content
+else the page chunk has not rendered yet
+  doc --> shell : null
+  shell --> rider : Nothing moves; the link stays focused
+end
+@enduml

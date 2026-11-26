@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Switch theme and full screen
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System(telo, "Telo Ride 1", "One class, on the rider's own bike")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+
+Rel(rider, telo, "Views in the dark or the light theme, and in or out of full screen")
+Rel(host, telo, "Serves index.html and the tokens to", "HTTPS")
+@enduml

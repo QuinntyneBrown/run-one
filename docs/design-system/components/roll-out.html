@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roll-out — Telo Ride 1 design system</title>
+<meta name="description" content="The few seconds after the finish banner: a card at the foot of the box while the bike eases off, before Class Done opens on its own.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+<style>
+.ds-rollout { position: relative; width: 100%; max-width: 30rem; min-height: 7.5rem; border-radius: var(--radius-xl); overflow: hidden; background: var(--color-video); }
+</style>
+</head>
+<body id="top">
+<a class="ds-skip" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Telo Ride 1 DS</a><button class="ds-theme-toggle" type="button" aria-pressed="true">☀ Light</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/ride-readout.html">Bike panel</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/class-done.html">Class Done</a></li>
+      <li><a href="../components/video.html">Class video</a></li>
+      <li><a href="../components/container.html">Container</a></li>
+      <li><a href="../components/countdown.html">Countdown</a></li>
+      <li><a href="../components/course.html">Course</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/device-list.html">Device list</a></li>
+      <li><a href="../components/diagnostic-panel.html">Diagnostic panel</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+      <li><a href="../components/finish-banner.html">Finish banner</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/ibiza-flyover.html">Ibiza Flyover</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/lockup.html">Lockup</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/plan-chart.html">Plan chart</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/recording-mark.html">Recording mark</a></li>
+      <li><a href="../components/number-stepper.html">Resistance stepper</a></li>
+      <li><a href="../components/roll-out.html">Roll-out</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/sidebar-nav.html">Sidebar navigation</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/stat.html">Stat</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/the-class.html">The Class</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation.html">Navigation</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+      <li><a href="../patterns/live-ride.html">The shape of a ride</a></li>
+    </ul></details>
+  </nav>
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · The shape of a ride</p>
+      <h1>Roll-out</h1>
+      <p class="ds-lead">The few seconds after the finish banner: a card at the foot of the box while the bike eases off, before Class Done opens on its own.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">In the mocks</span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li></ul>
+    </header>
+<section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+<p>After the <a href="finish-banner.html">finish banner</a> the video or the course carries on for a few seconds: the roll-out (L2-182). A card at the foot of the box says the ride is over and the summary is coming; the target resistance has eased to 4 of 32 and the <a href="number-stepper.html">stepper</a> is off. Then <a href="class-done.html">Class Done</a> opens without a press.</p>
+<p>Use it only here. It is not a toast and not a dialog: it asks nothing of the rider.</p>
+</section>
+
+<section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+<div class="ds-anatomy">
+<figure class="ds-anatomy__figure"><div class="ds-anatomy__target ds-anatomy__target--wide"><div class="ds-w-lg"><div class="class-course">
+<img alt="Ibiza Sunset Strip" class="photo class-course__scene" role="img" src="../../mocks/assets/images/courses/ibiza-sunset-strip.jpg"/>
+<div class="class-rollout">
+<p class="class-rollout__title">Rolling on down the promenade</p>
+<p class="class-rollout__body" role="status">Easy spin. Your summary is coming up.</p>
+<div aria-label="Class Done opens in a moment" aria-valuemax="100" aria-valuemin="0" aria-valuenow="77" class="class-rollout__bar" role="progressbar"><span class="class-rollout__fill" style="--value: 77%"></span></div>
+</div>
+
+
+</div></div></div></figure>
+<ol class="ds-anatomy__list">
+<li><div><b>Card</b><small>The strong scrim, 16px radius, 12px in from the box’s left, right and foot, at most 672px wide and centred.</small></div></li>
+<li><div><b>Title</b><small>“Rolling on” with the class video; “Rolling on down the promenade” in Ibiza. Semibold, in <code>--color-on-photo</code>.</small></div></li>
+<li><div><b>Body</b><small>“Easy spin. Your summary is coming up.” at 72% of the on-photo colour; <code>role="status"</code>.</small></div></li>
+<li><div><b>Bar</b><small>A 4px progress bar: how much of the roll-out has passed. <code>role="progressbar"</code>, named “Class Done opens in a moment”.</small></div></li>
+</ol>
+</div>
+</section>
+
+<section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+<div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stack"><div class="ds-rollout"><div class="class-rollout">
+<p class="class-rollout__title">Rolling on</p>
+<p class="class-rollout__body" role="status">Easy spin. Your summary is coming up.</p>
+<div aria-label="Class Done opens in a moment" aria-valuemax="100" aria-valuemin="0" aria-valuenow="77" class="class-rollout__bar" role="progressbar"><span class="class-rollout__fill" style="--value: 77%"></span></div>
+</div></div></div>
+  <div class="ds-example__caption"><span>With the class video.</span></div>
+</div><div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stack"><div class="ds-rollout"><div class="class-rollout">
+<p class="class-rollout__title">Rolling on down the promenade</p>
+<p class="class-rollout__body" role="status">Easy spin. Your summary is coming up.</p>
+<div aria-label="Class Done opens in a moment" aria-valuemax="100" aria-valuemin="0" aria-valuenow="77" class="class-rollout__bar" role="progressbar"><span class="class-rollout__fill" style="--value: 77%"></span></div>
+</div></div></div>
+  <div class="ds-example__caption"><span>In Ibiza.</span></div>
+</div>
+</section>
+
+<section class="ds-section" id="sizes" data-na="One size; its padding steps from 12 × 16px to 16 × 20px at 640px."><h2><a href="#sizes">Sizes</a></h2>
+<p class="ds-na">One size; its padding steps from 12 × 16px to 16 × 20px at 640px.</p>
+</section>
+
+<section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+<p>One state. The bar fills from 0 to 100%; the card leaves with the screen.</p><div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stack"><div class="ds-w-lg"><div class="class-video">
+<img alt="Video: Intervals to the Beat, GCN Training" class="photo photo--yt" src="../../mocks/assets/images/classes/intervals-to-the-beat.jpg"/>
+<div class="class-rollout">
+<p class="class-rollout__title">Rolling on</p>
+<p class="class-rollout__body" role="status">Easy spin. Your summary is coming up.</p>
+<div aria-label="Class Done opens in a moment" aria-valuemax="100" aria-valuemin="0" aria-valuenow="77" class="class-rollout__bar" role="progressbar"><span class="class-rollout__fill" style="--value: 77%"></span></div>
+</div>
+
+</div></div></div>
+  <div class="ds-example__caption"><span>Four seconds in, with the class video: 82 W at 70 rpm, resistance 4 of 32, the stepper disabled under the box.</span></div>
+</div>
+</section>
+
+<section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+<ul><li>The card keeps 12px from the box’s edges at every width and is never wider than 672px.</li><li><b>From 640px</b> its padding grows to 16 × 20px.</li><li>It lies inside the box, so it never covers the bike panel.</li></ul>
+</section>
+
+<section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+<p>On a picture, so the same in both themes: <code>--color-on-photo</code> on <code>--color-scrim-strong</code>.</p><div class="ds-themes"><div data-theme="light"><div class="ds-rollout"><div class="class-rollout">
+<p class="class-rollout__title">Rolling on</p>
+<p class="class-rollout__body" role="status">Easy spin. Your summary is coming up.</p>
+<div aria-label="Class Done opens in a moment" aria-valuemax="100" aria-valuemin="0" aria-valuenow="77" class="class-rollout__bar" role="progressbar"><span class="class-rollout__fill" style="--value: 77%"></span></div>
+</div></div></div><div data-theme="dark"><div class="ds-rollout"><div class="class-rollout">
+<p class="class-rollout__title">Rolling on</p>
+<p class="class-rollout__body" role="status">Easy spin. Your summary is coming up.</p>
+<div aria-label="Class Done opens in a moment" aria-valuemax="100" aria-valuemin="0" aria-valuenow="77" class="class-rollout__bar" role="progressbar"><span class="class-rollout__fill" style="--value: 77%"></span></div>
+</div></div></div></div>
+</section>
+
+<section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+<h3>Role and pattern</h3>
+<p>The body is a <code>role="status"</code>; the bar is a <code>role="progressbar"</code> with <code>aria-valuenow</code>.</p>
+<h3>Keyboard</h3>
+<p>It takes no keyboard input: nothing in it can be focused.</p>
+<h3>Focus</h3>
+<p>Focus stays where it was. Class Done takes focus when it opens.</p>
+<h3>Labelling</h3>
+<p>The bar’s name says what it leads to: “Class Done opens in a moment”.</p>
+<h3>Contrast</h3>
+<div class="ds-pairs"><div class="ds-pairs-col" data-theme="light"><span class="ds-pairs-col__title">light theme</span><div class="ds-pair"><span>Words on the strong scrim</span><span class="ds-pair__ratio" data-contrast="--color-on-photo|--color-scrim-strong" data-min="4.5"></span></div><div class="ds-pair"><span>Body at 72% on the strong scrim</span><span class="ds-pair__ratio" data-contrast="--color-on-photo|--color-scrim-strong" data-min="4.5"></span></div></div><div class="ds-pairs-col" data-theme="dark"><span class="ds-pairs-col__title">dark theme</span><div class="ds-pair"><span>Words on the strong scrim</span><span class="ds-pair__ratio" data-contrast="--color-on-photo|--color-scrim-strong" data-min="4.5"></span></div><div class="ds-pair"><span>Body at 72% on the strong scrim</span><span class="ds-pair__ratio" data-contrast="--color-on-photo|--color-scrim-strong" data-min="4.5"></span></div></div></div>
+<h3>Motion</h3>
+<p>The card rises 12px and fades in over <code>--duration-base</code>. With reduced motion it appears without animation.</p>
+<h3>Touch</h3>
+<p>None: nothing in it is pressed. Full screen stays in the header.</p>
+</section>
+
+<section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+<ul>
+<li>It is the “roll-out”. The title is “Rolling on”, plus where in Ibiza: “down the promenade”.</li>
+<li>“Easy spin. Your summary is coming up.” Two short sentences; no countdown in numbers.</li>
+<li>No second resistance readout in the card: the stepper under the box shows it.</li>
+</ul>
+</section>
+
+<section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+<div class="ds-dodont">
+<figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="ds-rollout"><div class="class-rollout">
+<p class="class-rollout__title">Rolling on</p>
+<p class="class-rollout__body" role="status">Easy spin. Your summary is coming up.</p>
+<div aria-label="Class Done opens in a moment" aria-valuemax="100" aria-valuemin="0" aria-valuenow="77" class="class-rollout__bar" role="progressbar"><span class="class-rollout__fill" style="--value: 77%"></span></div>
+</div></div></div><figcaption>Let Class Done open on its own.</figcaption></figure>
+<figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><p class="ds-note">A “See your summary” button in the card.</p></div><figcaption>Ask for a press with sweaty hands on the bars.</figcaption></figure>
+</div>
+<div class="ds-dodont">
+<figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><p class="ds-note">Stepper under the box: 4 of 32, disabled.</p></div><figcaption>Show the eased resistance once, on the stepper.</figcaption></figure>
+<figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><p class="ds-note">“Resistance · Eased off” beside the card.</p></div><figcaption>Repeat it in the card, as the prototype does where it has no stepper.</figcaption></figure>
+</div>
+</section>
+
+<section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+<div class="ds-table-wrap"><table class="ds-table">
+<thead><tr><th scope="col">Used by</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+<tbody>
+<tr><td>the block, body, bar, fill</td><td><code>--color-on-photo</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-on-photo" data-swatch></i><span data-token="--color-on-photo"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-on-photo" data-swatch></i><span data-token="--color-on-photo"></span></span></td></tr>
+<tr><td>the block</td><td><code>--color-scrim-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-scrim-strong" data-swatch></i><span data-token="--color-scrim-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-scrim-strong" data-swatch></i><span data-token="--color-scrim-strong"></span></span></td></tr>
+<tr><td>the block</td><td><code>--duration-base</code></td><td><span data-theme="light"><span data-token="--duration-base"></span></span></td><td><span data-theme="dark"><span data-token="--duration-base"></span></span></td></tr>
+<tr><td>the block</td><td><code>--ease-enter</code></td><td><span data-theme="light"><span data-token="--ease-enter"></span></span></td><td><span data-theme="dark"><span data-token="--ease-enter"></span></span></td></tr>
+<tr><td>body</td><td><code>--font-size-sm</code></td><td><span data-theme="light"><span data-token="--font-size-sm"></span></span></td><td><span data-theme="dark"><span data-token="--font-size-sm"></span></span></td></tr>
+<tr><td>title</td><td><code>--font-weight-semibold</code></td><td><span data-theme="light"><span data-token="--font-weight-semibold"></span></span></td><td><span data-theme="dark"><span data-token="--font-weight-semibold"></span></span></td></tr>
+<tr><td>the block</td><td><code>--layout-text-2xl</code></td><td><span data-theme="light"><span data-token="--layout-text-2xl"></span></span></td><td><span data-theme="dark"><span data-token="--layout-text-2xl"></span></span></td></tr>
+<tr><td>body</td><td><code>--line-height-sm</code></td><td><span data-theme="light"><span data-token="--line-height-sm"></span></span></td><td><span data-theme="dark"><span data-token="--line-height-sm"></span></span></td></tr>
+<tr><td>the block</td><td><code>--radius-2xl</code></td><td><span data-theme="light"><span data-token="--radius-2xl"></span></span></td><td><span data-theme="dark"><span data-token="--radius-2xl"></span></span></td></tr>
+<tr><td>bar</td><td><code>--radius-full</code></td><td><span data-theme="light"><span data-token="--radius-full"></span></span></td><td><span data-theme="dark"><span data-token="--radius-full"></span></span></td></tr>
+<tr><td>body</td><td><code>--space-0-5</code></td><td><span data-theme="light"><span data-token="--space-0-5"></span></span></td><td><span data-theme="dark"><span data-token="--space-0-5"></span></span></td></tr>
+<tr><td>bar</td><td><code>--space-1</code></td><td><span data-theme="light"><span data-token="--space-1"></span></span></td><td><span data-theme="dark"><span data-token="--space-1"></span></span></td></tr>
+<tr><td>the block, bar</td><td><code>--space-3</code></td><td><span data-theme="light"><span data-token="--space-3"></span></span></td><td><span data-theme="dark"><span data-token="--space-3"></span></span></td></tr>
+<tr><td>the block</td><td><code>--space-4</code></td><td><span data-theme="light"><span data-token="--space-4"></span></span></td><td><span data-theme="dark"><span data-token="--space-4"></span></span></td></tr>
+<tr><td>the block</td><td><code>--space-5</code></td><td><span data-theme="light"><span data-token="--space-5"></span></span></td><td><span data-theme="dark"><span data-token="--space-5"></span></span></td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+<pre><code>&lt;div class="class-rollout"&gt;
+&lt;p class="class-rollout__title"&gt;Rolling on down the promenade&lt;/p&gt;
+&lt;p class="class-rollout__body" role="status"&gt;Easy spin. Your summary is coming up.&lt;/p&gt;
+&lt;div aria-label="Class Done opens in a moment" aria-valuemax="100" aria-valuemin="0" aria-valuenow="77" class="class-rollout__bar" role="progressbar"&gt;&lt;span class="class-rollout__fill" style="--value: 77%"&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre><div class="ds-table-wrap"><table class="ds-table">
+<thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead>
+<tbody>
+<tr><td><code>.class-rollout</code></td><td>The card, pinned to the foot of its positioned parent.</td></tr>
+<tr><td><code>.class-rollout__fill</code> with <code>--value</code></td><td>The bar’s fill, 0% to 100%.</td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+<p>Mocks this component was extracted from:</p>
+<ul>
+<li><a href="../../mocks/pages/class-ride/rolling-on.html">pages/class-ride/rolling-on</a></li>
+<li><a href="../../mocks/pages/class-ride/rolling-on-ibiza.html">pages/class-ride/rolling-on-ibiza</a></li>
+</ul>
+<p>Drift fixed during extraction: none in the mocks. The frame’s second resistance readout is left out, as the stepper shows it.</p>
+</section>
+    <footer class="ds-footer"><span>Telo Ride 1 design system · extracted from <a href="../../mocks/index.html">docs/mocks</a> on 24 November 2026</span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

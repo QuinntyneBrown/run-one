@@ -1,0 +1,70 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Support screen readers and motion
+
+class "tokens.css" as Tokens <<stylesheet>> {
+  --duration-fast: 150 ms
+  --duration-base: 200 ms
+  --duration-slow: 250 ms
+  --duration-stagger: 40 ms
+  --ease-standard
+  --ease-spring
+  @media (prefers-reduced-motion: reduce): durations 0 ms
+}
+class "contrast-pairs.json" as Pairs <<config>> {
+  foreground and background pairs
+  ratio in the dark theme
+  ratio in the light theme
+}
+class "Screen page" as Page <<component>> {
+  one h1
+  main#main
+}
+class ClassDonePage <<component>> {
+  .class-done~__effort: ~--value, ~--index
+  .class-done~__bar: animation class-done-rise
+  .class-done~__effort~--peak: "your strongest" in hidden text
+  .class-done~__verdict~--best: "New best output"
+}
+class ClassHeader {
+  +title: string
+  +mode: string
+  +elapsed: number
+  +total: number
+  .class-ride~__clock: role="timer", aria-label
+}
+class ClassSegment {
+  .class-segment~__left: role="timer", aria-label
+}
+class ClassLost {
+  .class-lost: role="alert"
+}
+class ClassProfile {
+  +segments: Segment[]
+  +label: string
+  svg: role="img", aria-label
+}
+class LiveAnnouncer <<Angular CDK>> {
+  +announce(message: string, politeness: "polite"): Promise<void>
+}
+
+Page <|-- ClassDonePage
+Page --> ClassHeader : Class Ride
+Page --> ClassSegment : Class Ride
+Page --> ClassLost : lost bike
+Page --> ClassProfile : The Class, Class Ride
+Page ..> LiveAnnouncer : paused, resumed, paired
+ClassDonePage ..> Tokens : --duration-slow, ~--duration-stagger
+Tokens ..> Pairs : role colours checked by
+@enduml

@@ -1,0 +1,43 @@
+@startuml
+title UML sequence behaviour — Cross a breakpoint
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "Screen page stylesheet" as page
+  participant "tokens.css" as tokens
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "Button" as button
+end box
+box "Device — Browser" #F2F4F7
+  participant "Viewport" as viewport
+end box
+rider -> viewport : Open a screen on a phone, 390 px wide
+viewport -> tokens : Resolve ~--layout-margin
+tokens --> viewport : 16 px (L2-139 AC2)
+viewport -> page : Apply the base rules, one column
+page --> rider : No sideways scroll, nothing overlaps or is cut off (L2-139 AC1)
+rider -> viewport : Widen or rotate to 640 px or more
+viewport -> tokens : Match min-width: 40rem
+tokens --> viewport : ~--layout-margin is 24 px (L2-139 AC2)
+rider -> viewport : Widen to 1024 px or more
+viewport -> tokens : Match min-width: 64rem
+tokens --> viewport : ~--layout-margin is 32 px (L2-139 AC2)
+viewport -> page : Match the screen's own lg rules
+page --> rider : Layout changes as the screen's L2 states (L2-139 AC3)
+rider -> button : Tap or hover a control
+button --> rider : At least 44 x 44 px; hover shows on links and buttons only (L2-140 AC2, AC3)
+@enduml

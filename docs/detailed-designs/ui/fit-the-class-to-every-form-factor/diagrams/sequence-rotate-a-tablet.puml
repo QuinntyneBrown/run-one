@@ -1,0 +1,38 @@
+@startuml
+title UML sequence behaviour — Rotate a tablet
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "TheClass" as page
+  participant "the-class.scss" as sheet
+end box
+box "Device — Browser" #F2F4F7
+  participant "Viewport" as viewport
+end box
+rider -> viewport : Hold an 11 inch tablet in portrait, 834 x 1194
+viewport -> sheet : Evaluate min-width: 64rem
+sheet --> viewport : No match: one column that scrolls (L2-171 AC2)
+rider -> viewport : Scroll to the end
+viewport --> rider : "What the bike will do" ends above the pinned footer; nothing is hidden behind it (L2-171 AC3)
+rider -> viewport : Rotate to landscape, 1194 x 834
+viewport -> sheet : Evaluate min-width: 64rem again
+sheet --> viewport : Match: two columns on one screen, no scrolling (L2-171 AC1)
+sheet --> viewport : Footer hidden, the-class~__action shown (L2-171 AC5)
+viewport -> page : No component state changes; the same DOM is laid out again
+page --> rider : The parked video stays in its box, in the height left at 16:9 (L2-171 AC1)
+rider -> viewport : Rotate back to portrait
+sheet --> viewport : One column, footer pinned again (L2-171 AC2, AC3)
+@enduml

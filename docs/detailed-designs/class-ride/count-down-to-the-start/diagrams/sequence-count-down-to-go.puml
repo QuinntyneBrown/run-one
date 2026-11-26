@@ -1,0 +1,69 @@
+@startuml
+title UML sequence behaviour — Count down to Go!
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "RidePage" as ridePage
+  participant "ClassRidePage" as page
+  participant "ClassRideStore" as store
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "wz-class-countdown" as view
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "Countdown" as countdown
+  participant "WorkoutEngine" as engine
+  participant "ResistanceController" as resist
+  participant "RideClock, RideTicker" as clock
+end box
+box "Frontend — Ride app (video library)" #ECFDF3
+  participant "YouTubeVideoPlayer" as player
+end box
+box "Device" #F2F4F7
+  participant "Smart bike" as bike
+end box
+rider -> ridePage : Presses the start button on The Class; /ride opens
+ridePage -> store : Create with the ride's services
+store -> engine : follow(plan); the clock has not started
+engine -> resist : applyPlanLevel(14): the warm-up's level (L2-180 AC3)
+resist -> bike : Set resistance 14
+bike --> resist : Acknowledged
+ridePage -> store : beginCountdown()
+store -> countdown : start(); phase becomes countdown
+countdown --> store : step: "3", no light lit
+store --> page : phase, countdown, plan at 0:00 with 2:30 left
+page -> view : Render "3" over the box; header shows Leave, no Pause (AC6)
+page -> store : playVideo(host)
+store -> player : load(startSeconds 3, autoplay false): parked (AC4)
+view --> rider : "The class starts in 3 seconds", said once (AC8)
+countdown -> countdown : Timer at 1,000 ms; read the step from MONOTONIC_TIME (AC5)
+countdown --> store : step: "2", one light lit
+countdown -> countdown : Timer at 2,000 ms
+countdown --> store : step: "1", two lights lit
+rider -> page : Presses Raise resistance
+page -> store : raise()
+store -> resist : nudge(+1) (L2-028)
+resist -> bike : Set resistance 15
+countdown -> countdown : Timer at 3,000 ms
+countdown --> store : step: "Go!", three lights in the accent colour
+store -> clock : RideClock.start(goAt), RideTicker.start(); phase becomes riding (AC2)
+store -> player : play() from 0:03
+page -> view : Render "Go!"
+view --> rider : "Go", said once
+countdown -> countdown : Timer at 3,700 ms
+countdown --> store : step: null; the countdown goes
+page --> rider : The ride, with Pause in the header
+@enduml

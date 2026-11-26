@@ -1,0 +1,58 @@
+@startuml
+title UML sequence behaviour — A track that cannot play, and the release
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+  participant "ClassRideStore" as store
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "ClassCourse" as box
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "BrowserRideMusic" as music
+end box
+box "Browser — Chrome or Edge" #F2F4F7
+  participant "HTMLAudioElement" as audio
+  participant "localStorage" as storage
+end box
+box "Static host — the app's own origin" #FFF4E5
+  participant "Static host" as origin
+end box
+
+== The music cannot be loaded or played (L2-176 AC7) ==
+store -> music : play()
+music -> audio : new Audio(path); play()
+alt the file cannot be loaded
+  audio -> origin : GET /music/beautiful-boom-bap.mp3
+  origin --> audio : Fails
+  audio --> music : error event
+else the browser refuses to play
+  audio --> music : play() rejects
+end
+music -> music : available = false
+store -> page : musicAvailable() is false
+page -> box : musicAvailable = false
+box --> rider : Music disabled, aria-pressed="false", a stroke through the note; no alert
+note over store : The clock, the plan, the bike and the course carry on
+== Class Ride closes (L2-176 AC6) ==
+rider -> page : Press Leave, or Class Done opens
+page -> store : Destroyed
+store -> music : release()
+music -> audio : pause(); removeAttribute("src"); load()
+music -> music : Forget the element; available = true for the next ride
+note over audio : No element is left: The Class, Connect Bike,\nIbiza Flyover and Class Done play nothing
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Show the class
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(youtube, "YouTube", "Privacy-enhanced player for the class video")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The four screens, Web Bluetooth, the protocol and the engine")
+  ContainerDb(storage, "Browser storage", "localStorage", "The record and the remembered bike")
+}
+
+Rel(rider, app, "Reads The Class and presses the start button", "Chrome or Edge")
+Rel(app, storage, "Reads the record from", "localStorage")
+Rel(app, youtube, "Embeds the class video, parked at 0:03, from", "HTTPS, youtube-nocookie.com")
+@enduml

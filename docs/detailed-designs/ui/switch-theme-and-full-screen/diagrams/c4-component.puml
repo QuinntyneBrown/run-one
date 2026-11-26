@@ -1,0 +1,29 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Switch theme and full screen
+
+Person(rider, "Rider", "Rides a smart bike at home")
+Container_Boundary(ride, "ride application") {
+  Component(index, "index.html", "Document", "color-scheme meta; no fixed theme attribute")
+  Component(tokens, "tokens.css", "Global stylesheet", "Dark theme, light theme under prefers-color-scheme, role tokens")
+  Component(routes, "ride.routes.ts", "Lazy parent route", "Binds FULLSCREEN to BrowserFullscreen once")
+  Component(pages, "Screen pages", "Angular components", "Render the toggle where full screen is available")
+}
+Container_Boundary(components, "components library") {
+  Component(toggle, "FullscreenToggle", "Angular component, wz-fullscreen-toggle", "Named Full screen or Exit full screen")
+}
+Container_Boundary(domain, "domain library") {
+  Component(browser, "BrowserFullscreen", "Injectable, browser/", "Fullscreen on the Fullscreen API")
+}
+Container_Boundary(api, "api library") {
+  Component(contract, "Fullscreen and FULLSCREEN", "Contract and injection token, screen/", "available, active, enter(), exit()")
+}
+Rel(rider, toggle, "Presses")
+Rel(index, tokens, "Loads")
+Rel(pages, tokens, "Read colours by role from")
+Rel(pages, toggle, "Render in each header")
+Rel(pages, contract, "Inject")
+Rel(routes, browser, "Provides as FULLSCREEN")
+Rel(browser, contract, "Implements")
+@enduml

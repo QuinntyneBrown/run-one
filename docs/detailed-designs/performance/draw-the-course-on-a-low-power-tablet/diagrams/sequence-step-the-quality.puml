@@ -1,0 +1,54 @@
+@startuml
+title UML sequence behaviour — Step the quality by measured frames
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+box "Frontend — Ride app (world library)" #ECFDF3
+  participant "CourseScene" as scene
+  participant "FrameScheduler" as sched
+  participant "ThreeCourseRenderer" as renderer
+  participant "FrameBudget" as budget
+  participant "SunShadow" as shadow
+end box
+box "Browser — Chrome or Edge" #F2F4F7
+  participant "Display and GPU" as gpu
+end box
+
+scene -> sched : measurePeriod(), before the renderer starts
+sched -> gpu : 31 empty frames
+gpu --> sched : Their times
+sched --> scene : The frame period, snapped to a common refresh rate
+scene -> renderer : start(...), then setFramePeriod(period)
+note over renderer : The first frame is drawn at step 1:\n1 device pixel a CSS pixel, no bloom (L2-177 AC3)
+loop each frame drawn
+  renderer -> gpu : Render
+  renderer -> budget : frame(ms since the last frame, period)
+  alt fewer than 90 frames judged
+    budget --> renderer : 0
+  else average within 1.1 of the period, and never stepped down
+    budget --> renderer : +1
+    renderer -> renderer : step(+1): 1.5, then 1.5 with bloom, then 2 with bloom
+  else average over 1.6 of the period
+    budget -> budget : settled = true: no step up after this
+    budget --> renderer : -1, or 0 at the lowest step (0.75)
+    renderer -> renderer : step(-1)
+  else between the two
+    budget --> renderer : 0
+  end
+  opt a step was taken
+    renderer -> gpu : setPixelRatio(min(device ratio, the step's)); setSize
+    renderer -> shadow : detail(step): texels, readings, frames a picture serves
+  end
+end
+@enduml

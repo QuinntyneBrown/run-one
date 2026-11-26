@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Stay smooth on long rides
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System(telo, "Telo Ride 1", "One class, on the rider's own bike")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Ext(youtube, "YouTube", "Privacy-enhanced player for the class video")
+
+Rel(rider, telo, "Keeps open beside the bike for hours")
+Rel(bike, telo, "Sends a notification about once a second", "Bluetooth LE")
+Rel(telo, youtube, "Creates one player per visit to a video screen and destroys it on leaving", "IFrame Player API")
+@enduml

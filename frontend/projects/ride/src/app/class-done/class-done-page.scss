@@ -1,0 +1,11 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+// Done is as wide as the design gives it from 640 px (--class-done-action-width), full width below.
+.class-done-page__done {
+  @media (min-width: 40rem) {
+    width: var(--class-done-action-width);
+  }
+}

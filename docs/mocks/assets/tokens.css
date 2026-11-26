@@ -1,0 +1,2 @@
+/* The mocks consume the design system's tokens. This shim exists for the generated gallery (index.html). */
+@import url('../../design-system/tokens/tokens.css');

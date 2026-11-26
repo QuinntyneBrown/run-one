@@ -1,0 +1,29 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Keep the record
+
+ContainerDb(storage, "Browser storage", "localStorage", "The record and the remembered bike")
+
+Container_Boundary(ride, "ride application") {
+  Component(rideStore, "ClassRideStore", "Page-scoped store", "Adds a finished ride to the record at 30:00")
+  Component(classStore, "TheClassStore", "Page-scoped store", "Shows Rides, Best output and Last time")
+  Component(guard, "rememberedBikeGuard", "CanActivateFn", "Tells a new rider from a returning one")
+  Component(done, "ClassDonePage", "Angular page", "Shows the verdict and the not-saved notice")
+}
+Container_Boundary(domain, "domain library") {
+  Component(store, "RideRecordStore", "Storage service", "Reads, validates and writes the record")
+  Component(rule, "RecordRule", "Pure helper", "The next record after a finished ride")
+}
+Container_Boundary(api, "api library") {
+  Component(token, "RIDE_RECORD", "Injection token", "Contract RideRecord")
+}
+
+Rel(rideStore, token, "Calls add(outputKj) through")
+Rel(classStore, token, "Reads current through")
+Rel(guard, token, "Reads current through")
+Rel(rideStore, done, "Hands the RecordOutcome to, in the ClassResult")
+Rel(store, token, "Implements")
+Rel(store, rule, "Computes the next record with")
+Rel(store, storage, "Reads and writes one JSON record", "localStorage")
+@enduml

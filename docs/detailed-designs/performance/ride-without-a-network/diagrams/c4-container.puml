@@ -1,0 +1,20 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Ride without a network
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The four screens, Web Bluetooth, the protocol and the engine")
+  ContainerDb(storage, "Browser storage", "localStorage", "The record and the remembered bike")
+}
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Ext(youtube, "YouTube", "Privacy-enhanced player for the class video")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+
+Rel(rider, app, "Rides and finishes the class")
+Rel(app, storage, "Writes the record at the finish; no network", "localStorage")
+Rel(app, bike, "Telemetry and target resistance; no network", "Web Bluetooth")
+Rel(app, youtube, "Video stream; the only dependency a lost network breaks", "HTTPS")
+Rel(app, host, "Fetches lazy chunks; Class Done's is preloaded", "HTTPS")
+@enduml

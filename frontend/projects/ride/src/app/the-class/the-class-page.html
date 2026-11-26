@@ -1,0 +1,37 @@
+<div class="the-class-page">
+  <wz-screen-header>
+    <a wz-the-class-bike slot="end" routerLink="/connect" [connected]="store.bikeName() !== null">{{
+      store.bikeName() ?? 'No bike'
+    }}</a>
+    <wz-fullscreen-button slot="end" />
+  </wz-screen-header>
+  @if (notice(); as why) {
+    <wz-browser-notice
+      [icon]="why.icon"
+      [title]="why.title"
+      [body]="why.body"
+      [action]="why.way === 'secure' ? 'Open over HTTPS' : link.copied() ? 'Copied' : 'Copy link'"
+      [href]="why.way === 'secure' ? support.secureUrl() : null"
+      [done]="link.copied()"
+      (act)="link.copy()"
+    />
+  }
+  @if (store.view(); as view) {
+    <wz-the-class
+      [view]="view"
+      (start)="start(view.start.opens)"
+      (choose)="store.choose($event)"
+      (videoFrame)="store.parkVideo($event)"
+    />
+  } @else {
+    <div class="the-class-page__scroll">
+      <main id="main" class="container the-class__unavailable" tabindex="-1">
+        <h1 class="visually-hidden">The class</h1>
+        <wz-inline-message tone="warn" role="alert"
+          >The class can’t be loaded. Reload Telo Ride 1 to try again.</wz-inline-message
+        >
+        <button wz-button variant="raised" type="button" (click)="reload()">Reload</button>
+      </main>
+    </div>
+  }
+</div>

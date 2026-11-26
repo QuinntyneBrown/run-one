@@ -1,0 +1,51 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Pause, leave or finish the class
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+ContainerDb(storage, "Browser storage", "localStorage", "The record and the remembered bike")
+
+Container_Boundary(ride, "ride application") {
+  Component(page, "ClassRidePage", "Angular page", "Pause button, Leave link and the lost-bike alert")
+  Component(store, "ClassRideStore", "Page-scoped store", "Holds, carries on and finishes the ride")
+  Component(holder, "FinishedRideHolder", "In-memory holder, new", "Holds the ClassResult for Class Done")
+  Component(done, "ClassDonePage", "Lazy route /done behind classDoneGuard", "Shows the result")
+}
+Container_Boundary(components, "components library") {
+  Component(cvideo, "ClassVideo", "wz-class-video", "Draws the Paused overlay")
+}
+Container_Boundary(domain, "domain library") {
+  Component(clock, "RideClock", "engine service", "Stops and resumes the ride clock")
+  Component(ticker, "RideTicker", "engine service", "Publishes whole seconds; none while held")
+  Component(engine, "WorkoutEngine", "engine service", "Steps the plan on each tick")
+  Component(totals, "RideTotals, EffortTotals, OnTargetCounter", "engine services", "The ride's running totals")
+  Component(record, "RideRecordStore", "storage service, new", "Counts the finished ride under telo-ride.record")
+}
+Container_Boundary(api, "api library") {
+  Component(conn, "BIKE_CONNECTION", "Contract and token", "Gains forgetTarget()")
+  Component(recordToken, "RIDE_RECORD", "Contract and token, new", "add(outputKj) returns a RecordOutcome")
+  Component(finished, "FINISHED_RIDE", "Contract and token, new", "set, peek and clear a ClassResult")
+  Component(vp, "VideoPlayer", "Contract", "pause, play, seekTo, destroy")
+}
+
+Rel(rider, page, "Presses Pause, Resume or Leave")
+Rel(page, store, "Calls pause() and resume()")
+Rel(page, cvideo, "Sets paused")
+Rel(store, clock, "Pauses and resumes")
+Rel(ticker, clock, "Reads elapsed time")
+Rel(ticker, store, "Reports the second that reaches 20:00")
+Rel(engine, ticker, "Steps on ticks")
+Rel(store, vp, "Pauses, seeks, plays, destroys")
+Rel(store, totals, "Reads at the finish")
+Rel(store, recordToken, "Adds the finished ride through")
+Rel(record, recordToken, "Implements")
+Rel(record, storage, "Writes", "localStorage")
+Rel(store, finished, "Sets the ClassResult on")
+Rel(holder, finished, "Implements")
+Rel(done, finished, "Reads the result through")
+Rel(store, done, "Navigates to /done")
+Rel(store, conn, "Calls forgetTarget() at the finish and on teardown")
+Rel(conn, bike, "Sends nothing further", "Web Bluetooth")
+@enduml

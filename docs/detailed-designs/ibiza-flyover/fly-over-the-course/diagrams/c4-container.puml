@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Fly over the course
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The five screens, Web Bluetooth, the protocol, the engine and the course's renderer")
+  Container(files, "Static files", "Azure Static Web Apps", "The app's chunks, courses/ibiza.glb, its centre line and riders/rider.glb")
+  ContainerDb(storage, "Browser storage", "localStorage", "How the rider chose to ride; not written by the flyover")
+}
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+
+Rel(rider, app, "Presses Skip flyover, Cancel or Try again", "HTTPS")
+Rel(app, files, "Fetches the world chunk and the course's files once", "HTTPS")
+Rel(app, storage, "Reads the kept choice: Ibiza Sunset Strip", "localStorage")
+Rel(app, bike, "Sends the first segment's level; reconnects on Try again", "Web Bluetooth")
+@enduml

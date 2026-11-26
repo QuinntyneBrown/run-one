@@ -1,0 +1,113 @@
+<button
+  wz-button
+  variant="raised"
+  size="sm"
+  type="button"
+  class="class-course__sound"
+  aria-controls="class-sound-panel"
+  [attr.aria-expanded]="open()"
+  (click)="toggle()"
+>
+  @if (sound() === 'music' || sound() === 'none') {
+    <svg class="class-sound__icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M9 18V5l12-2v13" />
+      <circle cx="6" cy="18" r="3" />
+      <circle cx="18" cy="16" r="3" />
+      @if (sound() === 'none') {
+        <path d="m2 2 20 20" />
+      }
+    </svg>
+  } @else {
+    <svg class="class-sound__icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M11 5 6 9H2v6h4l5 4z" />
+      <path d="M15.5 8.5a5 5 0 0 1 0 7" />
+      <path d="M19 5a10 10 0 0 1 0 14" />
+    </svg>
+  }
+  <span><span class="visually-hidden">Sound: </span>{{ name() }}</span>
+</button>
+<div class="class-sound" id="class-sound-panel" [hidden]="!open()">
+  <fieldset class="class-sound__group">
+    <legend class="class-sound__legend">Sound</legend>
+    <label class="class-sound__option">
+      <input
+        type="radio"
+        name="class-sound"
+        value="music"
+        [checked]="sound() === 'music'"
+        [disabled]="!musicAvailable()"
+        (change)="soundChange.emit('music')"
+      />
+      <span class="class-sound__text"
+        >Music
+        <span class="class-sound__hint">{{
+          musicAvailable() ? 'Beautiful Boom Bap' : 'Can’t play'
+        }}</span></span
+      >
+    </label>
+    <label class="class-sound__option">
+      <input
+        type="radio"
+        name="class-sound"
+        value="none"
+        [checked]="sound() === 'none'"
+        (change)="soundChange.emit('none')"
+      />
+      <span class="class-sound__text">No music</span>
+    </label>
+    @if (youtube()) {
+      <label class="class-sound__option">
+        <input
+          type="radio"
+          name="class-sound"
+          value="youtube-video"
+          [checked]="sound() === 'youtube-video'"
+          (change)="soundChange.emit('youtube-video')"
+        />
+        <span class="class-sound__text"
+          >YouTube video <span class="class-sound__hint">Over the course</span></span
+        >
+      </label>
+      <label class="class-sound__option">
+        <input
+          type="radio"
+          name="class-sound"
+          value="youtube-audio"
+          [checked]="sound() === 'youtube-audio'"
+          (change)="soundChange.emit('youtube-audio')"
+        />
+        <span class="class-sound__text"
+          >YouTube audio <span class="class-sound__hint">The video’s sound alone</span></span
+        >
+      </label>
+    }
+  </fieldset>
+  @if (youtubeChosen()) {
+    <fieldset class="class-sound__group">
+      <legend class="class-sound__legend">Video</legend>
+      <label class="class-sound__option">
+        <input
+          type="radio"
+          name="class-sound-video"
+          value="default"
+          [checked]="video() === 'default'"
+          (change)="videoChange.emit('default')"
+        />
+        <span class="class-sound__text">Default video</span>
+      </label>
+      <label class="class-sound__option">
+        <input
+          type="radio"
+          name="class-sound-video"
+          value="class"
+          [checked]="video() === 'class'"
+          (change)="videoChange.emit('class')"
+        />
+        <span class="class-sound__text"
+          >The class video
+          <span class="class-sound__hint">Intervals to the Beat, in time with the ride</span></span
+        >
+      </label>
+    </fieldset>
+  }
+</div>

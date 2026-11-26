@@ -1,0 +1,42 @@
+@startuml
+title UML sequence behaviour — Close the tab during the banner
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRideStore" as store
+  participant "Angular Router" as router
+  participant "TheClassPage" as theClass
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "RideRecordStore" as record
+end box
+box "Device — Browser" #F2F4F7
+  database "localStorage" as ls
+end box
+store -> record : add(351) at 20:00
+record -> ls : Write the record
+ls --> record : Written
+store --> rider : The finish banner shows
+rider -> store : Closes the tab during the banner or the roll-out
+note over store : The ClassResult held in memory goes with the tab.\nThe record is already written (L2-181 AC3).
+rider -> router : Opens the app again
+router -> record : FINISHED_RIDES.any()
+record -> ls : Read the record
+ls --> record : 7 rides, best 351 kJ, last 351 kJ
+record --> router : true
+router -> theClass : Open The Class (L2-167)
+theClass --> rider : The Class with the ride counted
+@enduml

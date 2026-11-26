@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ibiza Flyover · recording — Telo Ride 1 mocks</title>
+<meta name="mock:kind" content="page">
+<meta name="mock:screen" content="ibiza-flyover">
+<meta name="mock:state" content="recording">
+<meta name="mock:requirements" content="L2-175 L2-178 L2-179">
+<meta name="description" content="Ibiza Flyover with the diagnostic recording on: the flight as it is, and the recording mark at the left, above the band on the corner of the course.">
+<link rel="stylesheet" href="../../../design-system/tokens/tokens.css">
+<link rel="stylesheet" href="../../../design-system/assets/components.css">
+<link rel="stylesheet" href="../../assets/mock.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="app ibiza-flyover">
+  <header class="ibiza-flyover__bar">
+    <span class="lockup" role="img" aria-label="Telo Ride 1"><svg class="logo-mark" width="26" height="26" viewBox="0 0 48 48" aria-hidden="true"><path class="logo-mark__ring" d="M37.79 21.57 A14 14 0 1 1 26.43 10.21"/><path class="logo-mark__crank" d="M24 24 L38 10"/><circle class="logo-mark__hub" cx="24" cy="24" r="4.6"/></svg><span class="wordmark">TELO<span class="wordmark__product">Ride 1</span></span></span>
+    <a class="btn btn--raised btn--sm ibiza-flyover__skip" href="landed.html"><svg class="icon icon--md" viewBox="0 0 24 24" aria-hidden="true"><path d="m13 19 9-7-9-7z"/><path d="m2 19 9-7-9-7z"/></svg>Skip flyover</a>
+    <a class="icon-btn ibiza-flyover__cancel" href="../the-class/ibiza.html" aria-label="Cancel"><svg class="icon icon--md" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></a>
+  </header>
+
+  <main id="main" class="ibiza-flyover__scene">
+    <img class="photo" src="../../assets/images/courses/ibiza-sunset-strip-from-above.jpg" role="img" alt="Ibiza Sunset Strip from above">
+    <p class="mock-note">Before a ride in Ibiza the camera flies the course from above, from the grid to the finish line, in 9 s (L2-179 AC2). The caption steps through five places, a fifth of the flight each: The waterfront, The Strip, The DJ terrace, The finale, The finish. The picture is the design’s target still and stands in for the canvas; the course as built is 8.4 km from a grid to a finish line, not a loop. The course loads here, so the ride has no wait of its own. <strong>Skip flyover</strong> goes straight to <a href="landed.html">the grid</a>; Cancel goes back to The Class. With reduced motion this screen is not shown (AC9).</p>
+  </main>
+
+  <footer class="ibiza-flyover__band">
+    <div class="ibiza-flyover__where">
+      <h1 class="ibiza-flyover__title">Ibiza Sunset Strip</h1>
+      <p class="ibiza-flyover__caption" aria-live="polite"><span class="ibiza-flyover__place">The Strip</span> · every effort climbs past the clubs</p>
+    </div>
+    <p class="ibiza-flyover__status">Echelon EX-5s connected</p>
+  </footer>
+</div>
+
+<button class="diagnostic-mark diagnostic-mark--on-ibiza-flyover" type="button" aria-haspopup="dialog"><span class="diagnostic-mark__dot" aria-hidden="true"></span><span class="diagnostic-mark__label">Recording</span></button>
+<p class="mock-note diagnostic-note">The recording mark, drawn only with the app opened at <code>?diagnose</code> (L2-178 AC2). The foot of Ibiza Flyover is the band, which holds the course’s name, the caption and the bike’s status, so the mark stands above it on the bottom-left corner of the course (<code>diagnostic-mark--on-ibiza-flyover</code>) and lies over no word. The flight goes on. Pressing it opens <a href="../../dialogs/diagnostic-recording/default.html">Diagnostic recording</a>.</p>
+
+<nav class="mock-bar" aria-label="Mock navigation">
+  <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
+  <span class="mock-bar__screen">Ibiza Flyover</span>
+  <ul class="mock-bar__states">
+    <li><a href="default.html">default</a></li>
+    <li><a href="loading.html">loading</a></li>
+    <li><a href="landed.html">landed</a></li>
+    <li><a href="bike-lost.html">bike-lost</a></li>
+    <li><a href="recording.html" aria-current="page">recording</a></li>
+  </ul>
+  <button type="button" data-theme-toggle aria-pressed="true">☀ Light</button>
+  <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
+</nav>
+<script src="../../assets/mock.js"></script>
+</body>
+</html>

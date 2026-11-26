@@ -1,0 +1,74 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Keep data on the device
+
+interface RememberedBike {
+  +get(): RememberedBikeRecord | null
+  +save(bike: RememberedBikeRecord): void
+  +forget(): void
+}
+
+class RememberedBikeStore {
+  +REMEMBERED_BIKE_KEY = "telo-ride.bike"
+  +get(): RememberedBikeRecord | null
+  +save(bike: RememberedBikeRecord): void
+  +forget(): void
+}
+
+interface RideRecord <<new>> {
+  +current: Signal<RecordData | null>
+  +add(outputKj: number): RecordOutcome
+}
+
+class RideRecordStore <<new>> {
+  key = "telo-ride.record"
+  +current: Signal<RecordData | null>
+  +add(outputKj: number): RecordOutcome
+}
+
+class RecordData <<type>> {
+  +rides: number
+  +bestOutputKj: number
+  +lastOutputKj: number
+}
+
+class "localStorage" as LocalStorage <<browser>> {
+  +getItem(key: string): string | null
+  +setItem(key: string, value: string): void
+}
+
+class "ride.routes.ts" as Routes <<config>> {
+  no sign-in route
+  no authGuard
+  no provideSession()
+}
+
+class "app.config.ts" as Config <<config>> {
+  no provideHttpClient()
+}
+
+class "guard" as Guard <<fixture>> {
+  fails a spec on a request off localhost
+  fails a spec on an unanswered request
+}
+
+RememberedBikeStore ..|> RememberedBike
+RememberedBikeStore --> LocalStorage : only persistence
+RideRecordStore ..|> RideRecord
+RideRecordStore --> LocalStorage : only persistence
+RideRecordStore ..> RecordData : stores
+Routes ..> RememberedBikeStore : binds
+Routes ..> RideRecordStore : binds
+Guard ..> Config : proves no request leaves
+@enduml

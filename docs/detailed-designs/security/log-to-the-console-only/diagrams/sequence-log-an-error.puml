@@ -1,0 +1,58 @@
+@startuml
+title UML sequence behaviour — Log an error
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ConnectBikeStore" as page
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "WebBluetoothBikeConnection" as conn
+  participant "RecordingAppLogger" as reclogger
+  participant "ConsoleAppLogger" as logger
+  participant "describeError" as describe
+  participant "DiagnosticRecorder" as recorder
+end box
+box "Device — Browser" #F2F4F7
+  participant "navigator.bluetooth" as ble
+  participant "console" as console
+end box
+box "Device — Smart bike" #F2F4F7
+  participant "Bike" as bike
+end box
+rider -> page : Start pairing the bike
+page -> conn : connect()
+conn -> ble : Open the GATT connection
+ble -> bike : Connect
+bike --> ble : Connection fails
+ble --> conn : Reject with NetworkError
+conn -> conn : report(error)
+alt the diagnostic recording is off
+  conn -> logger : APP_LOGGER.error("bluetooth", error)
+  logger -> describe : describeError(error)
+  describe --> logger : "NetworkError: <message>"
+  logger -> console : console.error(redact("[bluetooth] NetworkError: <message>")) (L2-115 AC1, AC3)
+else the diagnostic recording is on
+  conn -> reclogger : APP_LOGGER.error("bluetooth", error)
+  reclogger -> logger : error("bluetooth", error)
+  logger -> describe : describeError(error)
+  describe --> logger : "NetworkError: <message>"
+  logger -> console : The same console.error line (L2-115 AC4)
+  reclogger -> recorder : logged(logLine("bluetooth", error)): the same redacted line as an ERR entry (L2-178 AC7)
+end
+note over logger, console : No request leaves the page for the line (L2-115 AC1)
+conn --> page : Reject connect()
+page --> rider : Show the app's own message, not the error text (L2-017 AC5)
+@enduml

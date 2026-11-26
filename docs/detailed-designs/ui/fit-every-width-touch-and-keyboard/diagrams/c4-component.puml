@@ -1,0 +1,29 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Fit every width, touch and keyboard
+
+Person(rider, "Rider", "Rides a smart bike at home")
+Container_Boundary(ride, "ride application") {
+  Component(shell, "AppShell", "Angular component, wz-root", "Skip link first, then the router outlet")
+  Component(pages, "Screen pages", "Angular components, lazy routes", "Each owns main#main and its breakpoint rules")
+  Component(tokens, "tokens.css", "Global stylesheet", "Page margin, breakpoints, target sizes, focus ring")
+  Component(styles, "styles.scss", "Global stylesheet", "Reset, :focus-visible ring, skip-link, visually-hidden")
+  Component(partials, "_app.scss and _page.scss", "Sass partials", "The app column, the scroll body, the container")
+}
+Container_Boundary(components, "components library") {
+  Component(button, "Button", "Angular component, wz-button", "44 px controls with hover on links and buttons only")
+  Component(resist, "ClassResist", "Angular component, wz-class-resist", "48 px resistance buttons pressed mid-ride")
+  Component(toggle, "FullscreenToggle", "Angular component, wz-fullscreen-toggle", "Header icon button")
+}
+Rel(rider, shell, "Presses Tab, then Enter on Skip to content")
+Rel(shell, pages, "Focuses main#main of")
+Rel(pages, partials, "Uses", "@use")
+Rel(pages, button, "Renders")
+Rel(pages, resist, "Renders on Class Ride")
+Rel(pages, toggle, "Renders in each header")
+Rel(partials, tokens, "Reads ~--layout-margin from")
+Rel(button, tokens, "Reads control heights from")
+Rel(resist, tokens, "Reads ~--target-ride from")
+Rel(styles, tokens, "Reads the focus ring from")
+@enduml

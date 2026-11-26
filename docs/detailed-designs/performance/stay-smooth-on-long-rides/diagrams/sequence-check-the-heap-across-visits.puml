@@ -1,0 +1,43 @@
+@startuml
+title UML sequence behaviour — Check the heap across visits
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Developer" as dev
+box "Device — Browser" #F2F4F7
+  participant "enter-and-leave.heap.ts (Playwright)" as check
+  participant "Chromium, DevTools Protocol" as cdp
+end box
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "TheClassPage" as classPage
+  participant "ClassRidePage" as ridePage
+end box
+dev -> check : Run by hand: playwright test -c playwright.heap.config.ts
+check -> classPage : Open The Class with the fake bike connected
+loop 10 times
+  check -> classPage : Press the start button
+  classPage -> ridePage : Class Ride opens
+  check -> ridePage : Press Leave
+  ridePage -> classPage : The Class opens; the ride is released
+  check -> cdp : HeapProfiler.collectGarbage
+  check -> cdp : Runtime.getHeapUsage
+  cdp --> check : Heap after this return
+end
+check -> check : Heap after return 10 minus heap after return 3
+alt growth over 5 MB (L2-138 AC3)
+  check --> dev : The check fails with the ten readings
+else at most 5 MB
+  check --> dev : The check passes
+end
+@enduml

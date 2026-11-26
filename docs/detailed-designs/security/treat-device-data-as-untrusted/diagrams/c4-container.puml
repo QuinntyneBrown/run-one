@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Treat device data as untrusted
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The four screens, Web Bluetooth, the protocol and the engine")
+  ContainerDb(storage, "Browser storage", "localStorage", "The record and the remembered bike")
+}
+
+Rel(rider, app, "Uses", "HTTPS")
+Rel(bike, app, "Sends untrusted names, errors and frames to", "Web Bluetooth")
+Rel(app, storage, "Reads and validates the record and the remembered bike from", "localStorage")
+@enduml

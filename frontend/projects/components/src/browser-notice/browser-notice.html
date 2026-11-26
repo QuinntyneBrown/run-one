@@ -1,0 +1,54 @@
+<div class="browser-notice" role="alert">
+  <svg
+    class="icon icon--lg browser-notice__icon"
+    [attr.data-icon]="icon()"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    @if (icon() === 'lock') {
+      <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+    } @else {
+      <path d="m14.5 12.5-5-5" />
+      <path d="m9.5 12.5 5-5" />
+      <rect width="20" height="14" x="2" y="3" rx="2" />
+      <path d="M12 17v4" />
+      <path d="M8 21h8" />
+    }
+  </svg>
+  <p class="browser-notice__text">
+    <span class="browser-notice__title">{{ title() }}</span>&ngsp;<span
+      class="browser-notice__body"
+      >{{ body() }}</span
+    >
+  </p>
+  @if (href(); as url) {
+    <a wz-button variant="primary" class="browser-notice__action" [href]="url"
+      >{{ action() }}
+      <svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M15 3h6v6" />
+        <path d="M10 14 21 3" />
+        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+      </svg>
+    </a>
+  } @else {
+    <button
+      wz-button
+      variant="raised"
+      type="button"
+      class="browser-notice__action"
+      [attr.data-copied]="done() ? '' : null"
+      (click)="act.emit()"
+    >
+      <svg class="icon icon--md" viewBox="0 0 24 24" aria-hidden="true">
+        @if (done()) {
+          <path d="M20 6 9 17l-5-5" />
+        } @else {
+          <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+          <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+        }
+      </svg>
+      {{ action() }}
+    </button>
+  }
+</div>

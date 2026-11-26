@@ -1,0 +1,21 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Record diagnostics
+
+Person(person, "Person diagnosing", "Finds a fault with a bike")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Ext(host, "Static host", "Serves the app's files")
+System_Ext(downloads, "Downloads folder", "The device's own files")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The four screens, Web Bluetooth, the protocol and the engine; reads the switch once")
+  Container(chunk, "Diagnostic recording chunk", "Lazy JavaScript chunk", "The recorder, the screen capture, the file saver, the mark and the dialog; 21.68 kB raw; holds the recording in the page's memory")
+}
+
+Rel(person, app, "Opens with diagnose in the address; rides", "HTTPS")
+Rel(app, host, "Fetches the chunk from, only with diagnose; the service worker keeps it only then", "HTTPS")
+Rel(app, chunk, "Imports and reports bytes, events and readouts to", "Optional tokens")
+Rel(app, bike, "Writes commands to and receives notifications from", "Web Bluetooth")
+Rel(person, chunk, "Presses the recording mark; adds notes, captures and saves in")
+Rel(chunk, downloads, "Saves one .log file and each .png to", "Download of a blob URL")
+@enduml

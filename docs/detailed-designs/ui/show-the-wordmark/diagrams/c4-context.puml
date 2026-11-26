@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Show the wordmark
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System(telo, "Telo Ride 1", "One class, on the rider's own bike")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+
+Rel(rider, telo, "Sees and hears the product's name on every screen of")
+Rel(host, telo, "Serves the app's files and the bundled display font to", "HTTPS")
+@enduml

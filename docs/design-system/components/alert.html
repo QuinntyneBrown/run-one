@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alert — Telo Ride 1 design system</title>
+<meta name="description" content="A message that something stands between the rider and the ride: the wrong browser, no HTTPS, Bluetooth off.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="ds-skip" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Telo Ride 1 DS</a><button class="ds-theme-toggle" type="button" aria-pressed="true">☀ Light</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/ride-readout.html">Bike panel</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/class-done.html">Class Done</a></li>
+      <li><a href="../components/video.html">Class video</a></li>
+      <li><a href="../components/container.html">Container</a></li>
+      <li><a href="../components/countdown.html">Countdown</a></li>
+      <li><a href="../components/course.html">Course</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/device-list.html">Device list</a></li>
+      <li><a href="../components/diagnostic-panel.html">Diagnostic panel</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+      <li><a href="../components/finish-banner.html">Finish banner</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/ibiza-flyover.html">Ibiza Flyover</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/lockup.html">Lockup</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/plan-chart.html">Plan chart</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/recording-mark.html">Recording mark</a></li>
+      <li><a href="../components/number-stepper.html">Resistance stepper</a></li>
+      <li><a href="../components/roll-out.html">Roll-out</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/sidebar-nav.html">Sidebar navigation</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/stat.html">Stat</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/the-class.html">The Class</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation.html">Navigation</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+      <li><a href="../patterns/live-ride.html">The shape of a ride</a></li>
+    </ul></details>
+  </nav>
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Feedback</p>
+      <h1>Alert</h1>
+      <p class="ds-lead">A message that something stands between the rider and the ride: the wrong browser, no HTTPS, Bluetooth off.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">In the mocks</span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li></ul>
+    </header>
+<section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+<p>Telo Ride 1 has two alerts, both about reaching the bike. The <b>browser notice</b> (<code>.browser-notice</code>) lies at the top of The Class when the browser cannot use Web Bluetooth or the page is not served over HTTPS. The <b>blocker</b> (<code>.connect-blocker</code>) takes the pairing card’s place on Connect Bike and says why the bike cannot be reached and what to do.</p>
+<p>A smaller piece of news that does not stop anything is an <a href="inline-message.html">inline message</a>. The bike lost mid-ride is the <a href="dialog.html">lost-bike alert</a>.</p>
+</section>
+
+<section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+<div class="ds-anatomy">
+<figure class="ds-anatomy__figure"><div class="ds-anatomy__target ds-anatomy__target--wide"><div class="browser-notice" role="alert">
+<svg aria-hidden="true" class="icon icon--lg browser-notice__icon" viewBox="0 0 24 24"><path d="m14.5 12.5-5-5"/><path d="m9.5 12.5 5-5"/><rect height="14" rx="2" width="20" x="2" y="3"/><path d="M12 17v4"/><path d="M8 21h8"/></svg>
+<p class="browser-notice__text"><span class="browser-notice__title">Open Telo Ride 1 in Chrome or Edge.</span> <span class="browser-notice__body">Bluetooth to the bike only works there — you can look around, but not ride.</span></p>
+<button class="btn btn--raised browser-notice__action" type="button"><svg aria-hidden="true" class="icon icon--md" viewBox="0 0 24 24"><rect height="14" rx="2" ry="2" width="14" x="8" y="8"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy link</button>
+</div></div></figure>
+<ol class="ds-anatomy__list">
+<li><div><b>Icon</b><small>A warning triangle in <code>--color-warn-fg</code>; shown from 640px.</small></div></li>
+<li><div><b>Title</b><small>What to do, semibold: “Open Telo Ride 1 in Chrome or Edge.”</small></div></li>
+<li><div><b>Body</b><small>Why, muted: “Bluetooth to the bike only works there — you can look around, but not ride.”</small></div></li>
+<li><div><b>Action</b><small>One button, 36px: Copy link (raised) or Open over HTTPS (primary).</small></div></li>
+</ol>
+</div>
+</section>
+
+<section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+<div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stack"><div class="browser-notice" role="alert">
+<svg aria-hidden="true" class="icon icon--lg browser-notice__icon" viewBox="0 0 24 24"><path d="m14.5 12.5-5-5"/><path d="m9.5 12.5 5-5"/><rect height="14" rx="2" width="20" x="2" y="3"/><path d="M12 17v4"/><path d="M8 21h8"/></svg>
+<p class="browser-notice__text"><span class="browser-notice__title">Open Telo Ride 1 in Chrome or Edge.</span> <span class="browser-notice__body">Bluetooth to the bike only works there — you can look around, but not ride.</span></p>
+<button class="btn btn--raised browser-notice__action" type="button"><svg aria-hidden="true" class="icon icon--md" viewBox="0 0 24 24"><rect height="14" rx="2" ry="2" width="14" x="8" y="8"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy link</button>
+</div></div>
+  <div class="ds-example__caption"><span>Browser notice: the wrong browser.</span></div>
+</div><div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stack"><div class="browser-notice" role="alert">
+<svg aria-hidden="true" class="icon icon--lg browser-notice__icon" viewBox="0 0 24 24"><rect height="11" rx="2" ry="2" width="18" x="3" y="11"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+<p class="browser-notice__text"><span class="browser-notice__title">Open the secure version of this page.</span> <span class="browser-notice__body">Bluetooth is blocked on plain http, so the bike can’t connect.</span></p>
+<a class="btn btn--primary browser-notice__action" href="https://ride.telo.app/">Open over HTTPS<svg aria-hidden="true" class="icon icon--sm" viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></a>
+</div></div>
+  <div class="ds-example__caption"><span>Browser notice: no HTTPS. The action is primary because it fixes the problem.</span></div>
+</div><div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stack"><div class="ds-w-lg"><div class="connect-blocker" role="alert">
+<div class="connect-blocker__head">
+<svg aria-hidden="true" class="icon icon--lg connect-blocker__icon connect-blocker__icon--heart" viewBox="0 0 24 24"><path d="m17 17-5 5V12l-5 5"/><path d="m2 2 20 20"/><path d="M14.5 9.5 17 7l-5-5v4.5"/></svg>
+<p class="connect-blocker__title">Bluetooth is off</p>
+</div>
+<p class="connect-blocker__body">Turn on Bluetooth on this computer, then try again.</p>
+<a class="btn btn--raised connect-blocker__retry" href="#">Try again</a>
+</div></div></div>
+  <div class="ds-example__caption"><span>Blocker: Bluetooth is off (the icon in the danger colour).</span></div>
+</div><div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stack"><div class="ds-w-lg"><div class="connect-blocker" role="alert">
+<div class="connect-blocker__head">
+<svg aria-hidden="true" class="icon icon--lg connect-blocker__icon connect-blocker__icon--warn" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+<p class="connect-blocker__title">This browser can't reach the bike</p>
+</div>
+<p class="connect-blocker__body">Open Telo Ride 1 in Chrome or Edge on a laptop or Android tablet. Safari and Firefox don't support Web Bluetooth yet.</p>
+<a class="btn btn--raised connect-blocker__retry" href="#">Try again</a>
+</div></div></div>
+  <div class="ds-example__caption"><span>Blocker: the browser cannot reach the bike (warning).</span></div>
+</div>
+</section>
+
+<section class="ds-section" id="sizes" data-na="One size each."><h2><a href="#sizes">Sizes</a></h2>
+<p class="ds-na">One size each.</p>
+</section>
+
+<section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+<div class="ds-matrix"><table>
+<thead><tr><th scope="col">State</th><th scope="col">Notice</th></tr></thead>
+<tbody>
+<tr><th scope="row">Copy link</th><td><div class="browser-notice" role="alert">
+<svg aria-hidden="true" class="icon icon--lg browser-notice__icon" viewBox="0 0 24 24"><path d="m14.5 12.5-5-5"/><path d="m9.5 12.5 5-5"/><rect height="14" rx="2" width="20" x="2" y="3"/><path d="M12 17v4"/><path d="M8 21h8"/></svg>
+<p class="browser-notice__text"><span class="browser-notice__title">Open Telo Ride 1 in Chrome or Edge.</span> <span class="browser-notice__body">Bluetooth to the bike only works there — you can look around, but not ride.</span></p>
+<button class="btn btn--raised browser-notice__action" type="button"><svg aria-hidden="true" class="icon icon--md" viewBox="0 0 24 24"><rect height="14" rx="2" ry="2" width="14" x="8" y="8"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy link</button>
+</div></td></tr>
+<tr><th scope="row">Just copied: “Copied” with a tick (<code>data-copied</code>)</th><td><div class="browser-notice" role="alert">
+<svg aria-hidden="true" class="icon icon--lg browser-notice__icon" viewBox="0 0 24 24"><path d="m14.5 12.5-5-5"/><path d="m9.5 12.5 5-5"/><rect height="14" rx="2" width="20" x="2" y="3"/><path d="M12 17v4"/><path d="M8 21h8"/></svg>
+<p class="browser-notice__text"><span class="browser-notice__title">Open Telo Ride 1 in Chrome or Edge.</span> <span class="browser-notice__body">Bluetooth to the bike only works there — you can look around, but not ride.</span></p>
+<button class="btn btn--raised browser-notice__action" data-copied="" type="button"><svg aria-hidden="true" class="icon icon--md" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Copied</button>
+</div></td></tr>
+</tbody>
+</table></div><p>The blocker’s other states are its other causes: <code>needs-https</code>, <code>chooser-blocked</code> and <code>chooser-failed</code> on Connect Bike.</p><div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stack"><div class="ds-w-lg"><div class="connect-blocker" role="alert">
+<div class="connect-blocker__head">
+<svg aria-hidden="true" class="icon icon--lg connect-blocker__icon connect-blocker__icon--warn" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
+<p class="connect-blocker__title">The bike list didn’t open</p>
+</div>
+<p class="connect-blocker__body">Something went wrong opening your browser’s list of bikes. Try again.</p>
+<a class="btn btn--raised connect-blocker__retry" href="#">Try again</a>
+</div></div></div>
+  <div class="ds-example__caption"><span>The browser’s list of bikes could not be opened.</span></div>
+</div>
+</section>
+
+<section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+<ul><li><b>Browser notice, below 640px:</b> the icon is hidden and the action wraps under the text. <b>From 640px:</b> icon, text and action in one row.</li><li><b>Blocker:</b> the width of Connect Bike’s content column at every size.</li></ul>
+</section>
+
+<section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+<p>The notice is a warning-tinted panel with a hairline; the blocker is a plain panel. Icons read <code>--color-warn-fg</code> or <code>--color-heart-fg</code>.</p><div class="ds-themes"><div data-theme="light"><div class="browser-notice" role="alert">
+<svg aria-hidden="true" class="icon icon--lg browser-notice__icon" viewBox="0 0 24 24"><path d="m14.5 12.5-5-5"/><path d="m9.5 12.5 5-5"/><rect height="14" rx="2" width="20" x="2" y="3"/><path d="M12 17v4"/><path d="M8 21h8"/></svg>
+<p class="browser-notice__text"><span class="browser-notice__title">Open Telo Ride 1 in Chrome or Edge.</span> <span class="browser-notice__body">Bluetooth to the bike only works there — you can look around, but not ride.</span></p>
+<button class="btn btn--raised browser-notice__action" type="button"><svg aria-hidden="true" class="icon icon--md" viewBox="0 0 24 24"><rect height="14" rx="2" ry="2" width="14" x="8" y="8"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy link</button>
+</div></div><div data-theme="dark"><div class="browser-notice" role="alert">
+<svg aria-hidden="true" class="icon icon--lg browser-notice__icon" viewBox="0 0 24 24"><path d="m14.5 12.5-5-5"/><path d="m9.5 12.5 5-5"/><rect height="14" rx="2" width="20" x="2" y="3"/><path d="M12 17v4"/><path d="M8 21h8"/></svg>
+<p class="browser-notice__text"><span class="browser-notice__title">Open Telo Ride 1 in Chrome or Edge.</span> <span class="browser-notice__body">Bluetooth to the bike only works there — you can look around, but not ride.</span></p>
+<button class="btn btn--raised browser-notice__action" type="button"><svg aria-hidden="true" class="icon icon--md" viewBox="0 0 24 24"><rect height="14" rx="2" ry="2" width="14" x="8" y="8"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy link</button>
+</div></div></div>
+</section>
+
+<section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+<h3>Role and pattern</h3>
+<p><code>role="alert"</code>: both appear because of something the rider just did or tried, and they block the ride. The blocker is a labelled <code>&lt;section&gt;</code>.</p>
+<h3>Keyboard</h3>
+<div class="ds-table-wrap"><table class="ds-table ds-keys">
+<thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead>
+<tbody>
+<tr><td><kbd>Tab</kbd></td><td>To the alert’s one action</td></tr>
+<tr><td><kbd>Enter</kbd></td><td>Copies the link, opens the HTTPS page, or tries again</td></tr>
+</tbody>
+</table></div>
+<h3>Focus</h3>
+<p>Focus is not moved; the alert is read because of its role.</p>
+<h3>Labelling</h3>
+<p>The title is the first thing read. “Copied” is announced by the button’s own text changing.</p>
+<h3>Contrast</h3>
+<div class="ds-pairs"><div class="ds-pairs-col" data-theme="light"><span class="ds-pairs-col__title">light theme</span><div class="ds-pair"><span>Title on the panel</span><span class="ds-pair__ratio" data-contrast="--color-fg|--color-panel" data-min="4.5"></span></div><div class="ds-pair"><span>Body on the panel</span><span class="ds-pair__ratio" data-contrast="--color-muted|--color-panel" data-min="4.5"></span></div><div class="ds-pair"><span>Warning icon</span><span class="ds-pair__ratio" data-contrast="--color-warn-fg|--color-panel" data-min="3"></span></div><div class="ds-pair"><span>Danger icon</span><span class="ds-pair__ratio" data-contrast="--color-heart-fg|--color-panel" data-min="3"></span></div></div><div class="ds-pairs-col" data-theme="dark"><span class="ds-pairs-col__title">dark theme</span><div class="ds-pair"><span>Title on the panel</span><span class="ds-pair__ratio" data-contrast="--color-fg|--color-panel" data-min="4.5"></span></div><div class="ds-pair"><span>Body on the panel</span><span class="ds-pair__ratio" data-contrast="--color-muted|--color-panel" data-min="4.5"></span></div><div class="ds-pair"><span>Warning icon</span><span class="ds-pair__ratio" data-contrast="--color-warn-fg|--color-panel" data-min="3"></span></div><div class="ds-pair"><span>Danger icon</span><span class="ds-pair__ratio" data-contrast="--color-heart-fg|--color-panel" data-min="3"></span></div></div></div>
+<h3>Motion</h3>
+<p>None.</p>
+<h3>Touch</h3>
+<p>The action is 36px tall with 44px of touch area.</p>
+</section>
+
+<section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+<ul><li>Title: what to do, as a sentence. Body: why, and what still works.</li><li>“Open Telo Ride 1 in Chrome or Edge.” · “Bluetooth is off” · “Turn on Bluetooth on this computer, then try again.”</li><li>Actions: “Copy link”, “Open over HTTPS”, “Try again”.</li></ul>
+</section>
+
+<section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+<div class="ds-dodont">
+<figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="browser-notice" role="alert">
+<svg aria-hidden="true" class="icon icon--lg browser-notice__icon" viewBox="0 0 24 24"><path d="m14.5 12.5-5-5"/><path d="m9.5 12.5 5-5"/><rect height="14" rx="2" width="20" x="2" y="3"/><path d="M12 17v4"/><path d="M8 21h8"/></svg>
+<p class="browser-notice__text"><span class="browser-notice__title">Open Telo Ride 1 in Chrome or Edge.</span> <span class="browser-notice__body">Bluetooth to the bike only works there — you can look around, but not ride.</span></p>
+<button class="btn btn--raised browser-notice__action" type="button"><svg aria-hidden="true" class="icon icon--md" viewBox="0 0 24 24"><rect height="14" rx="2" ry="2" width="14" x="8" y="8"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy link</button>
+</div></div><figcaption>Say what to do and offer the one action that helps.</figcaption></figure>
+<figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><p class="ds-note">“Error: navigator.bluetooth is undefined”</p></div><figcaption>Show the rider an error string.</figcaption></figure>
+</div>
+<div class="ds-dodont">
+<figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="ds-w-lg"><div class="connect-blocker" role="alert">
+<div class="connect-blocker__head">
+<svg aria-hidden="true" class="icon icon--lg connect-blocker__icon connect-blocker__icon--heart" viewBox="0 0 24 24"><path d="m17 17-5 5V12l-5 5"/><path d="m2 2 20 20"/><path d="M14.5 9.5 17 7l-5-5v4.5"/></svg>
+<p class="connect-blocker__title">Bluetooth is off</p>
+</div>
+<p class="connect-blocker__body">Turn on Bluetooth on this computer, then try again.</p>
+<a class="btn btn--raised connect-blocker__retry" href="#">Try again</a>
+</div></div></div><figcaption>Pair the colour with an icon and a title.</figcaption></figure>
+<figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><p class="ds-note">A red box with no words.</p></div><figcaption>Rely on colour to say something is wrong.</figcaption></figure>
+</div>
+</section>
+
+<section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+<div class="ds-table-wrap"><table class="ds-table">
+<thead><tr><th scope="col">Used by</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+<tbody>
+<tr><td>icon--heart</td><td><code>--color-heart-fg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-heart-fg" data-swatch></i><span data-token="--color-heart-fg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-heart-fg" data-swatch></i><span data-token="--color-heart-fg"></span></span></td></tr>
+<tr><td>body</td><td><code>--color-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-muted" data-swatch></i><span data-token="--color-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-muted" data-swatch></i><span data-token="--color-muted"></span></span></td></tr>
+<tr><td>the block</td><td><code>--color-panel</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-panel" data-swatch></i><span data-token="--color-panel"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-panel" data-swatch></i><span data-token="--color-panel"></span></span></td></tr>
+<tr><td>action</td><td><code>--color-volt-fg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-volt-fg" data-swatch></i><span data-token="--color-volt-fg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-volt-fg" data-swatch></i><span data-token="--color-volt-fg"></span></span></td></tr>
+<tr><td>icon, icon--warn</td><td><code>--color-warn-fg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-warn-fg" data-swatch></i><span data-token="--color-warn-fg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-warn-fg" data-swatch></i><span data-token="--color-warn-fg"></span></span></td></tr>
+<tr><td>the block</td><td><code>--color-warning-bg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-warning-bg" data-swatch></i><span data-token="--color-warning-bg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-warning-bg" data-swatch></i><span data-token="--color-warning-bg"></span></span></td></tr>
+<tr><td>the block</td><td><code>--color-warning-border</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-warning-border" data-swatch></i><span data-token="--color-warning-border"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-warning-border" data-swatch></i><span data-token="--color-warning-border"></span></span></td></tr>
+<tr><td>the block</td><td><code>--border-width-hairline</code></td><td><span data-theme="light"><span data-token="--border-width-hairline"></span></span></td><td><span data-theme="dark"><span data-token="--border-width-hairline"></span></span></td></tr>
+<tr><td>action</td><td><code>--control-height-sm</code></td><td><span data-theme="light"><span data-token="--control-height-sm"></span></span></td><td><span data-theme="dark"><span data-token="--control-height-sm"></span></span></td></tr>
+<tr><td>text, body</td><td><code>--font-size-sm</code></td><td><span data-theme="light"><span data-token="--font-size-sm"></span></span></td><td><span data-theme="dark"><span data-token="--font-size-sm"></span></span></td></tr>
+<tr><td>title</td><td><code>--font-weight-semibold</code></td><td><span data-theme="light"><span data-token="--font-weight-semibold"></span></span></td><td><span data-theme="dark"><span data-token="--font-weight-semibold"></span></span></td></tr>
+<tr><td>body</td><td><code>--line-height-sm</code></td><td><span data-theme="light"><span data-token="--line-height-sm"></span></span></td><td><span data-theme="dark"><span data-token="--line-height-sm"></span></span></td></tr>
+<tr><td>text</td><td><code>--line-height-snug</code></td><td><span data-theme="light"><span data-token="--line-height-snug"></span></span></td><td><span data-theme="dark"><span data-token="--line-height-snug"></span></span></td></tr>
+<tr><td>the block</td><td><code>--radius-xl</code></td><td><span data-theme="light"><span data-token="--radius-xl"></span></span></td><td><span data-theme="dark"><span data-token="--radius-xl"></span></span></td></tr>
+<tr><td>body</td><td><code>--space-2</code></td><td><span data-theme="light"><span data-token="--space-2"></span></span></td><td><span data-theme="dark"><span data-token="--space-2"></span></span></td></tr>
+<tr><td>the block, head</td><td><code>--space-3</code></td><td><span data-theme="light"><span data-token="--space-3"></span></span></td><td><span data-theme="dark"><span data-token="--space-3"></span></span></td></tr>
+<tr><td>action</td><td><code>--space-3-5</code></td><td><span data-theme="light"><span data-token="--space-3-5"></span></span></td><td><span data-theme="dark"><span data-token="--space-3-5"></span></span></td></tr>
+<tr><td>the block, retry</td><td><code>--space-4</code></td><td><span data-theme="light"><span data-token="--space-4"></span></span></td><td><span data-theme="dark"><span data-token="--space-4"></span></span></td></tr>
+<tr><td>the block, icon</td><td><code>--space-5</code></td><td><span data-theme="light"><span data-token="--space-5"></span></span></td><td><span data-theme="dark"><span data-token="--space-5"></span></span></td></tr>
+<tr><td>the block</td><td><code>--space-8</code></td><td><span data-theme="light"><span data-token="--space-8"></span></span></td><td><span data-theme="dark"><span data-token="--space-8"></span></span></td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+<pre><code>&lt;div class="browser-notice" role="alert"&gt;
+&lt;svg aria-hidden="true" class="icon icon--lg browser-notice__icon" viewBox="0 0 24 24"&gt;…&lt;/svg&gt;
+&lt;p class="browser-notice__text"&gt;&lt;span class="browser-notice__title"&gt;Open Telo Ride 1 in Chrome or Edge.&lt;/span&gt; &lt;span class="browser-notice__body"&gt;Bluetooth to the bike only works there — you can look around, but not ride.&lt;/span&gt;&lt;/p&gt;
+&lt;button class="btn btn--raised browser-notice__action" type="button"&gt;&lt;svg aria-hidden="true" class="icon icon--md" viewBox="0 0 24 24"&gt;…&lt;/svg&gt;Copy link&lt;/button&gt;
+&lt;/div&gt;</code></pre><div class="ds-table-wrap"><table class="ds-table">
+<thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead>
+<tbody>
+<tr><td><code>.browser-notice</code></td><td>The notice; <code>__icon</code>, <code>__title</code>, <code>__body</code>, <code>__action</code>.</td></tr>
+<tr><td><code>[data-copied]</code> on the action</td><td>The tick takes the accent after a copy.</td></tr>
+<tr><td><code>.connect-blocker</code></td><td>The blocker; <code>__icon--heart</code> and <code>__icon--warn</code> set its tone.</td></tr>
+<tr><td><code>.connect-blocker__retry</code></td><td>Its action.</td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+<p>Mocks this component was extracted from:</p>
+<ul>
+<li><a href="../../mocks/pages/the-class/needs-chromium.html">pages/the-class/needs-chromium</a></li>
+<li><a href="../../mocks/pages/the-class/needs-https.html">pages/the-class/needs-https</a></li>
+<li><a href="../../mocks/pages/the-class/link-copied.html">pages/the-class/link-copied</a></li>
+<li><a href="../../mocks/pages/connect-bike/bluetooth-off.html">pages/connect-bike/bluetooth-off</a></li>
+<li><a href="../../mocks/pages/connect-bike/unsupported-browser.html">pages/connect-bike/unsupported-browser</a></li>
+<li><a href="../../mocks/pages/connect-bike/needs-https.html">pages/connect-bike/needs-https</a></li>
+<li><a href="../../mocks/pages/connect-bike/chooser-blocked.html">pages/connect-bike/chooser-blocked</a></li>
+<li><a href="../../mocks/pages/connect-bike/chooser-failed.html">pages/connect-bike/chooser-failed</a></li>
+</ul>
+<p>Drift fixed during extraction: none. The generic <code>.banner</code> and its tones, used only by removed screens, were removed.</p>
+</section>
+    <footer class="ds-footer"><span>Telo Ride 1 design system · extracted from <a href="../../mocks/index.html">docs/mocks</a> on 24 November 2026</span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

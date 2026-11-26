@@ -1,0 +1,39 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Show Class Done
+
+Person(rider, "Rider", "Rides a smart bike at home")
+
+Container_Boundary(ride, "ride application") {
+  Component(rideStore, "ClassRideStore", "Page-scoped store", "Runs the ride; hands over the result at 30:00")
+  Component(holder, "FinishedRideHolder", "In-memory service", "The ride just finished, until Class Done closes")
+  Component(guard, "classDoneGuard", "CanActivateFn", "Opens The Class when no ride was just finished")
+  Component(page, "ClassDonePage", "Angular page", "Class Done at /done; Done opens The Class")
+  Component(view, "classDoneView", "Pure helper", "Verdict, output, facts and efforts as the screen reads them")
+}
+Container_Boundary(components, "components library") {
+  Component(block, "ClassDone", "wz-class-done", "The class-done block: verdict, output, facts, efforts chart and Done")
+}
+Container_Boundary(domain, "domain library") {
+  Component(efforts, "EffortTotals", "Engine service", "Running total and seconds of each of the eight efforts")
+  Component(totals, "RideTotals", "Engine service", "Output in kJ and running seconds")
+}
+Container_Boundary(api, "api library") {
+  Component(token, "FINISHED_RIDE", "Injection token", "Contract FinishedRide")
+  Component(result, "ClassResult", "Type", "A finished ride's result")
+  Component(viewType, "ClassDoneView", "Type", "What Class Done draws")
+}
+
+Rel(rideStore, efforts, "Counts each running second of a work segment in")
+Rel(rideStore, totals, "Reads output and running seconds from")
+Rel(rideStore, token, "Sets the ClassResult through")
+Rel(holder, token, "Implements")
+Rel(guard, token, "Reads through")
+Rel(page, token, "Reads and clears through")
+Rel(page, view, "Builds the view with")
+Rel(view, result, "Reads")
+Rel(view, viewType, "Returns")
+Rel(page, block, "Passes ClassDoneView to; handles done")
+Rel(rider, block, "Reads the result and presses Done on")
+@enduml

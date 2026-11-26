@@ -1,0 +1,52 @@
+@startuml
+title UML sequence behaviour — Reject a forbidden import
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+box "External — CI" #FFF4E5
+  participant "lint job" as job
+  participant "ng lint" as lint
+  participant "eslint.config.js" as config
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "A presentation component" as comp
+end box
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "A page" as page
+end box
+[-> job : Push or pull request
+job -> lint : npm run lint
+lint -> config : Load the flat config
+config --> lint : Rules per project folder
+lint -> comp : Check projects/components/**/*.ts
+alt a value import from @telo/api, or any import from @telo/domain
+  comp --> lint : no-restricted-imports reports "Presentation components name api types only." (L2-146 AC2)
+else import type from @telo/api
+  comp --> lint : No report
+end
+lint -> page : Check projects/ride/**/*.ts
+alt the file reads navigator.bluetooth
+  page --> lint : no-restricted-properties reports "Only domain/src/bluetooth/ touches navigator.bluetooth." (L2-146 AC3)
+else a component without OnPush or standalone
+  page --> lint : prefer-on-push and prefer-standalone report (L2-146 AC4)
+else no violation
+  page --> lint : No report
+end
+lint --> job : Exit code
+alt any report
+  [<-- job : The lint job fails
+else none
+  [<-- job : The lint job passes
+end
+@enduml

@@ -1,0 +1,175 @@
+# Telo Ride 1's pipeline (L2-149 AC2, ADR 0043). On every push and pull request it runs lint, the production
+# build and one critical acceptance path per feature, in three parallel jobs, and fails on any of them. It
+# runs no unit tests and no visual, responsive, accessibility or heap sweep: `node tools/verify/verify.mjs`
+# runs everything locally. No job touches Bluetooth hardware or a network beyond localhost: the Playwright
+# specs answer both from fixtures (AGENTS.md). Telo Ride 1 is static files and has no backend to build or test.
+#
+# Kept under 5 minutes: each job checks out only the folders its steps read (docs/, with the films, is in
+# none), node_modules and the Playwright browser are cached, and nothing is retried. A push to main that
+# passes is deployed, once the repository variables of docs/deployment.md name the host.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            frontend
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - id: modules
+        uses: actions/cache@v4
+        with:
+          path: frontend/node_modules
+          key: node-modules-${{ runner.os }}-node24-${{ hashFiles('frontend/package-lock.json') }}
+      - if: steps.modules.outputs.cache-hit != 'true'
+        run: npm ci --no-audit --no-fund
+        working-directory: frontend
+      - name: Prettier
+        run: npm run format:check
+        working-directory: frontend
+      - name: ESLint and the e2e type check
+        run: npm run lint
+        working-directory: frontend
+
+  build:
+    name: Production build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            frontend
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - id: modules
+        uses: actions/cache@v4
+        with:
+          path: frontend/node_modules
+          key: node-modules-${{ runner.os }}-node24-${{ hashFiles('frontend/package-lock.json') }}
+      - if: steps.modules.outputs.cache-hit != 'true'
+        run: npm ci --no-audit --no-fund
+        working-directory: frontend
+      - name: The ride app, within its budgets
+        run: npm run build
+        working-directory: frontend
+      - name: The ride app's initial bundle, at most 300 KB gzipped
+        run: npm run bundle:size
+        working-directory: frontend
+
+  acceptance:
+    name: Critical acceptance paths
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # tools/blender/courses holds the course's file, which the specs read the class's plan from
+      # (frontend/e2e/fixtures/the-class.ts). A spec that reads a file outside frontend/ needs its folder here.
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            frontend
+            tools/blender/courses
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - id: modules
+        uses: actions/cache@v4
+        with:
+          path: frontend/node_modules
+          key: node-modules-${{ runner.os }}-node24-${{ hashFiles('frontend/package-lock.json') }}
+      - if: steps.modules.outputs.cache-hit != 'true'
+        run: npm ci --no-audit --no-fund
+        working-directory: frontend
+      - id: browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('frontend/package-lock.json') }}
+      # The runner image already carries Chromium's system libraries, so only the browser is fetched,
+      # and only when it is not cached.
+      - name: Install Chromium
+        if: steps.browsers.outputs.cache-hit != 'true'
+        run: npx playwright install chromium
+        working-directory: frontend
+      - name: Playwright specs tagged @critical (Chromium)
+        run: npx playwright test --grep @critical
+        working-directory: frontend
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-traces
+          path: frontend/test-results/
+          retention-days: 7
+
+  # A push to main that passes is published to Azure Static Web Apps, which serves the build's files over
+  # HTTPS as the build's own staticwebapp.config.json says (ADR 0043). The job signs in with GitHub's OIDC
+  # token and reads the deployment token at run time, so the repository stores no secret. Skipped until
+  # TELO_RIDE_STATIC_WEB_APP names the host (docs/deployment.md).
+  deploy:
+    name: Deploy
+    needs: [lint, build, acceptance]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.TELO_RIDE_STATIC_WEB_APP != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            frontend
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Build the app
+        run: npm ci --no-audit --no-fund && npm run build
+        working-directory: frontend
+      # A browser installs a service worker again only when its bytes change, so the commit is appended:
+      # a change to the worker's headers then reaches a worker already installed (ADR 0043).
+      - name: Stamp the service worker with the commit
+        run: printf '\n// %s\n' "$GITHUB_SHA" >> frontend/dist/ride/browser/ngsw-worker.js
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - id: token
+        name: Read the deployment token
+        env:
+          STATIC_WEB_APP: ${{ vars.TELO_RIDE_STATIC_WEB_APP }}
+          RESOURCE_GROUP: ${{ vars.TELO_RIDE_RESOURCE_GROUP }}
+        run: |
+          token=$(az staticwebapp secrets list --name "$STATIC_WEB_APP" --resource-group "$RESOURCE_GROUP" --query properties.apiKey -o tsv)
+          echo "::add-mask::$token"
+          echo "value=$token" >> "$GITHUB_OUTPUT"
+      - name: Upload the build to Azure Static Web Apps
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ steps.token.outputs.value }}
+          action: upload
+          app_location: frontend/dist/ride/browser
+          output_location: ''
+          skip_app_build: true
+          skip_api_build: true

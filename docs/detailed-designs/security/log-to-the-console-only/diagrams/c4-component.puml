@@ -1,0 +1,36 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Log to the console only
+
+Container_Boundary(ride, "ride application") {
+  Component(main, "main.ts", "Bootstrap", "Writes a failed bootstrap to console.error")
+  Component(config, "app.config.ts", "Composition root", "Adds the browser's global error listeners")
+  Component(provide, "provideBikeConnection", "Providers of the lazy parent route", "Binds APP_LOGGER to ConsoleAppLogger")
+  Component(diagnostics, "provideDiagnostics", "Providers, new, only with diagnose", "Rebinds APP_LOGGER to RecordingAppLogger")
+}
+Container_Boundary(domainlib, "domain library") {
+  Component(logger, "ConsoleAppLogger", "Service", "Writes one redacted plain-text line per error to console.error")
+  Component(reclogger, "RecordingAppLogger", "Service, new", "Writes the console line through ConsoleAppLogger, then adds it to the recording")
+  Component(logline, "logLine", "Pure function", "The one line an error is logged as")
+  Component(describe, "describeError", "Pure function", "Renders an error as name: message")
+  Component(redact, "redact", "Pure function", "Replaces an email address or a session token")
+  Component(conn, "WebBluetoothBikeConnection", "Service", "Reports a Bluetooth error once; logs no packet")
+  Component(telemetry, "BikeTelemetry", "Service", "Decodes notifications; writes no console line")
+}
+Container_Boundary(apilib, "api library") {
+  Component(contract, "AppLogger and APP_LOGGER", "Contract and token", "error(area, error)")
+}
+Rel(provide, contract, "Binds APP_LOGGER to ConsoleAppLogger")
+Rel(provide, logger, "Provides")
+Rel(diagnostics, reclogger, "Provides in its place")
+Rel(conn, contract, "Injects APP_LOGGER")
+Rel(logger, contract, "Implements")
+Rel(reclogger, contract, "Implements")
+Rel(reclogger, logger, "Wraps")
+Rel(logger, logline, "Writes the line of")
+Rel(reclogger, logline, "Records the line of")
+Rel(logline, describe, "Formats the error with")
+Rel(logline, redact, "Redacts the line with")
+Rel(telemetry, conn, "Subscribes to frames of")
+@enduml

@@ -1,0 +1,100 @@
+// Blocks class-course__sound and class-sound (docs/design-system/assets/components.css, Class Ride): the Sound button,
+// at least 44 px, and under it a non-modal panel of two radio groups of 44 px rows (L2-185 AC1, AC2). The component
+// fills the course box's sound slot from the top-left corner to the bottom, so the panel can scroll within the box;
+// only the button and the panel take a press, so the intensity under them still does.
+:host {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  pointer-events: none;
+}
+
+.class-course__sound {
+  min-width: var(--target-comfortable);
+  min-height: var(--target-comfortable);
+  pointer-events: auto;
+}
+
+.class-sound__icon {
+  width: var(--space-5);
+  height: var(--space-5);
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.class-sound {
+  display: flex;
+  width: min(20rem, 100%);
+  min-height: 0;
+  flex-direction: column;
+  gap: var(--space-3);
+  overflow-y: auto;
+  border-radius: var(--radius-xl);
+  background: var(--color-panel);
+  box-shadow: var(--shadow-3);
+  padding: var(--space-3);
+  pointer-events: auto;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.class-sound__group {
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+.class-sound__legend {
+  padding: 0 0 var(--space-1);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-muted);
+}
+
+.class-sound__option {
+  display: flex;
+  min-height: var(--target-comfortable);
+  align-items: center;
+  gap: var(--space-3);
+  border-radius: var(--radius-md);
+  padding-inline: var(--space-2);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--color-raised);
+  }
+
+  &:has(input:disabled) {
+    cursor: default;
+    opacity: 0.5;
+  }
+
+  input {
+    width: var(--space-4);
+    height: var(--space-4);
+    margin: 0;
+    accent-color: var(--color-accent);
+  }
+}
+
+.class-sound__text {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+}
+
+.class-sound__hint {
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-xs);
+  color: var(--color-muted);
+}

@@ -1,0 +1,57 @@
+@startuml
+title UML sequence behaviour — Keep the video on the ride clock
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+  participant "ClassRideStore" as store
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "ClassVideo" as cvideo
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "RideTicker" as ticker
+  participant "VideoClockSync" as sync
+  participant "VideoStallWatch" as stall
+end box
+box "Frontend — Ride app (video library)" #ECFDF3
+  participant "YouTubeVideoPlayer" as player
+end box
+box "External — YouTube" #FFF4E5
+  participant "youtube-nocookie.com" as yt
+end box
+ticker -> store : Tick: a new whole second of the ride clock
+store -> stall : check(player state, second)
+stall --> store : true once 10 s of the ride have passed without playing (L2-088 AC4)
+alt player state is playing
+  store -> player : currentTime()
+  player --> store : Video time
+  store -> sync : check(video time, elapsed, offset)
+  alt drift over 1.5 s (L2-088 AC2)
+    sync --> store : Seek to elapsed + offset
+    store -> player : seekTo(elapsed + offset)
+    player -> yt : Seek
+  else within 1.5 s
+    sync --> store : null, no seek
+  end
+else player state is error, the player's code did not load, or the video has stalled (L2-088 AC4)
+  store -> store : videoUnavailable = true
+  store -> page : Signal changes
+  page -> cvideo : unavailable = true
+  cvideo --> rider : "The video can’t play. The bike will still follow the class."
+  note over store, ticker : The clock, the plan and the bike carry on
+end
+@enduml

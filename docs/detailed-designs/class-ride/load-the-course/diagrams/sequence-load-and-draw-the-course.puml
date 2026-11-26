@@ -1,0 +1,63 @@
+@startuml
+title UML sequence behaviour — Load and draw the course (as built)
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+  participant "ClassRideStore" as store
+  participant "CourseSceneHost" as host
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "ClassCourse" as box
+end box
+box "Frontend — Ride app (world library)" #ECFDF3
+  participant "CourseScene" as scene
+  participant "ThreeCourseRenderer" as renderer
+  participant "parseCourse" as parse
+end box
+box "Browser — service worker and cache" #F2F4F7
+  participant "Service worker" as sw
+end box
+box "Static host — the app's own origin" #FFF4E5
+  participant "Static host" as origin
+end box
+
+rider -> page : Press the start button with "Ibiza Sunset Strip" chosen
+page -> store : Create
+store -> store : Start the clock; WorkoutEngine.follow(plan) sends the first level (L2-175 AC1)
+page -> box : loading = true
+box --> rider : The still under "Loading Ibiza Sunset Strip" (role="status")
+page -> host : Create in the scene slot
+host -> sw : import('@telo/world')
+sw -> origin : The world chunk, unless kept (L2-175 AC4)
+host -> scene : createComponent(CourseScene)
+scene -> sw : COURSE_RENDERER(): the renderer's chunk and Three.js
+scene -> scene : measurePeriod(), beside the load
+scene -> renderer : start(canvas, nextFrame, segments)
+renderer -> sw : ibiza.course.json, ibiza.glb, riders/rider.glb, together
+sw -> origin : Each file not yet kept; kept in the assets group
+sw --> renderer : The three files
+renderer -> parse : parseCourse(file) (L2-175 AC6)
+parse --> renderer : CourseFile
+renderer -> renderer : build, rehearse, compileAsync, warm, first picture
+renderer --> scene : true
+scene -> renderer : draw(time = the clock's second now) (L2-175 AC3)
+scene --> host : drawn
+host --> page : drawn
+page -> store : showCourse()
+page -> box : loading = false
+box --> rider : The course, with the rider where the clock puts them
+@enduml

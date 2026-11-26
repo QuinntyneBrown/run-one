@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Ease off and roll on
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System(telo, "Telo Ride 1", "One class, on the rider's own bike")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Ext(youtube, "YouTube", "Privacy-enhanced player for the class video")
+
+Rel(rider, telo, "Spins easily and waits for the summary in")
+Rel(telo, bike, "Steps the target resistance down to level 4 on", "Bluetooth LE")
+Rel(telo, youtube, "Lets the class video play on until Class Done opens through", "IFrame Player API")
+@enduml

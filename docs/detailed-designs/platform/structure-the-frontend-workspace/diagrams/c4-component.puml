@@ -1,0 +1,35 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Structure the frontend workspace
+
+Container_Boundary(ride, "ride application") {
+  Component(config, "app.config.ts", "Composition root", "Zoneless change detection, the router, token bindings")
+  Component(routes, "app.routes.ts, ride.routes.ts", "Lazy routes", "Load each screen on demand; bind the first screen's tokens")
+  Component(pages, "Pages", "Standalone components", "Connect Bike, The Class, Class Ride, Class Done, Page not found")
+}
+Container_Boundary(componentslib, "components library") {
+  Component(presentation, "Presentation components", "wz-* standalone, OnPush", "Inputs and outputs; inject no service, token or router")
+}
+Container_Boundary(domainlib, "domain library") {
+  Component(bluetooth, "bluetooth/", "Folder", "The only code that touches navigator.bluetooth")
+  Component(rules, "protocol/, engine/, storage/, browser/", "Folders", "Framing, ride rules, localStorage, browser APIs")
+}
+Container_Boundary(videolib, "video library") {
+  Component(player, "YouTubeVideoPlayer", "VideoPlayer", "Imported dynamically by a screen that shows the video")
+}
+Container_Boundary(apilib, "api library") {
+  Component(contracts, "Contracts, types and tokens", "TypeScript", "Imports nothing in the workspace")
+}
+Rel(config, routes, "Provides the router with")
+Rel(routes, pages, "Loads with loadComponent")
+Rel(routes, bluetooth, "Binds tokens to implementations in")
+Rel(routes, rules, "Binds tokens to implementations in")
+Rel(pages, presentation, "Renders")
+Rel(pages, contracts, "Injects tokens from")
+Rel(pages, player, "Imports with import()")
+Rel(presentation, contracts, "Imports types only from")
+Rel(bluetooth, contracts, "Implements contracts of")
+Rel(rules, contracts, "Implements contracts of")
+Rel(player, contracts, "Implements VideoPlayer of")
+@enduml

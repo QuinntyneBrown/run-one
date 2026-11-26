@@ -1,0 +1,54 @@
+@startuml
+title UML sequence behaviour — Open Class Ride
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "connectedBikeGuard" as guard
+  participant "ClassRidePage" as page
+  participant "ClassRideStore" as store
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "RideClock and RideTicker" as clock
+  participant "WorkoutEngine" as engine
+  participant "ResistanceController" as resist
+end box
+box "Frontend — Ride app (video library)" #ECFDF3
+  participant "YouTubeVideoPlayer" as player
+end box
+box "Device — Smart bike" #F2F4F7
+  participant "Smart bike" as bike
+end box
+box "External — YouTube" #FFF4E5
+  participant "youtube-nocookie.com" as yt
+end box
+rider -> guard : Press the start button on The Class, or open /ride
+alt no connected bike (L2-087 AC4)
+  guard --> rider : Open The Class instead, with no Bluetooth call; a new rider goes on to Connect Bike
+else bike connected
+  guard -> page : Activate /ride
+  page -> store : Provide the store and the ride's services
+  store -> clock : start() at 0:00
+  store -> engine : follow(plan)
+  engine -> resist : applyPlanLevel(first segment's level)
+  resist -> bike : Write the target resistance
+  page --> rider : Header, hidden h1, clock "0:00 / 20:00" (L2-087 AC1)
+  page -> store : playVideo(frame)
+  store -> player : load(frame, videoId, start = offset + clock, controls off)
+  player -> yt : Load the IFrame API and the embed (L2-088 AC5)
+  yt --> player : Player ready
+  player --> rider : Video plays from 0:03, without controls (L2-088 AC1)
+end
+@enduml

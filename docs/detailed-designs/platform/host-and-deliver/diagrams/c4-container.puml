@@ -1,0 +1,17 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Host and deliver
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+System_Ext(ci, "CI", "GitHub Actions: lint, production build, critical acceptance paths")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The four screens, Web Bluetooth, the protocol and the engine")
+}
+
+Rel(rider, app, "Uses", "HTTPS")
+Rel(host, app, "Serves static files, the L2-131 headers and the index.html fallback for", "HTTPS")
+Rel(ci, app, "Runs lint, the production build and the @critical specs on")
+Rel(ci, host, "Uploads dist/ride/browser to")
+@enduml

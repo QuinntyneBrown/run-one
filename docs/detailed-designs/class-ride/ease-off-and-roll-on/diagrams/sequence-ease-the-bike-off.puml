@@ -1,0 +1,54 @@
+@startuml
+title UML sequence behaviour — Ease the bike off
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+  participant "ClassRideStore" as store
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "ResistanceEaseOff" as ease
+  participant "ResistanceController" as ctrl
+  participant "BikeConnection" as conn
+  participant "BikeTelemetry" as telemetry
+end box
+box "Device" #F2F4F7
+  participant "Smart bike" as bike
+end box
+store -> store : finish() at 20:00; phase becomes finished
+store -> ease : start() (L2-182 AC1)
+ease -> ctrl : byHand()? target()?
+ctrl --> ease : false; 11
+ease -> ease : easeOffLevels(11, 4): 10, 9, 8, 7, 6, 5, 4
+store --> page : stepperOff: true
+page --> rider : Lower resistance and Raise resistance disabled (AC2)
+loop each level, 110 ms after the last
+  ease -> ctrl : applyPlanLevel(level)
+  ctrl -> conn : setResistance(level)
+  conn -> bike : Write the resistance command
+  bike --> conn : Acknowledged
+  bike -> telemetry : Reports its resistance
+  telemetry --> page : The stepper shows the level as it falls (L2-026)
+end
+ease --> store : Nothing left to send: the target stands at 4
+alt the bike gives no control (L2-014 AC3)
+  ease -> ctrl : byHand()?
+  ctrl --> ease : true
+  ease -> ease : Send nothing (AC3)
+else the target already stands at 4 or lower
+  ease -> ease : easeOffLevels returns none; the target stays
+end
+@enduml

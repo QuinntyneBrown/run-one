@@ -1,0 +1,44 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Check bike and browser support
+
+Container_Boundary(ride, "ride application") {
+  Component(classPage, "TheClassPage", "Angular page, exists", "Shows the notice, the bike status and the disabled start button")
+  Component(noticeHelper, "browserNotice", "Pure helper", "The notice for a support state, or none")
+  Component(linkCopy, "LinkCopy", "Service on the page", "Copies the page address; copied for 2 s")
+  Component(connectPage, "ConnectBikePage", "Angular page, exists", "Shows the Works with list and replaces the device card with an alert")
+  Component(guard, "connectedBikeGuard", "CanActivateFn", "Sends the ride's address to The Class without a connected bike, so in a blocked browser")
+  Component(provide, "provideBikeConnection", "Provider function, exists", "Binds the support check on the lazy parent route")
+}
+Container_Boundary(components, "components library") {
+  Component(notice, "BrowserNotice", "wz-browser-notice", "Alert under the header with one action")
+  Component(blocker, "ConnectBlocker", "wz-connect-blocker", "Alert that stands in for the device card")
+  Component(works, "ConnectWorks", "wz-connect-works, exists", "Works with list, one or two columns")
+}
+Container_Boundary(domain, "domain library") {
+  Component(support, "WebBluetoothSupport", "Service, exists", "Reads the secure context, navigator.bluetooth and the adapter")
+  Component(blocked, "isBlocked", "Pure helper", "True for unsupported-browser and insecure-context")
+  Component(bikes, "SUPPORTED_BIKES", "Constant, exists", "The five rows of the list, in order")
+  Component(clip, "BrowserClipboard", "Service", "Writes text through navigator.clipboard")
+}
+Container_Boundary(api, "api library") {
+  Component(supportToken, "BLUETOOTH_SUPPORT", "Contract and token, exists", "state, recheck, secureUrl")
+  Component(clipToken, "CLIPBOARD", "Contract and token", "copy")
+  Component(connToken, "BIKE_CONNECTION", "Contract and token, exists", "ble, the link state")
+}
+
+Rel(provide, support, "Binds to BLUETOOTH_SUPPORT")
+Rel(support, supportToken, "Implements")
+Rel(clip, clipToken, "Implements")
+Rel(classPage, supportToken, "Reads state and secureUrl")
+Rel(classPage, noticeHelper, "Reads the notice from")
+Rel(classPage, linkCopy, "Copy link calls")
+Rel(linkCopy, clipToken, "Copies the page address")
+Rel(classPage, blocked, "Disables the start button with")
+Rel(classPage, notice, "Renders when blocked")
+Rel(connectPage, supportToken, "Reads state, calls recheck")
+Rel(connectPage, blocker, "Renders when blocked")
+Rel(connectPage, works, "Passes the bikes to")
+Rel(connectPage, bikes, "Reads")
+@enduml

@@ -1,0 +1,249 @@
+# Classes, maps and worlds
+
+Telo Ride is mainly a kart-racing-style game (AGENTS.md, *Direction*): cyclists, driven by riders on their Echelon bikes, race maps, and each map is modelled after a GCN online class. The class gives the map its structure: its stages are the map's stretches of road, its length sets the map's size, its target resistance sets the elevation (above the class's mean is uphill, below is downhill) and each stage's cadence aim is what the rider scores for holding.
+
+**Maps are courses built in Blender** ([ADR 0034](adr/0034-maps-built-in-blender.md), [ride a course](detailed-designs/race/ride-a-course/README.md)). `tools/blender/build_course.py` reads a course file (`tools/blender/courses/<id>.json`: the class, its video and its plan) and writes the map as one glTF model, its road's centre line and the Blender scene ([how to build one](../tools/blender/README.md)). Each stage's stretch is its seconds x its cadence aim (in turns a second) x 5 m a turn, and its gradient is 1 % for each level its target resistance stands above the course's mean; the bends are dealt from the course's seed. In a class the clock places the rider on the course, so every hill arrives as the bike's resistance changes for it; in a race their distance does, and the map's finish line is the race's. A course is a place a rider learns: the same corner and the same hill every time.
+
+| Course | Class | Length | Climbing | Model | Status |
+| --- | --- | --- | --- | --- | --- |
+| Ibiza Sunset Strip (`ibiza`) | Intervals to the Beat (GCN Training, 20:00) | 8.4 km | 159 m | `public/courses/ibiza.glb` ([captures](screenshots/courses/ibiza/)) | Built and ridden; open from the start on the map catalogue |
+| Prairie Paceline (`prairie`) | The catalogue's 30:00 intervals (placeholder) | 18.4 km | 90 m | `public/courses/prairie.glb` ([film](../blender/prairie.mp4)) | Built in Blender (ADR 0035) and ridden in races |
+| Old Town Criterium (`oldtown`) | The catalogue's 30:00 intervals (placeholder) | 14.2 km | 140 m | `public/courses/oldtown.glb` ([film](../blender/oldtown.mp4)) | Built in Blender (ADR 0035) and ridden in races |
+| Cliffside Coast (`coast`) | The catalogue's 30:00 intervals (placeholder) | 32 km | 410 m | `public/courses/coast.glb` ([film](../blender/coast.mp4)) | Built in Blender (ADR 0035) and ridden in races |
+| Neon Docklands (`docklands`) | The catalogue's 30:00 intervals (placeholder) | 21.6 km | 120 m | `public/courses/docklands.glb` ([film](../blender/docklands.mp4)) | Built in Blender (ADR 0035) and ridden in races |
+| Dolomites (`dolomites`) | The catalogue's 30:00 intervals (placeholder) | 38.5 km | 860 m | `public/courses/dolomites.glb` ([film](../blender/dolomites.mp4)) | Built in Blender (ADR 0035) and ridden in races |
+| Vice City (`vicecity`) | The catalogue's 30:00 intervals (placeholder) | 24 km | 60 m | `public/courses/vicecity.glb` ([film](../blender/vicecity.mp4)) | Built in Blender (ADR 0035) and ridden in races |
+| Col du Granit (`granite`) | The catalogue's 30:00 intervals (placeholder) | 16.1 km | 1,240 m | `public/courses/granite.glb` ([film](../blender/granite.mp4)) | Built in Blender (ADR 0035) and ridden in races |
+
+Every map in the catalogue is now a course; each has a 20-second film in [`blender/`](../blender/). Old Town hands over to `main`'s World Ride when the rider streams the real Bruges (L2-066).
+
+**The worlds below are the concepts courses are built from.** Every other class still rides `main`'s World Ride scene (ADR 0030): a street that recycles every few hundred metres, bent in the vertex stage and eased to the current stage's gradient, with no place a rider learns. Each scene stands as the concept of its world (`world-<name>.ts`), and the Blender theme for its course is built from it; once a world has a course (named in `course-worlds.ts`), its old scene is no longer drawn. The render quality and realism below judge those scenes, not the courses.
+
+Every class in `frontend/public/classes.json`, with its World Ride scene. Render quality is a judgement: Neon Docklands, Old Town, Caribana Parade, Westminster Rush Hour, Central Park Loop, South Beach Sunrise, Ghent Six-Day, Blackpool Illuminations, Suburban Sunrise, Notting Hill Carnival, Knicks Championship Parade, Las Vegas Strip, Route 66 Desert, Venice Beach Boardwalk, Amsterdam Canals, Giza Plateau, Daytona Beach Sand, Koppenberg Cobbles, Mont Ventoux, Chicago Loop Crit, Golden Gate Park, Havana Malecón, Sea Point, Cape Town, Montreal Jazz Fest, Stanley Park Seawall, Stelvio Pass, Edinburgh Fringe, North Shore, Oahu, Passo Campolongo, Marina Bay Night, Serpentine, Hyde Park, Champs-Élysées Finale, Dutch Tulip Fields, Col du Tourmalet, Napa Vineyards, Glastonbury Fields, Pike Place at Dawn, Hardknott Pass, Alpe d'Huez, Saguaro Desert, Trollstigen, The Poggio, Montmartre, Indianapolis Brickyard, Chichén Itzá, Bonneville Salt Flats, Lake Como, Yosemite Valley, Mount Etna, Times Square New Year's Eve, the Tremola, Mount Teide, Monaco Street Circuit, Tempelhof Field, Torres del Paine, Ibiza Sunset Strip, Isle of Skye Fog, the Toronto Waterfront Trail, Prospect Park, Sa Calobra, Strade Bianche, the Wicklow Gap, Haleakalā, Dubai Marina, Sixth Street, Austin, Winnats Pass, La Redoute, the Angliru, Lee Valley Velodrome, the Cinque Terre, Els Àngels, Coney Island Boardwalk, Winterlude, Ottawa, the Alto de Letras, Santa Monica Pier, the Antwerp Port Sprint, Lake Tahoe, Death Valley, the Atacama Desert, the Angkor Temples, Passo Gardena, Mauna Kea, the Col du Galibier, Hoover Dam and Miami Neon Nights have their own scene modules; every other world (Col du Granit, Prairie Paceline, Dolomites, Cliffside Coast and the 103 worlds from Trinidad J'Ouvert to the Engadin Lakes) uses the shared placeholder look: its own sky, light, fog, ground and road colours, with the generic roadside posts and no landmarks yet. Every class in the catalogue has a world. Mardi Gras, New Orleans is still built, in the placeholder look, but no class rides it since Ride to the Beat moved to Miami Neon Nights.
+
+Realism is a separate judgement, out of 100, of how close the scene comes to the real place (or, for a made-up place, to a real one like it): whether its landmarks, layout and side of the road match reality, as against how polished it looks. Every built scene is low-poly and stylised, with simple figures and a loop that repeats, so none scores above the low 40s except Amsterdam Canals, refined one change at a time ([its iterations](screenshots/amsterdam/README.md)), and Caribana Parade, refined over a hundred iterations ([its captures](screenshots/caribana/README.md)). Known departures cost points: Stanley Park's seawall puts the sea on the rider's left, though cyclists ride it anticlockwise with the water on the right, and calls Burrard Inlet English Bay; Route 66 sets saguaros in northern Arizona, where they do not grow; Blackpool runs its trams on the hotel side, not the sea side; Central Park puts the Reservoir between the rider and Fifth Avenue while Midtown lies ahead. The placeholder worlds are only sky, light, fog and road colours. Worlds built since this column was added are not scored yet; their cell is empty.
+
+In every `main` scene, placeholder looks included, the road bends left and right and rises and falls as the rider rides (L2-101 criteria 6 and 7, L2-110 criterion 9): hairpins on the big climbs such as the Alpe, the Stelvio and Trollstigen, gentle sweeps along the seawalls and promenades, and near-straight lines on the Bonneville salt and the Brickyard. The bends are scenery only, and the gradient still follows the class; the flattest places (Bonneville, Death Valley, the velodrome, Coney Island and Santa Monica) keep a small rolling gradient so their route profile still shows metres climbed.
+
+| # | Class | World | Render quality | Realism | Description |
+| --- | --- | --- | --- | --- | --- |
+| 1 | 20 Minute Power Intervals | Neon Docklands | 85% | 35/100 | A harbour city after dark. Each one-minute effort is a bridge ramp over the docks. |
+| 2 | 20 Min Threshold Builder | Col du Granit | 35% | 10/100 | A mountain pass at first light. The threshold blocks are the steep ramps. |
+| 3 | 30 Minute HIIT Cardio | Old Town Criterium | 80% | 35/100 | Cobbled streets on race day. Each of the eight sprints is a kick up to the cathedral. |
+| 4 | 30 Min Tempo Paceline | Prairie Paceline | 35% | 10/100 | Open farmland at golden hour. Take long turns on the front, into the wind past the turbines. |
+| 5 | 60 Min Dolomites Endurance | Dolomites | 35% | 5/100 | A valley road under limestone peaks. Soft rollers, one steady level and long views. |
+| 6 | 60 Min Coastal Endurance + Surges | Cliffside Coast | 35% | 10/100 | A clifftop road at sunset with the sea on your right. Each tempo surge climbs a headland. |
+| 7 | Calorie Burning Workout | South Beach Sunrise | 80% | 33/100 | Pastel art deco hotels with neon fins face palms, lifeguard towers and the Atlantic along Miami Beach's Ocean Drive at sunrise. The two-minute opener and the six short efforts each chase the rising sun up a rise toward the deco tower at the end of the drive. |
+| 8 | Intense Interval Blast | Caribana Parade | 95% | 90/100 | Lake Shore Boulevard closes for the Toronto Caribbean Carnival's Grand Parade on a hot August afternoon, crowds packed behind the barricades waving island flags under bunting and hanging baskets, as mas bands in feathered backpieces wine up the lanes behind a steel orchestra, its engine room and a towering King, with moko jumbies striding over them and the CN Tower rising ahead past the Gardiner and the Sunnyside Pavilion. The warm-up rolls in behind the steel orchestra, and each one-minute surge races between the bands, under the footbridge and the judging gantry, before the recoveries chip along with the parade. |
+| 9 | Quick But Brutal HIIT | Trinidad J'Ouvert | 35% |  | Port of Spain before dawn at Carnival, paint and mud flying; each sprint breaks through a soca crowd. |
+| 10 | Sprintavals | Knicks Championship Parade | 80% | 32/100 | Ticker tape and orange and blue streamers drift down between the towers of lower Broadway's Canyon of Heroes as fans pack the barricades for the Knicks' championship parade, the Woolworth Building's copper crown rising at the far end. The four long builds reel in the floats rolling up Broadway, and the five ten-second sprints each jump from one float to the next before the last surge toward the Woolworth. |
+| 11 | Time Is of the Essence | Westminster Rush Hour | 60% | 35/100 | London at dusk beneath Big Ben; race black cabs and red buses before the clock chimes. |
+| 12 | 15-Minute Smash Fest | Rio Sambadrome | 35% |  | Carnival night in Rio; glittering samba schools fill the runway and every smash rides the drum line. |
+| 13 | 10 On 20 Off Max Sprints | Venice Beach Boardwalk | 80% | 35/100 | Skaters glide past street performers, mural-painted shopfronts and towering palms along Venice Beach's Ocean Front Walk, the Santa Monica Pier's Ferris wheel turning over the bay ahead. The two one-minute efforts warm up past Muscle Beach, and the eighteen ten-second sprints each burst between the palms before twenty seconds cruising in the ocean breeze. |
+| 14 | 15 Minute Cardio HIIT | Central Park Loop | 65% | 28/100 | Early laps of Central Park past the reservoir and Bethesda Fountain, joggers and carriages sharing the drive. |
+| 15 | 15 Minute Strength Workout | Lisbon Tram Hills | 35% |  | Steep cobbled Alfama lanes beside yellow trams; grind each climb toward the castle above the Tagus. |
+| 16 | Low Cadence Strength Builder | Koppenberg Cobbles | 81% | 35/100 | Spring mist hangs over the Flemish farm lanes below the Koppenberg, where fans waving Flanders' lion pack the grass banks and Melden's church tower watches from the wooded crest. The two one-minute openers roll over the lanes' first rises, and the three three-minute heavy-gear efforts grind up the slick Koppenberg cobbles past the crowds before each minute's recovery rolls back down among the poplars. |
+| 17 | Level Up Your Cadence | Ghent Six-Day | 70% | 40/100 | Six-day racing under the Kuipke's wooden banking; cadence lifts with every lap the crowd counts. |
+| 18 | Nasty Pasty Sprint Session | Cornish Harbour | 35% |  | Fishing boats, pasty shops and slate cottages in a Cornwall harbour; sprint the quay between steep lanes. |
+| 19 | 15 Minutes HIIT Sprinting Efforts | Golden Gate Park | 81% | 35/100 | Fog drifts through the eucalyptus and Monterey cypress along John F. Kennedy Drive in San Francisco's Golden Gate Park, past roller skaters, Spreckels Lake and the bison grazing in their paddock toward the Dutch Windmill above Ocean Beach. The one-minute opener rolls through the eucalyptus groves, and the seven thirty-second sprints each fly past the bison paddock before a minute's recovery coasts on toward the windmill. |
+| 20 | In and Out, Shake It All About | Blackpool Illuminations | 68% | 28/100 | Seaside lights, piers and the tower; weave in and out of tram stops along the illuminated promenade. |
+| 21 | Quick Sprint Session | Copacabana Promenade | 35% |  | Rio's wave-patterned beachfront at sunset; sprint between volleyball nets with Sugarloaf on the horizon. |
+| 22 | 15 Minute Beginner Session | Stanley Park Seawall | 81% | 28/100 | The seawall path curls around Vancouver's Stanley Park between the cedars and the sea, past the totem poles at Brockton Point and sailboats on English Bay toward the green towers of the Lions Gate Bridge under the North Shore mountains. The easy warm-up rolls past the totem poles, the one- and two-minute pushes follow the seawall's curve under the cedars, and the single thirty-second sprint races toward the bridge. |
+| 23 | 15 Minute Cardio Workout at Home | Suburban Sunrise | 70% | 35/100 | Quiet tree-lined streets at dawn; sprinklers ticking, papers landing, neighbours waving from porches. |
+| 24 | 15 Min HIIT Cardio: Belly Fat Loss | Bondi to Bronte | 35% |  | Sydney's clifftop coast path; surf breaking below and an ocean pool at every headland. |
+| 25 | 15 Minute HIIT Cardio | Serpentine, Hyde Park | 80% |  | Rowing boats and white swans glide on the Serpentine as the lakeside road runs west through Hyde Park past the boathouse and the striped deckchairs under the plane trees toward the five stone arches of the Serpentine Bridge. The two-minute warm-up rolls past the boathouse, the three-minute tempo blocks sweep along the lake under the planes, and each thirty-second sprint races for the bridge's arches. |
+| 26 | Quick HIIT Workout | Notting Hill Carnival | 72% | 32/100 | Sound systems throbbing on Ladbroke Grove; push through costumed mas bands on carnival Monday. |
+| 27 | Instant Inferno | Kīlauea Lava Road | 35% |  | Hawaiian lava fields and glowing steam vents; each effort climbs toward the crater rim. |
+| 28 | Easy Riding | Napa Vineyards | 80% |  | Rows of vines climb the golden hills either side of the valley road on a warm Californian afternoon, past oak-shaded stone wineries and their tasting terraces toward a mission-style winery with a bell tower on a knoll ahead. The three-minute warm-up rolls between the vine rows, the short vineyard rises climb past the stone wineries under the oaks, and the two-minute pushes ride on toward the bell tower. |
+| 29 | Quick HIIT Sprint Workout | Las Vegas Strip | 70% | 33/100 | Neon casinos and dancing fountains after midnight; sprint from light to light down the boulevard. |
+| 30 | Super High Cadence Sprints | Shibuya Crossing | 35% |  | Tokyo in neon rain; spin fast through the scramble beneath towering video screens. |
+| 31 | Elevate Your Climbing Power | Alpe d'Huez | 80% |  | Twenty-one numbered hairpins stack up the mountainside above Bourg-d'Oisans on a blazing July afternoon, the tarmac covered in painted names and fans and camper vans packed onto every bend under the snowy peaks of the Grandes Rousses. The two-minute warm-up rolls out of the valley, each one-minute attack kicks round a hairpin through the orange roar of Dutch Corner by the church of Huez, and the two-minute blocks grind up the steep ramps toward the ski station at the top. |
+| 32 | High Power Tempo With Short Sprints | Route 66 Desert | 72% | 28/100 | Arizona's open highway, red mesas and chrome diners; hold tempo, then sprint for each roadside sign. |
+| 33 | Spicy Maximum Minute Efforts | Día de Muertos Parade | 35% |  | Marigolds, sugar skulls and giant skeletons along Mexico City's Paseo de la Reforma. |
+| 34 | Short, Sharp & Hard Efforts | Montmartre | 81% |  | Paris cobbles wind up the butte of Montmartre on a golden afternoon, between cream and pink houses with green shutters and café awnings, past the painters at their easels in the Place du Tertre, toward the white domes of Sacré-Cœur on the hilltop. The two-minute warm-up rolls over the cobbles of the lower lanes, the thirty-second kicks punch up the steep ramps past the cafés and painters, and the two- and three-minute blocks climb the winding streets to the basilica. |
+| 35 | Beginner Training Session | Amsterdam Canals | 95% | 88/100 | Flat canal-side streets, humpback bridges and houseboats among friendly commuters. |
+| 36 | Sprint Sprint Sprint | San Fermín, Pamplona | 35% |  | Red scarves and white shirts fill old Pamplona; sprint the bull-run streets at festival dawn. |
+| 37 | Team Time Trial | Bonneville Salt Flats | 80% |  | An endless white salt plain stretches away under a blazing Utah sky, the speedway course marked by its black line past the pits of Speed Week toward the Silver Island Mountains floating on a shimmering mirage. The three-minute warm-up rolls out past the motorhomes and the parked streamliners, each thirty-second and one-minute turn drives the paceline hard between the mile boards, and the recoveries sit in on the wheels with the mirage mountains still floating ahead. |
+| 38 | The Pyramid | Giza Plateau | 72% | 30/100 | Desert road around the pyramids at sunrise; efforts build and fall like the stones. |
+| 39 | Hold Your Intensity | Great Ocean Road | 35% |  | Australian sea cliffs and the Twelve Apostles; hold steady through winding, spray-dashed bends. |
+| 40 | Give Me One Minute | Times Square New Year's Eve | 80% |  | Broadway through Times Square glows on the last night of the year, its towers wrapped in billboards and countdown screens above a party packed behind police barriers, confetti drifting down toward One Times Square and the crystal ball on its pole. The two-minute warm-up rolls in under the screens, each one-minute effort races the countdown between the billboards toward the ball drop, and the recoveries coast through the confetti with the glowing 2027 still ahead. |
+| 41 | Drag Race | Daytona Beach Sand | 74% | 33/100 | Hard-packed sand where stock cars once raced; drag-race along the tide line. |
+| 42 | Max Effort Up & Overs | San Francisco Hills | 35% |  | Steep streets and Lombard's crooked bends; up and over each crest as cable cars clang. |
+| 43 | Non-Stop Sprinting | Monaco Street Circuit | 80% |  | Port Hercule glitters under a Riviera sun on race weekend, superyachts moored along the quay beside the catch fences and packed grandstands of the street circuit while the pastel town climbs its hill to the Casino. The five-minute warm-up rolls along the harbour front, each sprint from fifteen seconds to a minute and a half bursts between the red and white kerbs past the yachts, and the recoveries spin easy with the Casino's copper towers ahead. |
+| 44 | In & Out of the Saddle Hill Climb Reps | Mont Ventoux | 70% | 38/100 | Bare white limestone in the mistral; stand and sit up the Giant of Provence. |
+| 45 | Ride to the Beat | Miami Neon Nights | 78% |  | A beachfront boulevard on a Miami night, still wet from a shower: neon-traced art deco hotels, palms and convertibles on one side, the moonlit Atlantic on the other, and the bay's towers lit up ahead. |
+| 46 | Intervals to the Beat | Ibiza Sunset Strip (course) | 80% |  | **Built as a course in Blender:** 8.4 km and 159 m of climbing over the class's 20 minutes; the long warm-up rolls out along the waterfront, the efforts climb up from the promenade, the five 110 rpm sprints in the finale are short steep kicks, and the cool-down runs back down to the sea. The sun sinks into the sea off Sant Antoni beside the island of Conillera, whitewashed beach clubs lining the strip with their neon names, palms and pergola terraces as a DJ sweeps light beams over the dancing crowd under festoon lights. The warm-up cruises the waterfront under the opening set, each effort from fifteen seconds to a minute and a quarter drops with the bass past the clubs and the DJ terrace, and the recoveries float easy along the promenade toward the sunset. |
+| 47 | 20 Minute Crit Sprints | Chicago Loop Crit | 76% | 35/100 | Downtown streets beneath the L tracks; sprint every corner of a city criterium. |
+| 48 | High Cadence Sprints | Victoria Harbour | 35% |  | Hong Kong's neon skyline and Star Ferries; spin fast along the harbourfront promenade. |
+| 49 | 20 Minutes to Work on Your Cadence | Strade Bianche | 80% |  | White gravel roads wind between lines of dark cypresses across the golden Crete Senesi toward Siena, the Torre del Mangia and the Duomo's striped campanile on the ridge ahead, as tifosi line the dusty banks under the sector banners and stone farmhouses watch from the olive groves. The minute's warm-up rolls out over the first white sector, the efforts from half a minute to a minute spin up the cadence on the gravel rises between the cypresses, and the easy minutes coast the dust down past the farmhouses toward the hill town. |
+| 50 | 30 Sec On, 2 Min Off | Havana Malecón | 94% | 93/100 | Waves crash over the seawall; classic cars and pastel façades between surges. |
+| 51 | Short 20 Minute Sprint Blitz | Holi in Jaipur | 35% |  | Colour-powder clouds in the Pink City's streets; sprint through every burst of festival colour. |
+| 52 | Sprint Into the Effort | Dubai Marina | 80% |  | The marina walk runs along the water at dusk between the glass towers of Dubai Marina, superyachts moored at the pontoons and palms in their planters, as a crowd in white kandura and bright summer colours lines the barriers and the twisting Cayan Tower glows against the orange and violet sky ahead. The two minutes' warm-up rolls out under the first sprint banner, the half-minute sprints flash past the yachts at full gas, and the three-minute efforts hold the pace past the lit cafés of the podium before the easy minutes spin beneath the towers. |
+| 53 | 20/40 Interval Session | Sea Point, Cape Town | 74% | 33/100 | Promenade beneath Lion's Head and Table Mountain, Atlantic waves rolling in. |
+| 54 | Time to Spin Out | Overseas Highway | 35% |  | Turquoise water on both sides along the Florida Keys' Seven Mile Bridge. |
+| 55 | Spin to Win Cadence Session | Lee Valley Velodrome | 80% |  | The pale pine boards of London's Olympic velodrome sweep up into the steep banked bends under the bright arena lights and the curved timber roof, as the packed stands roar above the fence and the teams wait with their bikes in the infield. The minute's warm-up rolls round the black line, the one-minute efforts lift the cadence up the banking toward the stayers' line, and the long efforts of three and a half minutes hold the spin down the straights before the easy minutes drop back to the blue band. |
+| 56 | High Intensity, Short Rest | Montreal Jazz Fest | 72% | 30/100 | Downtown stages and street crowds in summer; short rests between sets. |
+| 57 | Full Gas Sprints | Isle of Man Mountain Course | 35% |  | Stone walls and Snaefell's mountain road on the famous motorcycle course. |
+| 58 | Spin to Win | Coney Island Boardwalk | 80% |  | The weathered planks of the Riegelmann Boardwalk run along the Brooklyn shore under stars-and-stripes bunting, past the clam bars and arcades and above a beach crowded with umbrellas, toward the turning Wonder Wheel, the white lattice of the Cyclone and the red Parachute Jump. The three-minute warm-up rolls along the railing above the sand, the opening minute lifts the pace past the clam bars, and the long efforts of two and three minutes push for the Wonder Wheel before the quick-spinning minutes between them roll past the arcades. |
+| 59 | Conquer the Climb | Stelvio Pass | 76% | 35/100 | Forty-eight hairpins stacked up an Italian alpine wall to the snowfields. |
+| 60 | HIIT Leg Buster | Philadelphia Art Museum Steps | 35% |  | Down the Parkway to the famous steps; every effort ends at the top, arms raised. |
+| 61 | 20 Minute Cardio: Lose Weight Fast | Santa Monica Pier | 80% |  | The beach bike path winds across the golden sand of Santa Monica toward the pier beneath a line of palms, past painted lifeguard towers and the surfers riding the breakers below the pilings, as the Pacific Park Ferris wheel turns over the pier in the late afternoon sun. The three-minute warm-up rolls past the first lifeguard towers, the long efforts of two and three minutes push along the sand under the palms, and the one-minute and half-minute surges sprint for the pier with the easy minutes spun beside the surf. |
+| 62 | 20 Minute HIIT | Edinburgh Fringe | 78% | 38/100 | The Royal Mile packed with street performers and posters in August festival season. |
+| 63 | 20 Min Cardio Spin Bike Workout | Lake Louise | 35% |  | Turquoise glacial lake beneath Rocky Mountain peaks; an easy shoreline road in Banff. |
+| 64 | Sufferfest 20 Minute Session | Death Valley | 80% |  | Badwater Road runs below sea level across the floor of Death Valley in the blazing midday heat, the white salt flats of Badwater Basin glaring on the left beneath the Panamint Range and the dark Black Mountains rising on the right, toward golden dunes shimmering in the heat haze. The five-minute warm-up rolls past the salt pans at 282 feet below sea level, the half-minute and one-minute surges attack the shimmer over the flats, and the effort of two and a quarter minutes grinds toward the dunes before the two-minute cool-down spins out past the giant thermometer. |
+| 65 | 20 Minute Fat Burning Workout | North Shore, Oahu | 72% |  | Big-wave beaches and shrimp trucks along Kamehameha Highway. |
+| 66 | 22 Minute Strength Intervals | Bealach na Bà | 35% |  | A single-track Highland road climbing above sea lochs through heather. |
+| 67 | Progressive Efforts on the Passo Gardena | Passo Gardena | 80% |  | The road from Selva climbs through larch meadows to the Passo Gardena on a bright summer morning, closed to cars for the Sellaronda Bike Day, the sheer pale towers of the Sella rising on the right and the jagged spires of the Cir on the left above the hairpins to the saddle. The six-minute warm-up spins up the lower meadows past the grazing cows, the minute-and-a-half and three-minute efforts climb the hairpins beneath the Sella towers, and the four minute-and-a-half steps and the closing half-minute sprint build to the pass before the cool-down rolls over the top. |
+| 68 | Intense Climb: Passo Campolongo | Passo Campolongo | 74% |  | Forested hairpins from Corvara past ski lifts to a grassy saddle. |
+| 69 | 20 Minute High Intensity Workout | Han River Parks, Seoul | 35% |  | Riverside parks and fountain-lit bridges at night. |
+| 70 | Calorie Crush | Oktoberfest, Munich | 35% |  | Beer tents, brass bands and dirndls on the Theresienwiese at festival time. |
+| 71 | Fast Paced Cadence Variations | Marina Bay Night | 74% |  | Singapore's night loop around the Supertrees and the bay's glowing skyline. |
+| 72 | Get to Work on Your Cycling Fitness | Brooklyn Bridge Commute | 35% |  | Morning rush across the bridge into lower Manhattan. |
+| 73 | Festive Spin With Surprise Sprints | Strasbourg Christmas Market | 35% |  | Lights, gingerbread stalls and carols; surprise sprints between market squares. |
+| 74 | Quick & Sharp Sprinting Efforts | Champs-Élysées Finale | 80% |  | Final-day cobbles toward the Arc de Triomphe; sharp sprints for the line. |
+| 75 | Cadence Training to Improve Pedalling | Kyoto Hanami | 35% |  | The Philosopher's Path under pink sakura petals during cherry-blossom season. |
+| 76 | Take It Easy | Bathsheba, Barbados | 35% |  | A calm coast road past rum shacks, palms and white sand. |
+| 77 | Easy Cadence Workout | Dutch Tulip Fields | 78% |  | Flat roads through striped bulb fields and windmills near Lisse. |
+| 78 | Step It Up | Machu Picchu Road | 35% |  | Switchbacks climbing through cloud to the Inca citadel. |
+| 79 | Running on Empty | Outback Highway | 35% |  | Endless red earth and road trains toward Uluru, fuel stops far apart. |
+| 80 | Four Minute Devils | Col du Tourmalet | 76% |  | Pyrenean slopes where a costumed devil chases riders up every ramp. |
+| 81 | 30 Second Sprint Intervals | Tel Aviv Promenade | 35% |  | Mediterranean beach paths, volleyball courts and seafront cafés. |
+| 82 | Flat Out Efforts | Silverstone Track Day | 35% |  | Flat-out sweeps of the British circuit with the grandstands empty. |
+| 83 | Sprint to the Music | Glastonbury Fields | 78% |  | Tents, flags and the Pyramid Stage; sprint between music stages. |
+| 84 | Sprints for Climbing | Mur de Huy | 35% |  | The Ardennes' brutal wall, climbing past chapels toward the finish. |
+| 85 | Don't Get Dropped | Arenberg Forest | 35% |  | Paris-Roubaix cobbles through the trees; hold the wheel or lose it. |
+| 86 | Wake Up and Smell the Lactic | Pike Place at Dawn | 77% |  | Coffee steam and fish-market crowds at sunrise over Seattle's Elliott Bay. |
+| 87 | 25 Minute Sprint Intervals | Chicago Lakefront Trail | 35% |  | Lake Michigan beaches and the skyline along the waterfront trail. |
+| 88 | 25 Minute High Intensity Intervals | Diwali, Marine Drive | 35% |  | Mumbai's Queen's Necklace lit with lamps and fireworks over the Arabian Sea. |
+| 89 | 25 Minute Hill Training | Hardknott Pass | 75% |  | England's steepest road twisting through the Cumbrian fells. |
+| 90 | Fat Burning Climb: Passo Sella | Passo Sella | 35% |  | A steady climb beneath the Sassolungo's walls to the summit meadows. |
+| 91 | High Intensity Race Day Effort | Kona Ironman | 35% |  | The Queen K highway through lava fields on Ironman race day. |
+| 92 | Burn Fat Fast | Saguaro Desert | 81% |  | A road through a saguaro cactus forest at Arizona sunrise. |
+| 93 | Sevens: Build Your VO2 Max | Seven Sisters Cliffs | 35% |  | Rolling chalk cliffs on the Sussex coast; seven summits, seven efforts. |
+| 94 | Emily's Short Mix | Brighton Pride | 35% |  | Rainbow flags along the seafront as the Pride parade passes the pier. |
+| 95 | Gradual Threshold Effort Builds | Trollstigen | 77% |  | Norway's troll ladder of hairpins climbing beside waterfalls. |
+| 96 | Intense VO2 Cycling Efforts | Iceland Ring Road | 35% |  | Black sand, glaciers and waterfalls under the midnight sun. |
+| 97 | New Year Spin: Get Back to Cycling | Sydney Harbour Fireworks | 35% |  | New Year's fireworks over the Harbour Bridge and Opera House. |
+| 98 | Tempo Efforts With Sprint Finishes | The Poggio | 79% |  | Riviera coast road over the Poggio and down to a sprint in San Remo. |
+| 99 | Strength Builder & Quad Burner | Monte Zoncolan | 35% |  | A brutal Friulian climb, steep and walled in by forest. |
+| 100 | Ollie's Zone 2 Tour des Stations Training | Valais Ski Stations | 35% |  | Swiss mountain roads linking ski villages in summer, at an easy zone 2 pace. |
+| 101 | 90-Second Extended Accelerations | Indianapolis Brickyard | 82% |  | The oval's long straights and the yard of bricks at the finish. |
+| 102 | Sweet Spot Endurance Training | Loire Châteaux | 35% |  | Riverside lanes past turreted châteaux and vineyards. |
+| 103 | 1 Minute VO2 Max Surges | Copenhagen Cycle Superhighway | 35% |  | Green-wave bike lanes, harbour baths and colourful Nyhavn. |
+| 104 | The Full Pyramid | Chichén Itzá | 78% |  | A jungle road to the Mayan pyramid of El Castillo. |
+| 105 | Sprint Surges | Surfers Paradise | 35% |  | Gold Coast high-rises above golden surf beaches. |
+| 106 | The Hurt Locker | Moab Slickrock | 35% |  | Red sandstone canyons and arches under a fierce desert sun. |
+| 107 | Seated Surges | Lake Como | 79% |  | A lakeshore road past villas, ferries and terraced gardens. |
+| 108 | VO2 Max Race Simulation | Glasgow World Championships | 35% |  | A rain-slick city circuit through Glasgow streets on championship day. |
+| 109 | The Climb | Mount Washington Auto Road | 35% |  | New Hampshire's relentless climb above the treeline into the clouds. |
+| 110 | Full Effort VO2 Max Intervals | Yosemite Valley | 76% |  | Beneath El Capitan and Half Dome, waterfalls thundering beside the road. |
+| 111 | VO2 Max Booster | Grand Canyon South Rim | 35% |  | A rim road with canyon views falling away at every bend. |
+| 112 | Start Hard, Finish Hard | Calgary Stampede | 35% |  | Rodeo grounds, chuckwagons and parade crowds in white hats. |
+| 113 | Go Until You Blow | Mount Etna | 80% |  | Black volcanic slopes climbing toward a smoking summit. |
+| 114 | 90 On 30 Off Intervals | La Mercè, Barcelona | 35% |  | Human towers, giants and fire runs fill the Gothic Quarter at festival time. |
+| 115 | 30 Second Sprints | St. Patrick's Day, Dublin | 35% |  | Green-clad crowds and pipe bands along O'Connell Street. |
+| 116 | Low Cadence Workout | Tremola, Gotthard Pass | 79% |  | Swiss cobbled hairpins stacked up the old pass road. |
+| 117 | Under Over Power Blocks | Big Sur | 35% |  | Highway 1 clinging to Pacific cliffs over Bixby Bridge. |
+| 118 | 30 Second Sprints HIIT Sandwich | Songkran, Bangkok | 35% |  | Thai New Year water fights; sprint the soaked streets between buckets and water guns. |
+| 119 | Build Your FTP & Increase Muscle Mass | Mount Teide | 79% |  | Tenerife's volcanic climb above the clouds to the lunar caldera. |
+| 120 | HIIT for Time-Crunched Parents | Playground Park Loop | 35% |  | A city park with playgrounds, splash pads and strollers; quick laps between pick-ups. |
+| 121 | 30 Minutes of Threshold Power | Hoover Dam | 70% |  | The road over Hoover Dam's crest in the blazing desert sun, between cream art deco parapets and bronze lamps, Lake Mead's bathtub ring and intake towers on one side and the drop into the Black Canyon on the other, the Winged Figures of the Republic beside the road and the bypass bridge's arch leaping the canyon ahead. |
+| 122 | Intense High Tempo Bike Workout | Tempelhof Field | 81% |  | Berlin's old airport runways turned park, kites flying overhead. |
+| 123 | Olympic Pursuit Efforts | Aguascalientes Velodrome | 35% |  | A high-altitude Mexican track where pursuit records fall. |
+| 124 | FTP HIIT Booster for Longer Efforts | Atlantic Ocean Road | 35% |  | Norway's bridges hopping between islets as waves break alongside. |
+| 125 | 30 Minute VO2 Max Session | Torres del Paine | 77% |  | Patagonian gravel roads beneath granite spires and wind-whipped lakes. |
+| 126 | Leg Burner | Fish Hill, Cotswolds | 35% |  | Honey-stone villages and a steep climb up the Cotswold escarpment. |
+| 127 | The Smash Fest | Junkanoo, Nassau | 35% |  | Bahamian Boxing Day parade of cowbells, goatskin drums and crepe-paper costumes. |
+| 128 | Into the Unknown | Isle of Skye Fog | 81% |  | Mist-shrouded Hebridean roads where the Cuillin appear and vanish. |
+| 129 | 30 Minute Short Sharp Efforts | Old Québec | 35% |  | Ramparts and steep lanes of the walled city above the St. Lawrence. |
+| 130 | 30 Minute HIIT Ramp Session | Mount Fuji Road | 35% |  | A ramping climb through forest toward Fuji's fifth station. |
+| 131 | 30 Minute Sprint and Threshold HIIT | Toronto Waterfront Trail | 82% |  | Harbourfront paths, island ferries and the CN Tower overhead. |
+| 132 | 30 Minute High Cadence HIIT | The Bund, Shanghai | 35% |  | Riverside promenade facing Pudong's glittering towers. |
+| 133 | Sufferfest Ramp Session: The Escalator | Comuna 13, Medellín | 35% |  | Colourful hillside murals beside outdoor escalators climbing the barrio. |
+| 134 | 30 Minute Intervals: Fitness Training | Prospect Park | 82% |  | Brooklyn's park loop past the lake, meadows and weekend markets. |
+| 135 | HIIT Fat Burn With Mitchelton-Scott | Adelaide Hills | 35% |  | Summer race roads through vineyards and gum trees, Tour Down Under style. |
+| 136 | Over/Under Intervals on the Passo Sella | Sella Ronda | 35% |  | A loop over four Dolomite passes circling the Sella massif. |
+| 137 | Aerobic Cadence Workout With Team Sky | Sa Calobra, Mallorca | 81% |  | The knotted hairpins of a pro training-camp favourite above the sea. |
+| 138 | Fast Fitness: High Cadence 30 | Marrakech Medina | 35% |  | Dusk in Jemaa el-Fnaa; spin past spice stalls, lanterns and snake charmers. |
+| 139 | 30 Minute Hill Climb Training | Mount Tamalpais | 35% |  | Marin's climb through redwoods to views of the Golden Gate. |
+| 140 | Conor's Racing Bonanza | Wicklow Gap | 80% |  | Irish race roads over bog and heather through the Wicklow Mountains. |
+| 141 | Over/Under Threshold Efforts | Independence Pass | 35% |  | Colorado's climb over the Continental Divide among aspens. |
+| 142 | Tough Time Trial Efforts | Fenland Time Trial | 35% |  | Dead-flat English fens, crosswinds and long straight drove roads. |
+| 143 | Maximum Intensity Hill Climb Efforts | Haleakalā | 82% |  | Maui's sea-level-to-summit climb, ending above the clouds. |
+| 144 | 35 Minute Threshold HIIT | Vienna Ringstrasse | 35% |  | Grand boulevard past palaces, opera house and trams. |
+| 145 | Climb & Sprint to the Beat | Blue Mountains, Jamaica | 35% |  | Coffee-farm switchbacks with reggae drifting up from roadside sound systems. |
+| 146 | Get Pumped With Grace | Sixth Street, Austin | 81% |  | Live-music bars and festival crowds spilling into the street. |
+| 147 | 35 Minute Torque Power Intervals | Col d'Aubisque | 35% |  | Pyrenean cliff road with cows and giant bike sculptures. |
+| 148 | Fast Fitness: High Intensity 35 | Rome Colosseum Loop | 35% |  | Ancient ruins, umbrella pines and sampietrini cobbles. |
+| 149 | 35 Minute Hill Training | Winnats Pass | 80% |  | Peak District limestone gorge, steep and grassy-walled. |
+| 150 | Climb Time: Boost Your Climbing Power | Great St Bernard Pass | 35% |  | An alpine border climb to a hospice and a frozen lake. |
+| 151 | High Power Anaerobic Sprints | Avenida 9 de Julio | 35% |  | Buenos Aires' vast boulevard sprinting past the Obelisco. |
+| 152 | Ramp It Up: Punchy Intervals | La Redoute | 84% |  | Liège-Bastogne-Liège's punchy Ardennes wall, painted with fan names. |
+| 153 | Spin Those Legs | Okinawa Coast Road | 35% |  | Coral beaches and turquoise shallows along a subtropical island road. |
+| 154 | Get Fit in 40 | Algarve Cliffs | 35% |  | Golden sea cliffs, coves and fishing villages on Portugal's south coast. |
+| 155 | 5 Gruelling Minutes | Angliru | 82% |  | Asturian ramps so steep the crowd pushes in on the road. |
+| 156 | Repeat Your Max | Mulholland Drive | 35% |  | Hollywood Hills ridge road with city views on repeat. |
+| 157 | Get Fit Fast: 40 Minute Sweet Spot | Provence Lavender | 35% |  | Purple lavender rows and stone farmhouses on the Valensole plateau. |
+| 158 | 3 Mins On, 2 Mins Off | Cinque Terre | 80% |  | Cliffside villages in pastel colours above the Ligurian Sea. |
+| 159 | A Little Bit of Everything | Cherry Blossom Festival, D.C. | 35% |  | The National Mall and Tidal Basin under pink blossoms and kites. |
+| 160 | Cobbled Mayhem | Oude Kwaremont | 35% |  | Tour of Flanders cobbles, beer tents and roaring Flemish fans. |
+| 161 | Drop Ollie at All Costs | Els Àngels, Girona | 81% |  | A favourite pro training climb above Girona's old town. |
+| 162 | FTP Builder | Oregon Coast | 35% |  | Highway 101 past sea stacks, lighthouses and misty spruce. |
+| 163 | Ramp Workout: From Threshold to Sprints | Cypress Mountain | 35% |  | Vancouver's ski-hill road ramping above the city and ocean. |
+| 164 | Aerobic Efforts With Max Sprints | Winterlude, Ottawa | 85% |  | Snow sculptures and skaters on the frozen Rideau Canal. |
+| 165 | 40 Minute HIIT | Iten, Kenya | 35% |  | High-altitude red-dirt roads where champions train. |
+| 166 | Rolling With the Hills | The Palouse | 35% |  | Rolling wheat hills of eastern Washington in green and gold. |
+| 167 | Hank's Hardest Training Session | Alto de Letras | 82% |  | Colombia's 80-kilometre climb through coffee country to the páramo. |
+| 168 | Ramp It Up: 50 Minute HIIT | Prague Old Town | 35% |  | Cobbles, spires and Charles Bridge ramping up to the castle. |
+| 169 | Steepest Climb in the World | Ffordd Pen Llech | 35% |  | A Welsh street in Harlech, once ranked the world's steepest. |
+| 170 | Lead Out Efforts Into Full Sprints | Antwerp Port Sprint | 84% |  | Flat docklands roads and a bunch-sprint finish in Antwerp. |
+| 171 | Aerobic Efforts: Drop Ollie Like a Boss | Andalusian White Villages | 35% |  | Whitewashed hill towns and olive groves in southern Spain. |
+| 172 | Un-Paced Efforts | Mongolian Steppe | 35% |  | Endless grassland, yurts and wild horses, no markers in sight. |
+| 173 | Sandwich Max Efforts | Lake Tahoe | 81% |  | Clear alpine lake shore ringed by pines and granite. |
+| 174 | Threshold Pyramid | Teotihuacán | 35% |  | The Avenue of the Dead between the Sun and Moon pyramids. |
+| 175 | 45 Minute VO2 Max Intervals | Furka Pass | 35% |  | Swiss hairpins beside the Rhône Glacier. |
+| 176 | Extreme Fat Burning Class | Atacama Desert | 86% |  | The driest desert on earth, salt flats and flamingo lagoons. |
+| 177 | 45 Minute Sprint Training | Beach Road, Melbourne | 35% |  | Bayside bunch-ride route past beach boxes and piers. |
+| 178 | FTP Booster Extended Efforts | Blue Ridge Parkway | 35% |  | Appalachian ridgeline road in blazing autumn colour. |
+| 179 | 60 Minute Reverse Pyramid | Angkor Temples | 82% |  | Jungle roads between Khmer temples and moats at dawn. |
+| 180 | Reverse HIIT Race Winning Intervals | Verona Arena Finale | 35% |  | A grand tour finale circling into the Roman arena. |
+| 181 | Reverse Steps | Valparaíso Stairways | 35% |  | Colourful hillside stairways and funiculars above the Chilean port. |
+| 182 | 60 Minutes of Brutal Power | Mauna Kea | 81% |  | A brutal climb past observatories to Hawaii's highest summit. |
+| 183 | Progressive Intervals: Steps to Glory | Mont Royal | 35% |  | Montreal's mountain park climb to the lookout over the city. |
+| 184 | Cadence Drills for Strength & Speed | Utrecht Bike City | 35% |  | Canal wharves and the world's largest bike park. |
+| 185 | Increase Your Threshold Power | Col du Galibier | 80% |  | High alpine road climbing past snow banks to the Tour monument. |
+| 186 | Ramp Session: Dialling In Your Training Zones | Joshua Tree | 35% |  | Desert road through twisted Joshua trees and boulder piles. |
+| 187 | 60 Minute Endurance Intervals | Cabot Trail | 35% |  | Nova Scotia's coastal highlands with ocean views and moose. |
+| 188 | 55 Minute FTP Threshold Intervals | Pico Veleta | 35% |  | Spain's highest paved road above Granada in the Sierra Nevada. |
+| 189 | Zwift Group Workout: HIIT Intervals | Bay of Islands Group Ride | 35% |  | A New Zealand bunch ride past sheltered bays and green hills. |
+| 190 | Race Winning Intervals | Yorkshire Dales | 35% |  | Stone walls, moors and race-day crowds on the Buttertubs climb. |
+| 191 | 60 Minute Turbo Trainer Class | Engadin Lakes | 35% |  | A Swiss high valley road along St. Moritz's chain of lakes. |
+
+## Rider feedback
+
+What the rider has said about the worlds as they ride now. A world named here is kept as it is when it changes: check any change to it against how it rides now. The references are where a new world, or a reworked one, looks first.
+
+**The top references, in order.** Ibiza Sunset Strip (`ibiza`) is the best world, hands down ([#919](https://github.com/QuinntyneBrown/wattzup/issues/919)). Sa Calobra, Mallorca (`calobra`) ranks with it, and its concept, its camera angles and its movement are the model for other worlds' concepts, framing and smooth motion ([#921](https://github.com/QuinntyneBrown/wattzup/issues/921)). Then Napa Vineyards (`napa`, [#915](https://github.com/QuinntyneBrown/wattzup/issues/915)), Dubai Marina (`dubai`, [#923](https://github.com/QuinntyneBrown/wattzup/issues/923)) and Amsterdam Canals (`amsterdam`, [#903](https://github.com/QuinntyneBrown/wattzup/issues/903)).
+
+**Epic, kept as references for look and feel.** Sea Point, Cape Town (`seapoint`, [#908](https://github.com/QuinntyneBrown/wattzup/issues/908)); Montreal Jazz Fest (`montreal`, [#909](https://github.com/QuinntyneBrown/wattzup/issues/909)); Marina Bay Night (`marinabay`, [#913](https://github.com/QuinntyneBrown/wattzup/issues/913)); Glastonbury Fields (`glastonbury`, [#916](https://github.com/QuinntyneBrown/wattzup/issues/916)); Santa Monica Pier (`santamonica`, [#927](https://github.com/QuinntyneBrown/wattzup/issues/927)); the Antwerp Port Sprint (`antwerp`, [#928](https://github.com/QuinntyneBrown/wattzup/issues/928)); South Beach Sunrise, really good ([#898](https://github.com/QuinntyneBrown/wattzup/issues/898)).
+
+**Good, kept as they are.** Golden Gate Park (`goldengate`, [#907](https://github.com/QuinntyneBrown/wattzup/issues/907)), Stanley Park Seawall (`stanleypark`, [#910](https://github.com/QuinntyneBrown/wattzup/issues/910)), Edinburgh Fringe (`edinburgh`, [#911](https://github.com/QuinntyneBrown/wattzup/issues/911)), North Shore, Oahu (`northshore`, [#912](https://github.com/QuinntyneBrown/wattzup/issues/912)), Montmartre (`montmartre`, [#917](https://github.com/QuinntyneBrown/wattzup/issues/917)) and Prospect Park (`prospect`, [#920](https://github.com/QuinntyneBrown/wattzup/issues/920)).
+
+**References for one part of a world.**
+
+| For | The reference | Kept |
+| --- | --- | --- |
+| Gameplay | Suburban Sunrise ([#899](https://github.com/QuinntyneBrown/wattzup/issues/899)) | How it plays |
+| Concept | Mont Ventoux (`ventoux`, [#906](https://github.com/QuinntyneBrown/wattzup/issues/906)); Lee Valley Velodrome (`velodrome`, [#925](https://github.com/QuinntyneBrown/wattzup/issues/925)), above all for indoor and track worlds | The concept, and the velodrome's scene |
+| Minimalist worlds | Rio Sambadrome (`sambadrome`, [#930](https://github.com/QuinntyneBrown/wattzup/issues/930)), Lisbon Tram Hills (`lisbon`, [#931](https://github.com/QuinntyneBrown/wattzup/issues/931)), Cornish Harbour (`cornwall`, [#932](https://github.com/QuinntyneBrown/wattzup/issues/932)) | Kept minimalist |
+| Roads | Coney Island Boardwalk (`coney`, [#926](https://github.com/QuinntyneBrown/wattzup/issues/926)) first, then Bonneville Salt Flats (`bonneville`, [#918](https://github.com/QuinntyneBrown/wattzup/issues/918)) | Both roads as they are; Coney Island is epic as a whole |
+| Turns | Machu Picchu Road (`machupicchu`, [#939](https://github.com/QuinntyneBrown/wattzup/issues/939)) | How its road bends |
+| Hills and scenery | Winnats Pass (`winnats`, [#924](https://github.com/QuinntyneBrown/wattzup/issues/924)) | Its scenes and hills |
+| Atmosphere | Strade Bianche's smoke (`strade`, [#922](https://github.com/QuinntyneBrown/wattzup/issues/922)): the `dust` `Mist` and `addDust()` clouds over the gravel in `world-strade.ts` | The dust |
+| Trees | Angkor Temples' tall trees (`angkor`, [#929](https://github.com/QuinntyneBrown/wattzup/issues/929)): `addTrees()` in `world-angkor.ts` | The trees |
+| Sunsets | Kīlauea Lava Road (`kilauea`, [#936](https://github.com/QuinntyneBrown/wattzup/issues/936)) | Its sky and light |
+| Sun flares | Every world's sun flare ([#934](https://github.com/QuinntyneBrown/wattzup/issues/934)): most likely the physical sky's sun (technique 11) bloomed by screen-space glare (technique 49), both from `medium` (L2-111); no code is named flare, so confirm with the rider before changing either | Kept through any change to skies, lighting or tiers |
+| Low-memory devices | Giza Plateau ([#904](https://github.com/QuinntyneBrown/wattzup/issues/904)) and Daytona Beach Sand ([#905](https://github.com/QuinntyneBrown/wattzup/issues/905)) run well on them | Kept light; how they are built is the model for making other worlds light |
+| Music | See [World music](world-music.md#rider-feedback) | |
+
+**Reworked.** Hoover Dam (`hoover`) was terrible: it had no scene of its own ([#940](https://github.com/QuinntyneBrown/wattzup/issues/940)). It now has one ([its captures](screenshots/hoover/README.md)); ask the rider how it rides now.

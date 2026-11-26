@@ -1,0 +1,56 @@
+@startuml
+title UML sequence behaviour — Roll on to Class Done
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+  participant "ClassRideStore" as store
+  participant "Angular Router" as router
+  participant "ClassDonePage" as done
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "wz-class-rollout" as card
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "RideEnding" as ending
+  participant "BikeConnection" as conn
+  participant "BrowserRideMusic" as music
+end box
+box "Frontend — Ride app (world library)" #ECFDF3
+  participant "CourseScene" as scene
+end box
+ending --> store : state: roll-out, share 0 (3,200 ms after the finish)
+store -> store : phase becomes rolling-out
+store --> page : rollOut: "Rolling on down the promenade", 0
+page -> card : Render the card at the foot of the box (L2-182 AC4)
+card --> rider : "Easy spin. Your summary is coming up.", said once (AC10)
+loop every 100 ms for 5.2 seconds
+  ending --> store : state: roll-out, share of the 5.2 seconds
+  store --> page : rollOut.progress; courseSeconds past 1200
+  page -> card : The bar fills; aria-valuenow follows
+  page -> scene : elapsed: courseSeconds, running: true
+  scene --> rider : The rider rolls down the run-out, the camera following (AC5)
+end
+note over music : The music plays on (AC6).\nNo second is recorded: output does not grow (AC7).
+ending --> store : state: over (8,400 ms after the finish)
+store -> conn : forgetTarget(): no command follows the ride
+store -> router : navigateByUrl("/done") with the ClassResult
+router -> page : Destroy RidePage and Class Ride
+page -> music : release() (L2-176 AC6)
+page -> scene : Dispose the course and its renderer (L2-174 AC8)
+router -> done : Activate /done
+done --> rider : Class Done shows the result (L2-078)
+@enduml

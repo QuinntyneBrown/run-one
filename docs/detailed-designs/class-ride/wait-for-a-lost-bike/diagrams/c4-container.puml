@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Wait for a lost bike
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The four screens, Web Bluetooth, the protocol and the engine")
+}
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Ext(youtube, "YouTube", "Privacy-enhanced player for the class video")
+
+Rel(rider, app, "Reads the alert; presses Reconnect or Leave", "HTTPS")
+Rel(app, bike, "Retries every 3 s; sends the level on return", "Web Bluetooth")
+Rel(app, youtube, "Pauses and plays the player", "IFrame Player API")
+@enduml

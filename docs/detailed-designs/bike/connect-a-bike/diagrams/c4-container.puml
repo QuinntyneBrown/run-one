@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Connect a bike
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The four screens, Web Bluetooth, the protocol and the engine")
+  ContainerDb(storage, "Browser storage", "localStorage", "The record and the remembered bike")
+}
+
+Rel(rider, app, "Presses Pair and picks the bike in the browser's chooser")
+Rel(app, bike, "Opens GATT, subscribes, then writes one at a time", "Web Bluetooth")
+Rel(app, storage, "Saves the paired bike's name and browser identifier", "localStorage")
+@enduml

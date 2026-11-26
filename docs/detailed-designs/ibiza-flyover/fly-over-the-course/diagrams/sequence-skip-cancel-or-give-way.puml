@@ -1,0 +1,51 @@
+@startuml
+title UML sequence behaviour — Skip, cancel or give way
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "RidePage" as ridePage
+  participant "IbizaFlyoverPage" as page
+  participant "FlyoverStore" as fly
+  participant "CourseSession" as session
+  participant "Angular Router" as router
+end box
+box "Frontend — Ride app (world library)" #ECFDF3
+  participant "CourseScene" as scene
+end box
+alt Skip flyover (L2-179 AC4)
+  rider -> page : Presses Skip flyover, or Enter or Space on it
+  page -> fly : skip()
+  fly -> fly : land() at once
+  fly --> page : stage landed; the camera on the grid
+  fly --> ridePage : done, 900 ms later
+  ridePage --> rider : Class Ride on the countdown
+else Cancel (AC5)
+  rider -> page : Presses Cancel
+  page -> fly : cancel()
+  fly -> router : navigateByUrl("/")
+  router -> ridePage : Destroy RidePage and its services
+  ridePage -> session : Destroyed
+  session -> scene : Destroy: the frame loop stops, the course and the renderer are disposed
+  router --> rider : The Class; no ride started, the record unchanged
+else The course cannot be drawn, or is not drawn in 10 seconds (AC8)
+  session --> fly : unavailable: true, or 10,000 ms pass in stage loading
+  fly --> ridePage : done, with no landing
+  ridePage --> rider : Class Ride on the countdown; the ride goes on as L2-175 says
+else Reduced motion (AC9)
+  ridePage -> ridePage : opensOnFlyover("ibiza", true): false
+  ridePage --> rider : Class Ride on the countdown; Ibiza Flyover is not shown
+end
+@enduml

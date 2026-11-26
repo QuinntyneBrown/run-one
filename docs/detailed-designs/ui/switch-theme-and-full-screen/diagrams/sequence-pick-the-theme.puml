@@ -1,0 +1,48 @@
+@startuml
+title UML sequence behaviour — Pick the theme
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "External — Static host" #FFF4E5
+  participant "Static host" as host
+end box
+box "Device — Browser" #F2F4F7
+  participant "Browser" as browser
+end box
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "index.html" as index
+  participant "tokens.css" as tokens
+  participant "Screen page" as page
+end box
+rider -> browser : Open the app
+browser -> host : GET index.html and tokens.css
+host --> browser : The document and the stylesheet
+browser -> index : Parse: no theme attribute, color-scheme "dark light"
+browser -> tokens : Evaluate prefers-color-scheme
+alt the device does not ask for a light colour scheme
+  tokens --> browser : Dark values on :root (L2-143 AC1)
+else the device asks for a light colour scheme
+  tokens --> browser : Light values under the media query (L2-143 AC2)
+end
+browser -> tokens : Resolve the role aliases on :root
+tokens --> browser : ~--color-bg-canvas, ~--color-fg, ~--color-accent and the rest
+browser -> page : Paint the lazy screen
+page -> tokens : Read each colour by role, never a raw value (L2-143 AC3)
+page --> rider : The screen in the chosen theme, before any script runs
+opt the device's colour scheme changes while the app is open
+  browser -> tokens : Re-evaluate the media query
+  tokens --> page : Role tokens re-resolve; no reload, no state lost
+end
+@enduml

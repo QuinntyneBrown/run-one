@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Structure the frontend workspace
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System(telo, "Telo Ride 1", "One class, on the rider's own bike")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Ext(youtube, "YouTube", "Privacy-enhanced player for the class video")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+
+Rel(rider, telo, "Takes the class with")
+Rel(telo, bike, "Runs all Bluetooth work against", "Bluetooth LE")
+Rel(telo, youtube, "Plays the class video from", "HTTPS")
+Rel(host, telo, "Serves the built workspace as", "HTTPS")
+@enduml

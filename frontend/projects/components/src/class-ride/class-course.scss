@@ -1,0 +1,100 @@
+// Block class-course (docs/design-system/assets/components.css, Class Ride): the course takes the video's box by the
+// video's own rule, 16:9 on a phone and filling the column above the bike panel in a landscape window from md, never
+// under 8 rem (L2-087 AC5, AC6).
+:host {
+  display: flex;
+  flex-direction: column;
+  // The notice sits space-2 under the box, nearer than the stage's gap (class-course__notice).
+  gap: var(--space-2);
+
+  @media (min-width: 48rem) and (orientation: landscape) {
+    flex: 1;
+  }
+}
+
+.class-course {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  background: var(--color-raised);
+
+  @media (min-width: 48rem) and (orientation: landscape) {
+    min-height: var(--space-32);
+    flex: 1;
+    aspect-ratio: auto;
+  }
+}
+
+// The course's still, until the course is drawn over it (L2-175 AC1).
+.class-course__still {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.class-course__scene {
+  position: absolute;
+  inset: 0;
+}
+
+// "Loading Ibiza Sunset Strip" over the still: ink at 45 %, the words centred.
+.class-course__loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: var(--space-4);
+  background: color-mix(in srgb, var(--color-ink) 45%, transparent);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+}
+
+// The class video's own overlay, over the whole course (class-video__paused; docs/mocks/pages/class-ride/paused-ibiza):
+// ink at 70 %, "Paused" centred. The course holds still under it (L2-091 AC1).
+.class-course__paused {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--color-ink) 70%, transparent);
+}
+
+.class-course__paused-label {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+// The Sound slot in the box's top-left corner (class-course__sound, L2-185 AC1): above the course, every overlay and
+// the intensity, so its panel lies over them; it runs to the box's foot so the panel can scroll within the box. Only
+// the button and the panel take a press (class-sound).
+.class-course__sound-slot {
+  position: absolute;
+  top: var(--space-3);
+  bottom: var(--space-3);
+  left: var(--space-3);
+  right: var(--space-3);
+  z-index: 3;
+  pointer-events: none;
+}
+
+// The box's controls slot on its left edge (class-intensity, L2-183 AC1): above the picture, the overlays and "Paused",
+// so the intensity can be set while the ride is paused. It is placed from the bottom, and grows up to its top.
+.class-course__controls {
+  position: absolute;
+  top: calc(2 * var(--space-3) + var(--space-11));
+  bottom: var(--space-3);
+  left: var(--space-3);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}

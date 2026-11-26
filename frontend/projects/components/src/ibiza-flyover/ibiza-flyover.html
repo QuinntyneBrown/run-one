@@ -1,0 +1,75 @@
+<div class="ibiza-flyover">
+  <header class="ibiza-flyover__bar">
+    <wz-lockup size="sm" />
+    @if (canSkip()) {
+      <button
+        wz-button
+        variant="raised"
+        size="sm"
+        type="button"
+        class="ibiza-flyover__skip"
+        (click)="skip.emit()"
+      >
+        <svg class="ibiza-flyover__icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m13 19 9-7-9-7z" />
+          <path d="m2 19 9-7-9-7z" />
+        </svg>
+        Skip flyover
+      </button>
+    }
+    <button
+      wz-button
+      size="sm"
+      type="button"
+      class="ibiza-flyover__cancel"
+      [class.ibiza-flyover__cancel--alone]="!canSkip()"
+      aria-label="Cancel"
+      (click)="cancelled.emit()"
+    >
+      <svg class="ibiza-flyover__icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M18 6 6 18" />
+        <path d="m6 6 12 12" />
+      </svg>
+    </button>
+  </header>
+  <main id="main" class="ibiza-flyover__scene">
+    @if (loading()) {
+      <img class="ibiza-flyover__still" [src]="still().url" [alt]="still().alt" />
+    }
+    <div class="ibiza-flyover__course">
+      <ng-content select="[slot=scene]" />
+    </div>
+    @if (loading()) {
+      <p class="ibiza-flyover__loading" role="status">Loading {{ name() }}</p>
+    }
+  </main>
+  <footer class="ibiza-flyover__band">
+    <div class="ibiza-flyover__where">
+      <h1 class="ibiza-flyover__title">{{ name() }}</h1>
+      @if (caption(); as caption) {
+        <!-- Said once, on the grid: the five captions of the flight are not read out as they change (L2-179 AC11). -->
+        <p class="ibiza-flyover__caption" [attr.aria-live]="landed() ? 'polite' : null">
+          <span class="ibiza-flyover__place">{{ caption.place }}</span> · {{ caption.line }}
+        </p>
+      }
+    </div>
+    @if (bikeLost()) {
+      <div class="ibiza-flyover__lost" role="alert">
+        <p class="ibiza-flyover__lost-line">{{ lostLine() }}</p>
+        <button
+          wz-button
+          variant="primary"
+          type="button"
+          class="ibiza-flyover__retry"
+          (click)="retry.emit()"
+        >
+          Try again
+        </button>
+      </div>
+    } @else {
+      <p class="ibiza-flyover__status" [class.ibiza-flyover__status--ready]="landed()">
+        {{ status() }}
+      </p>
+    }
+  </footer>
+</div>

@@ -1,0 +1,62 @@
+@startuml
+title UML sequence behaviour — Give up a course that cannot be drawn
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+  participant "ClassRideStore" as store
+  participant "CourseSceneHost" as host
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "ClassCourse" as box
+end box
+box "Frontend — Ride app (world library)" #ECFDF3
+  participant "CourseScene" as scene
+  participant "ThreeCourseRenderer" as renderer
+  participant "parseCourse" as parse
+end box
+box "Browser — service worker and cache" #F2F4F7
+  participant "Service worker" as sw
+end box
+box "Static host — the app's own origin" #FFF4E5
+  participant "Static host" as origin
+end box
+
+alt a file cannot be loaded, or is malformed (L2-175 AC2, AC6)
+  scene -> renderer : start(canvas, nextFrame, segments)
+  renderer -> sw : ibiza.course.json, ibiza.glb, riders/rider.glb
+  sw --> renderer : A failed response, or a bad value
+  renderer -> parse : parseCourse(file)
+  parse --> renderer : throws "The course's haze is malformed."
+  renderer --> scene : false
+  scene -> renderer : dispose()
+  scene --> host : unavailable
+else the graphics context is lost after the course is drawn
+  scene -> scene : webglcontextlost: preventDefault(), start a 3 s timer
+  alt webglcontextrestored within 3 s
+    scene -> scene : Clear the timer; the course is not given up
+  else 3 s pass
+    scene -> scene : giveUp(): stop the loop, hide the canvas
+    scene -> renderer : dispose()
+    scene --> host : unavailable
+  end
+end
+host --> page : unavailable
+page -> store : failCourse()
+page -> box : unavailable = true
+box --> rider : The still, no "Loading" line, and under the box:\n"Ibiza can’t be drawn. The bike will still follow the class."
+note over store : The plan, the clock, the bike and the music carry on
+@enduml

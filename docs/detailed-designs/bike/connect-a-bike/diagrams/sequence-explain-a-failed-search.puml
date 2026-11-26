@@ -1,0 +1,67 @@
+@startuml
+title UML sequence behaviour — Explain a failed search
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ConnectBikePage" as page
+  participant "ConnectBikeStore" as store
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "ConnectBlocker" as blocker
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "WebBluetoothSupport" as support
+  participant "WebBluetoothBikeConnection" as conn
+end box
+box "Device — Browser" #F2F4F7
+  participant "navigator.bluetooth" as bt
+end box
+rider -> page : Open Connect Bike
+page -> support : Read state()
+support -> bt : getAvailability()
+alt Bluetooth is off (L2-018 AC1)
+  bt --> support : false
+  support --> page : adapter-off
+  page -> blocker : "Bluetooth is off" with "Try again"; never "no bike found" (L2-018 AC2)
+  blocker --> rider : Alert replaces the device card
+  rider -> page : Press "Try again"
+  page -> support : recheck()
+  support -> bt : getAvailability()
+  bt --> support : true
+  support --> page : ready; device card returns (L2-018 AC3)
+else Bluetooth is on
+  bt --> support : true
+  support --> page : ready
+  rider -> page : Press "Pair Echelon EX-5s"
+  page -> store : pair()
+  store -> conn : requestBike()
+  conn -> bt : requestDevice(filters)
+  alt a policy blocks the chooser (L2-012 AC4)
+    bt --> conn : SecurityError
+    conn --> store : BikeConnectionError code blocked
+    store --> page : failed, reason blocked
+    page -> blocker : "Bluetooth is blocked for this page" with "Try again"
+  else any other failure (L2-012 AC4)
+    bt --> conn : Another error
+    conn --> store : BikeConnectionError code failed
+    store --> page : failed, reason failed
+    page -> blocker : "The bike list didn't open" with "Try again"
+  end
+  blocker --> rider : Alert replaces the device card
+  rider -> page : Press "Try again"
+  page -> store : pair() inside the click
+end
+@enduml

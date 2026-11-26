@@ -1,0 +1,142 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Show the class
+
+interface ClassDefinition {
+  +id: string
+  +title: string
+  +channel: string
+  +focus: string
+  +lengthSeconds: number
+  +summary: string
+  +world: WorldId
+  +plan: Plan
+  +video: ClassVideo
+}
+class ClassVideo {
+  +videoId: string
+  +syncOffsetSeconds: number
+}
+class Plan {
+  +segments: readonly Segment[]
+}
+class Segment {
+  +kind: SegmentKind
+  +duration: number
+  +level: number
+  +cadenceAim: number | null
+}
+enum SegmentKind {
+  warm-up
+  work
+  recover
+  cool-down
+}
+interface TheClassSource {
+  +get(): ClassDefinition
+}
+class ClassRule <<helper>> {
+  +{static} broken(definition: ClassDefinition): BrokenClassRule | null
+}
+class PlanSummary <<helper>> {
+  +{static} efforts(segments: readonly Segment[]): PlanEfforts
+  +{static} averagePower(segments: readonly Segment[]): number
+}
+class TheClassStore {
+  +view: Signal<TheClassView | null>
+  +bikeName: Signal<string | null>
+  +rideWith: Signal<RideWith>
+  +choose(way: RideWith): void
+  +parkVideo(host: HTMLElement): void
+}
+interface HowToRide {
+  +kept(): RideWith | null
+  +keep(way: RideWith): void
+}
+interface CourseGraphics {
+  +available(): boolean
+}
+enum RideWith {
+  video
+  ibiza
+}
+class TheClassView {
+  +meta: string
+  +title: string
+  +summary: string
+  +length: string
+  +lengthLabel: string
+  +cover: Picture
+  +still: Picture | null
+  +videoUnavailable: boolean
+  +rideWith: RideWith
+  +options: readonly RideWithOption[]
+  +start: StartAction
+  +plan: WhatTheBikeWillDo
+}
+class WhatTheBikeWillDo {
+  +average: string
+  +segments: readonly Segment[]
+  +note: string
+}
+class RideWithOption {
+  +way: RideWith
+  +name: string
+  +detail: string | null
+  +disabled: boolean
+}
+class Picture {
+  +url: string
+  +alt: string
+}
+class StartAction {
+  +label: string
+  +hint: string | null
+  +opens: "ride" | "connect"
+}
+class TheClass <<wz-the-class>> {
+  +view: InputSignal<TheClassView>
+  +start: OutputEmitterRef<void>
+  +choose: OutputEmitterRef<RideWith>
+  +videoFrame: OutputEmitterRef<HTMLElement>
+}
+class TheClassPage {
+  #start(opens: "ride" | "connect"): void
+}
+interface VideoPlayer {
+  +state: Signal<PlayerState>
+  +load(host, videoId, options: PlayerOptions): Promise<void>
+  +destroy(): void
+}
+
+TheClassSource ..> ClassDefinition : returns
+TheClassSource ..> ClassRule : checks with
+ClassDefinition *-- Plan
+ClassDefinition *-- ClassVideo
+Plan "1" *-- "33" Segment
+Segment --> SegmentKind
+TheClassStore ..> TheClassSource : reads
+TheClassStore ..> PlanSummary : summarises with
+TheClassView *-- WhatTheBikeWillDo
+TheClassStore --> TheClassView : builds
+TheClassStore ..> VideoPlayer : parks and destroys
+TheClassView *-- StartAction
+TheClassView *-- "2" RideWithOption
+TheClassView *-- Picture
+TheClassStore ..> HowToRide : reads and keeps
+TheClassStore ..> CourseGraphics : asks
+TheClassPage *-- TheClassStore : provides
+TheClassPage ..> TheClass : renders
+TheClass ..> TheClassView : draws
+@enduml

@@ -1,0 +1,26 @@
+// Block class-course__inset (docs/design-system/assets/components.css, Class Ride): 16:9 in the course box's top-right
+// corner, space-3 from the top and space-6 from the right edge, 32 % of the box between 12 and 28 rem (L2-186 AC1).
+// It lies under the countdown, the banner, "Paused" and the Sound button (it comes earlier in the box, on the same
+// layer as the overlays). YouTube audio keeps it 1 px square and transparent (AC2).
+:host {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-6);
+  z-index: 1;
+  width: clamp(12rem, 32%, 28rem);
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--color-ink);
+  box-shadow: var(--shadow-3);
+}
+
+:host(.class-course__inset--audio) {
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: none;
+}

@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Ride in Ibiza
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The five screens, Web Bluetooth, the protocol and the engine")
+  Container(files, "Course files", "glTF and JSON, static", "courses/ibiza.glb, courses/ibiza.course.json, riders/rider.glb")
+}
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Ext(gpu, "GPU", "WebGPU, or WebGL 2")
+
+Rel(rider, app, "Watches the course in the box of Class Ride", "HTTPS")
+Rel(app, files, "Reads the road, the map and the rider", "fetch, same origin")
+Rel(app, gpu, "Draws one frame per display frame while the ride runs", "Three.js")
+Rel(app, bike, "Reads speed; writes target resistance", "Web Bluetooth")
+@enduml

@@ -1,0 +1,237 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Record diagnostics
+
+interface BikeLinkTap {
+  +received(from: string, bytes: Uint8Array, how: ReceivedHow, bike: BikeKind | null): void
+  +writing(to: string, bytes: Uint8Array, targetResistance?: number): WriteSettled
+  +event(name: string, detail?: string): void
+}
+
+enum ReceivedHow {
+  notification
+  indication
+  read
+}
+
+interface DiagnosticRecording {
+  +entries: Signal<number>
+  +dropped: Signal<number>
+  +captures: Signal<number>
+  +startedAt: Date
+  +readouts(shown: ShownReadouts): void
+  +note(text: string): void
+  +keepCapture(captured: CapturedScreen): number
+  +captureFailed(code: ScreenCaptureErrorCode, error?: unknown): void
+  +files(): RecordingFile[]
+}
+
+class ShownReadouts {
+  +power: string
+  +cadence: string
+  +resistance: string
+  +targetResistance: string
+}
+
+class RecordingFile {
+  +name: string
+  +blob: Blob
+}
+
+interface ScreenCapture {
+  +supported: boolean
+  +capture(): Promise<CapturedScreen>
+}
+
+class CapturedScreen {
+  +picture: Blob
+  +width: number
+  +height: number
+}
+
+class ScreenCaptureError {
+  +code: refused | unsupported | failed
+}
+
+interface FileSaver {
+  +save(file: RecordingFile): void
+}
+
+class FileSaveError {
+  +code: not-saved
+}
+
+interface AppLogger {
+  +error(area: string, error: unknown): void
+}
+
+class DiagnosticRecorder {
+  -origin: number
+  -writes: number
+  -pictures: RecordingFile[]
+  -lastShown: string
+  +logged(line: string): void
+}
+
+class RecordingBuffer {
+  +size: number
+  +bytes: number
+  +dropped: number
+  +push(line: string): void
+  +lines(): string[]
+}
+
+class "RECORDING_LIMITS" as limits <<constant>> {
+  20,000 entries
+  3,000,000 bytes
+  8 captures
+}
+
+class "recording-format.ts" as format <<functions>> {
+  +quote(text: string): string
+  +ascii(text: string): string
+  +entryLine(sinceStartMs: number, kind: EntryKind, detail: string): string
+  +recordingHeader(facts: RecordingFacts): string[]
+  +recordingFileName(startedAt: Date): string
+  +captureFileName(startedAt: Date, number: number): string
+}
+
+class "frame-reading.ts" as readFrame <<functions>> {
+  +readFrame(bytes: Uint8Array, kind: BikeKind | null): string
+  +readAnswer(characteristic: string, bytes: Uint8Array): string | null
+}
+
+class "telemetryDecoder" as telemetryDecoder <<function>> {
+  +telemetryDecoder(kind: BikeKind | null | undefined): TelemetryDecoder
+}
+
+class RecordingAppLogger {
+  +error(area: string, error: unknown): void
+}
+
+class ConsoleAppLogger {
+  +error(area: string, error: unknown): void
+}
+
+class BrowserScreenCapture {
+  +supported: boolean
+  +capture(): Promise<CapturedScreen>
+}
+
+class BrowserFileSaver {
+  +save(file: RecordingFile): void
+}
+
+class GattWriteQueue {
+  -tap: BikeLinkTap | null
+  +enqueue(write: () => Promise<void>, minGapMs: number, sent?: SentBytes): Promise<number>
+}
+
+class SentBytes {
+  +to: string
+  +bytes: Uint8Array
+  +targetResistance?: number
+}
+
+class WebBluetoothBikeConnection {
+  -onValue(event: Event): void
+  -setBle(state: BleState): void
+  -choose(bike: BikeInfo): BikeInfo
+  -describe(services, tap: BikeLinkTap): Promise<void>
+}
+
+class BikeTelemetry {
+  -decode(bytes: Uint8Array): void
+}
+
+class DiagnosticsHost <<wz-diagnostics-host>> {
+  #show(dialog: HTMLDialogElement): void
+  #addNote(text: string): void
+  #capture(dialog: HTMLDialogElement): Promise<void>
+  #save(): void
+}
+
+class DiagnosticMark <<button[wz-diagnostic-mark]>> {
+  +busy: input<boolean>
+  +screen: input<the-class | class-ride | null>
+}
+
+class DiagnosticPanel <<wz-diagnostic-panel>> {
+  +entries: input<number>
+  +dropped: input<number>
+  +since: input<string>
+  +canCapture: input<boolean>
+  +status: input<DiagnosticStatus | null>
+  +note: output<string>
+  +capture: output
+  +save: output
+  +closed: output
+}
+
+class "diagnostic-switch.ts" as switch <<functions>> {
+  DIAGNOSE_PARAM = diagnose
+  +diagnosticsRequested(search: string): boolean
+}
+
+class "provideDiagnostics" as provide <<function>> {
+  provides DiagnosticRecorder
+  BIKE_LINK_TAP -> DiagnosticRecorder
+  DIAGNOSTIC_RECORDING -> DiagnosticRecorder
+  SCREEN_CAPTURE -> BrowserScreenCapture
+  FILE_SAVER -> BrowserFileSaver
+  APP_LOGGER -> RecordingAppLogger
+  mounts DiagnosticsHost
+}
+
+class "ride.routes.ts" as routes <<config>> {
+  +rideRoutes: Promise<Routes>
+  reads the switch once
+  imports provide-diagnostics when on
+}
+
+DiagnosticRecorder ..|> BikeLinkTap
+DiagnosticRecorder ..|> DiagnosticRecording
+DiagnosticRecorder *-- RecordingBuffer
+DiagnosticRecorder ..> format : formats with
+DiagnosticRecorder ..> readFrame : reads telemetry with
+RecordingBuffer ..> limits : bounded by
+readFrame ..> telemetryDecoder : decodes with
+BikeTelemetry ..> telemetryDecoder : decodes with
+BikeLinkTap ..> ReceivedHow : names
+DiagnosticRecording ..> ShownReadouts : takes
+DiagnosticRecording ..> RecordingFile : returns
+DiagnosticRecording ..> CapturedScreen : keeps
+RecordingAppLogger ..|> AppLogger
+ConsoleAppLogger ..|> AppLogger
+RecordingAppLogger *-- ConsoleAppLogger : wraps
+RecordingAppLogger --> DiagnosticRecorder : logged(line)
+BrowserScreenCapture ..|> ScreenCapture
+BrowserScreenCapture ..> ScreenCaptureError : rejects with
+ScreenCapture ..> CapturedScreen : resolves
+BrowserFileSaver ..|> FileSaver
+BrowserFileSaver ..> FileSaveError : throws
+GattWriteQueue ..> BikeLinkTap : reports writes to
+GattWriteQueue ..> SentBytes : takes
+WebBluetoothBikeConnection ..> BikeLinkTap : reports bytes and events to
+WebBluetoothBikeConnection *-- GattWriteQueue
+DiagnosticsHost --> DiagnosticRecording
+DiagnosticsHost --> ScreenCapture
+DiagnosticsHost --> FileSaver
+DiagnosticsHost ..> DiagnosticMark : renders
+DiagnosticsHost ..> DiagnosticPanel : renders
+provide ..> DiagnosticRecorder : binds
+provide ..> DiagnosticsHost : mounts
+routes ..> switch : calls
+routes ..> provide : imports when on
+@enduml

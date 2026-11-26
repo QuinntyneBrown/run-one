@@ -1,0 +1,17 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Ride in Ibiza
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System(telo, "Telo Ride 1", "One class, on the rider's own bike")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+System_Ext(blender, "Blender build", "tools/blender: builds the course and the rider from the class's plan")
+
+Rel(rider, telo, "Rides the class on the course")
+Rel(rider, bike, "Pedals")
+Rel(telo, bike, "Reads speed for the pedals; sets target resistance", "Bluetooth LE")
+Rel(telo, host, "Fetches the course's and the rider's files", "HTTPS, same origin")
+Rel(blender, host, "Writes ibiza.glb, ibiza.course.json and rider.glb, shipped with the app")
+@enduml

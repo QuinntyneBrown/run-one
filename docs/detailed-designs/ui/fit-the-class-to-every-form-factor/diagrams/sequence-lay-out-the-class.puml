@@ -1,0 +1,52 @@
+@startuml
+title UML sequence behaviour — Lay out The Class
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "TheClass" as page
+  participant "the-class.scss" as sheet
+end box
+box "Device — Browser" #F2F4F7
+  participant "Viewport" as viewport
+end box
+rider -> viewport : Open The Class at /
+viewport -> page : Render the-class: header, scroll body, footer
+page -> page : Render the go template in the-class~__action and in the-class~__footer
+viewport -> sheet : Evaluate min-width: 64rem
+alt viewport 1024 px wide or more (1194 x 834, 1440 x 900)
+  sheet --> viewport : Two columns: 1fr and the fixed aside; the body is the room under the header and nothing scrolls (L2-171 AC1)
+  viewport -> sheet : Size the-class~__media, a size container
+  sheet --> viewport : Video width is min(100cqw, 100cqh x 16 / 9), so it stays 16:9 in the height left (L2-171 AC1)
+  sheet --> viewport : "What the bike will do" in row 2 under the video; details, Ride with, record and start button in the aside (L2-171 AC1)
+  opt viewport under 800 px tall (1024 x 768)
+    sheet --> viewport : Short window: smaller padding, title and margins, so the aside still fits (L2-171 AC1)
+  end
+  opt aside taller than the room under the header
+    sheet --> viewport : The body is as tall as the aside and the-class~__scroll scrolls; nothing is cut off (L2-139 AC1)
+  end
+  sheet --> viewport : the-class~__footer is display none; the aside button is the one start button (L2-171 AC5)
+else viewport below 1024 px (390 x 844, 834 x 1194)
+  sheet --> viewport : One column in source order: video, details, Ride with, record, "What the bike will do" (L2-171 AC2)
+  sheet --> viewport : the-class~__action is display none; the footer button is the one start button (L2-171 AC5)
+  sheet --> viewport : Footer sits under the scroll body, padded by env(safe-area-inset-bottom) (L2-171 AC3)
+  opt returning rider below 640 px
+    sheet --> viewport : the-class~__stats wraps under "20:00" (L2-171 AC4)
+  end
+end
+viewport --> rider : The Class, with one start button visible
+rider -> page : Tab to the start button and press Enter
+page --> rider : The one visible start button takes focus and acts (L2-171 AC5)
+@enduml

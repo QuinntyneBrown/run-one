@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Class · link-copied — Telo Ride 1 mocks</title>
+<meta name="mock:kind" content="page">
+<meta name="mock:screen" content="the-class">
+<meta name="mock:state" content="link-copied">
+<meta name="mock:requirements" content="L2-008 L2-009 L2-010 L2-019 L2-080 L2-084 L2-144 L2-173">
+<meta name="description" content="Safari or Firefox, just after the rider pressed Copy link: the button reads Copied with a check for two seconds, then Copy link again.">
+<link rel="stylesheet" href="../../../design-system/tokens/tokens.css">
+<link rel="stylesheet" href="../../../design-system/assets/components.css">
+<link rel="stylesheet" href="../../assets/mock.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="app the-class">
+  <header class="class-header the-class__header">
+    <span class="lockup" role="img" aria-label="Telo Ride 1"><svg class="logo-mark" width="26" height="26" viewBox="0 0 48 48" aria-hidden="true"><path class="logo-mark__ring" d="M37.79 21.57 A14 14 0 1 1 26.43 10.21"/><path class="logo-mark__crank" d="M24 24 L38 10"/><circle class="logo-mark__hub" cx="24" cy="24" r="4.6"/></svg><span class="wordmark">TELO<span class="wordmark__product">Ride 1</span></span></span>
+    <a class="the-class__bike" href="../connect-bike/default.html"><svg class="icon icon--md the-class__bike-icon the-class__bike-icon--off" viewBox="0 0 24 24" aria-hidden="true"><path d="m17 17-5 5V12l-5 5"/><path d="m2 2 20 20"/><path d="M14.5 9.5 17 7l-5-5v4.5"/></svg><span class="the-class__bike-name">No bike</span><span class="the-class__bike-action">&nbsp;· Connect</span></a>
+    <button class="icon-btn" type="button" aria-label="Full screen"><svg class="icon icon--md" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg></button>
+  </header>
+  <div class="browser-notice" role="alert">
+    <svg class="icon icon--lg browser-notice__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 12.5-5-5"/><path d="m9.5 12.5 5-5"/><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M12 17v4"/><path d="M8 21h8"/></svg>
+    <p class="browser-notice__text"><span class="browser-notice__title">Open Telo Ride 1 in Chrome or Edge.</span> <span class="browser-notice__body">Bluetooth to the bike only works there — you can look around, but not ride.</span></p>
+    <button class="btn btn--raised browser-notice__action" type="button" data-copied><svg class="icon icon--md" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Copied</button>
+  </div>
+
+  <div class="app__scroll">
+    <main id="main" class="the-class__body">
+      <div class="the-class__media">
+        <div class="the-class__video">
+          <img class="photo photo--yt" src="../../assets/images/classes/intervals-to-the-beat.jpg" alt="Video: Intervals to the Beat, GCN Training">
+          <p class="mock-note">The YouTube player (il_OFz6o42I, with its controls) loads here, parked at 0:03, where the ride’s 0:00 lands. Its cover stands in for it.</p>
+        </div>
+      </div>
+
+      <section class="the-class__info" aria-labelledby="class-title">
+        <p class="the-class__meta">GCN Training · Intervals</p>
+        <h1 class="the-class__title" id="class-title">Intervals to the Beat</h1>
+        <p class="the-class__summary">Seventeen efforts from 15 seconds to 1:15, ridden to the beat, with five fast sprints to finish.</p>
+
+        <div class="ride-with the-class__ride-with">
+          <h2 class="ride-with__title" id="ride-with">Ride with</h2>
+          <div class="ride-with__options" role="radiogroup" aria-labelledby="ride-with">
+            <button class="ride-with__option" type="button" role="radio" aria-checked="true" tabindex="0"><span class="ride-with__mark" aria-hidden="true"></span><span class="ride-with__text"><span class="ride-with__name">Class video</span></span></button>
+            <button class="ride-with__option" type="button" role="radio" aria-checked="false" tabindex="-1"><span class="ride-with__mark" aria-hidden="true"></span><span class="ride-with__text"><span class="ride-with__name">Ibiza Sunset Strip</span><span class="ride-with__detail">8.4 km · 159 m of climbing</span></span></button>
+          </div>
+        </div>
+
+        <div class="the-class__facts">
+          <p class="the-class__length"><span class="the-class__duration">20:00</span><span class="the-class__duration-label">start to finish</span></p>
+          <dl class="the-class__stats">
+            <div class="the-class__stat"><dt class="the-class__stat-label">Rides</dt><dd class="the-class__stat-value">6</dd></div>
+            <div class="the-class__stat"><dt class="the-class__stat-label">Best output</dt><dd class="the-class__stat-value">342 kJ</dd></div>
+            <div class="the-class__stat"><dt class="the-class__stat-label">Last time</dt><dd class="the-class__stat-value">318 kJ</dd></div>
+          </dl>
+        </div>
+
+        <div class="the-class__action">
+          <button class="btn btn--primary btn--xl btn--block the-class__start" type="button" disabled>Connect your bike</button>
+          <p class="the-class__start-hint">The class needs the bike to set resistance.</p>
+        </div>
+      </section>
+
+      <section class="the-class__plan" aria-labelledby="plan-title">
+        <div class="the-class__plan-head">
+          <h2 class="the-class__plan-title" id="plan-title">What the bike will do</h2>
+          <span class="the-class__plan-watts">~254 W average</span>
+        </div>
+        <svg class="class-profile the-class__profile" viewBox="0 0 1200 32" preserveAspectRatio="none" role="img" aria-label="Resistance profile"><rect x="2.4" width="145.2" y="18" height="14" class="class-profile__warmup"/><rect x="152.4" width="40.2" y="13" height="19" class="class-profile__work"/><rect x="197.4" width="25.2" y="18" height="14" class="class-profile__rest"/><rect x="227.4" width="70.2" y="11" height="21" class="class-profile__work"/><rect x="302.4" width="55.2" y="19" height="13" class="class-profile__rest"/><rect x="362.4" width="25.2" y="11" height="21" class="class-profile__work"/><rect x="392.4" width="25.2" y="19" height="13" class="class-profile__rest"/><rect x="422.4" width="25.2" y="11" height="21" class="class-profile__work"/><rect x="452.4" width="25.2" y="19" height="13" class="class-profile__rest"/><rect x="482.4" width="25.2" y="11" height="21" class="class-profile__work"/><rect x="512.4" width="25.2" y="19" height="13" class="class-profile__rest"/><rect x="542.4" width="25.2" y="10" height="22" class="class-profile__work"/><rect x="572.4" width="25.2" y="21" height="11" class="class-profile__rest"/><rect x="602.4" width="25.2" y="10" height="22" class="class-profile__work"/><rect x="632.4" width="25.2" y="21" height="11" class="class-profile__rest"/><rect x="662.4" width="25.2" y="10" height="22" class="class-profile__work"/><rect x="692.4" width="25.2" y="21" height="11" class="class-profile__rest"/><rect x="722.4" width="10.2" y="8" height="24" class="class-profile__work"/><rect x="737.4" width="25.2" y="11" height="21" class="class-profile__work"/><rect x="767.4" width="25.2" y="21" height="11" class="class-profile__rest"/><rect x="797.4" width="10.2" y="8" height="24" class="class-profile__work"/><rect x="812.4" width="25.2" y="11" height="21" class="class-profile__work"/><rect x="842.4" width="25.2" y="21" height="11" class="class-profile__rest"/><rect x="872.4" width="15.2" y="10" height="22" class="class-profile__work"/><rect x="892.4" width="15.2" y="21" height="11" class="class-profile__rest"/><rect x="912.4" width="15.2" y="10" height="22" class="class-profile__work"/><rect x="932.4" width="15.2" y="21" height="11" class="class-profile__rest"/><rect x="952.4" width="15.2" y="10" height="22" class="class-profile__work"/><rect x="972.4" width="15.2" y="21" height="11" class="class-profile__rest"/><rect x="992.4" width="15.2" y="10" height="22" class="class-profile__work"/><rect x="1012.4" width="15.2" y="21" height="11" class="class-profile__rest"/><rect x="1032.4" width="15.2" y="10" height="22" class="class-profile__work"/><rect x="1052.4" width="145.2" y="21" height="11" class="class-profile__cooldown"/></svg>
+        <p class="the-class__plan-note">17 efforts · 0:15 to 1:15. Resistance changes on its own; you just pedal.</p>
+      </section>
+    </main>
+  </div>
+
+  <div class="the-class__footer">
+    <div class="the-class__footer-inner">
+      <button class="btn btn--primary btn--xl btn--block the-class__start" type="button" disabled>Connect your bike</button>
+          <p class="the-class__start-hint">The class needs the bike to set resistance.</p>
+    </div>
+  </div>
+</div>
+
+<nav class="mock-bar" aria-label="Mock navigation">
+  <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
+  <span class="mock-bar__screen">The Class</span>
+  <ul class="mock-bar__states">
+    <li><a href="default.html">default</a></li>
+    <li><a href="returning.html">returning</a></li>
+    <li><a href="no-bike.html">no-bike</a></li>
+    <li><a href="ibiza.html">ibiza</a></li>
+    <li><a href="video-unavailable.html">video-unavailable</a></li>
+    <li><a href="cannot-draw.html">cannot-draw</a></li>
+    <li><a href="needs-chromium.html">needs-chromium</a></li>
+    <li><a href="link-copied.html" aria-current="page">link-copied</a></li>
+    <li><a href="needs-https.html">needs-https</a></li>
+    <li><a href="cannot-load.html">cannot-load</a></li>
+  </ul>
+  <button type="button" data-theme-toggle aria-pressed="true">☀ Light</button>
+  <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
+</nav>
+<script src="../../assets/mock.js"></script>
+</body>
+</html>

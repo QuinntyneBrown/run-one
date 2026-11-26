@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Ride without a network
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System(telo, "Telo Ride 1", "One class, on the rider's own bike")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Ext(youtube, "YouTube", "Privacy-enhanced player for the class video")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+
+Rel(rider, telo, "Rides the class to the finish in")
+Rel(telo, bike, "Drives the plan on; unaffected by the network", "Bluetooth LE")
+Rel(telo, youtube, "Streams the class video from; lost with the network", "HTTPS")
+Rel(telo, host, "Loaded its files from before the ride", "HTTPS")
+@enduml

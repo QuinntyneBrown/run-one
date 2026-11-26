@@ -1,0 +1,52 @@
+@startuml
+title UML sequence behaviour — Load screens on demand
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "Angular Router" as router
+  participant "TheClassPage" as classPage
+  participant "ClassRidePage" as ridePage
+end box
+box "Frontend — Ride app (video library)" #ECFDF3
+  participant "YouTubeVideoPlayer" as player
+end box
+box "Device — Browser" #F2F4F7
+  participant "Browser" as browser
+end box
+box "External — Static host" #FFF4E5
+  participant "Static host" as host
+end box
+box "External — YouTube" #FFF4E5
+  participant "YouTube" as yt
+end box
+rider -> browser : Open the app
+browser -> host : GET index.html and the initial bundle
+host --> browser : At most 300 KB gzipped (L2-136 AC1)
+browser -> router : Bootstrap; match the empty path
+router -> host : Fetch ride.routes and The Class's chunk
+host --> router : Lazy chunks
+router -> classPage : Render The Class with the class cover
+classPage --> rider : Largest element painted within 2.5 s (L2-136 AC2)
+classPage -> host : import('@telo/video'), after the first render
+host --> player : The video library's chunk (L2-136 AC1)
+player -> yt : Load the IFrame API
+rider -> classPage : Press the start button
+classPage -> router : Navigate to /ride
+router -> host : Fetch Class Ride's chunk
+host --> router : Lazy chunk
+router -> ridePage : Render Class Ride
+ridePage --> rider : Readouts each second; no frame over 100 ms (L2-136 AC3)
+@enduml

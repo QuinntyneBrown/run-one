@@ -1,0 +1,32 @@
+@startuml
+title UML sequence behaviour — Open Class Done without a ride
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "Router" as router
+  participant "classDoneGuard" as guard
+  participant "FinishedRideHolder" as holder
+  participant "TheClassPage" as theclass
+end box
+rider -> router : Open /done by its address, or reload Class Done
+note over holder : Held in memory only, so a reload starts empty
+router -> guard : canActivate for /done
+guard -> holder : peek()
+holder --> guard : null
+guard --> router : UrlTree / (L2-078 AC5)
+router -> theclass : Load and show The Class
+theclass --> rider : The Class opens instead
+@enduml

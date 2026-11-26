@@ -1,0 +1,49 @@
+@startuml
+title UML sequence behaviour — Open as a new rider
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "Router" as router
+  participant "rememberedBikeGuard" as guard
+  participant "ConnectBikePage" as connect
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "RememberedBikeStore" as bikes
+  participant "FinishedRides" as record
+  participant "openingScreen" as rule
+end box
+box "Device — Browser" #F2F4F7
+  database "localStorage" as storage
+end box
+rider -> router : Open the app at /
+router -> guard : canActivate for the empty path
+guard -> bikes : get()
+bikes -> storage : getItem("telo-ride.bike")
+storage --> bikes : nothing stored
+bikes --> guard : null
+guard -> record : any()
+note right of record : the record in localStorage (RideRecordStore)
+record --> guard : false
+guard -> rule : openingScreen(no bike, no finished ride)
+rule --> guard : 'connect-bike'
+guard --> router : UrlTree /connect (L2-167 AC1)
+router -> connect : Load and show Connect Bike
+alt browser can reach a bike
+  connect --> rider : Device card with "Pair Echelon EX-5s"
+else blocked browser (L2-167 AC3)
+  connect --> rider : Alert of L2-008 AC1 or L2-009 AC4 in place of the device card
+end
+@enduml

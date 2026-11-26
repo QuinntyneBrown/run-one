@@ -1,0 +1,84 @@
+// Block diagnostic-mark (docs/design-system/components/recording-mark.html): the button that reads "Recording", fixed
+// at the foot of the screen at the left, above the home bar and above every screen's own overlay, 44 px tall. A dot
+// and the word carry the state; while a screen capture is taken the dot is a turning ring. A modifier for the screen
+// it is on lifts it clear of what that screen keeps at its foot.
+:host {
+  --diagnostic-mark-inset: var(--space-3);
+  --diagnostic-mark-lift: 0rem;
+
+  position: fixed;
+  z-index: calc(var(--z-overlay) + 2);
+  left: max(var(--diagnostic-mark-inset), env(safe-area-inset-left));
+  bottom: calc(max(var(--space-3), env(safe-area-inset-bottom)) + var(--diagnostic-mark-lift));
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: var(--target-comfortable);
+  height: var(--target-comfortable);
+  padding-inline: var(--space-3) var(--space-4);
+  border-width: var(--border-width-hairline);
+  border-color: var(--color-line-strong);
+  border-radius: var(--radius-full);
+  background: var(--color-panel);
+  color: var(--color-fg);
+  box-shadow: var(--shadow-3);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+:host(:hover) {
+  background: var(--color-raised);
+}
+
+.diagnostic-mark__dot {
+  flex-shrink: 0;
+  width: var(--space-2-5);
+  height: var(--space-2-5);
+  border-radius: var(--radius-full);
+  background: var(--color-heart);
+}
+
+.diagnostic-mark__label {
+  min-width: 0;
+}
+
+:host([aria-busy='true']) {
+  cursor: progress;
+
+  .diagnostic-mark__dot {
+    width: var(--space-3-5);
+    height: var(--space-3-5);
+    background: none;
+    border-width: var(--border-width-thick);
+    border-color: var(--color-line-strong);
+    border-top-color: var(--color-fg);
+    animation: icon-spin var(--duration-loop) linear infinite;
+  }
+}
+
+// On The Class: below lg the start button is pinned to the foot, and the mark stands just above that footer; from lg
+// the foot of the left column is "What the bike will do", and the mark stands above it, under the video.
+@media (max-width: 63.99rem) {
+  :host(.diagnostic-mark--on-the-class) {
+    --diagnostic-mark-lift: calc(var(--control-height-xl) + var(--space-6));
+  }
+}
+
+@media (min-width: 64rem) {
+  :host(.diagnostic-mark--on-the-class) {
+    --diagnostic-mark-inset: var(--space-8);
+    --diagnostic-mark-lift: var(--space-40);
+  }
+}
+
+// On Class Ride: a landscape window from md does not scroll and its foot is the bike panel, every part of it a readout
+// or a control, so the mark stands above the panel, on the bottom-left corner of the video or the course.
+@media (min-width: 48rem) and (orientation: landscape) {
+  :host(.diagnostic-mark--on-class-ride) {
+    --diagnostic-mark-inset: var(--space-7);
+    --diagnostic-mark-lift: var(--space-36);
+  }
+}

@@ -1,0 +1,49 @@
+@startuml
+title UML sequence behaviour — Pause and resume
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+  participant "ClassRideStore" as store
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "ClassVideo" as cvideo
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "RideClock" as clock
+  participant "RideTicker" as ticker
+end box
+box "Frontend — Ride app (video library)" #ECFDF3
+  participant "YouTubeVideoPlayer" as player
+end box
+rider -> page : Press "Pause"
+page -> store : pause()
+store -> clock : pause()
+store -> player : pause()
+store --> page : paused = true
+page -> cvideo : paused = true
+cvideo --> rider : Overlay "Paused" on the video (L2-091 AC1)
+page --> rider : Button reads "Resume"; the store announces "Ride paused" once through ANNOUNCER (L2-091 AC3)
+note over clock, ticker : The held clock reaches no new second: no tick, no segment change, no plan command
+rider -> page : Press "Resume"
+page -> store : resume()
+store -> clock : resume()
+store -> player : seekTo(sync offset + elapsed)
+store -> player : play()
+store --> page : paused = false
+page --> rider : Clock, plan and video carry on from the same place (L2-091 AC2); "Ride resumed" is announced once (AC3)
+ticker -> store : Next whole second
+@enduml

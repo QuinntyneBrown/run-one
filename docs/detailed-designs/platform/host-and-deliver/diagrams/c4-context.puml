@@ -1,0 +1,15 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Host and deliver
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System(telo, "Telo Ride 1", "One class, on the rider's own bike")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+System_Ext(ci, "CI", "GitHub Actions: lint, production build, critical acceptance paths")
+
+Rel(rider, telo, "Opens any address of")
+Rel(host, telo, "Serves the files and headers of", "HTTPS")
+Rel(ci, telo, "Lints, builds and tests each change to")
+Rel(ci, host, "Deploys a passing build of main to")
+@enduml

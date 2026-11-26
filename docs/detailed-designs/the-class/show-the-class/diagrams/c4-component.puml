@@ -1,0 +1,61 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Show the class
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(youtube, "YouTube", "Privacy-enhanced player for the class video")
+
+Container_Boundary(ride, "ride application") {
+  Component(page, "TheClassPage", "Angular page", "The Class at /; navigates to Class Ride or Connect Bike")
+  Component(store, "TheClassStore", "Page-scoped store", "Reads the class, builds the view, parks the video")
+  Component(view, "theClassView", "Pure helper", "The class's words, the start button and the options of Ride with")
+}
+Container_Boundary(components, "components library") {
+  Component(block, "TheClass", "wz-the-class", "The the-class block: video box, details, what the bike will do and start button")
+  Component(ridewith, "RideWith", "wz-ride-with", "The radio group Ride with")
+  Component(bike, "TheClassBike", "a[wz-the-class-bike]", "The header's bike status link")
+  Component(profile, "ClassProfile", "wz-class-profile", "Resistance profile as one image")
+}
+Container_Boundary(domain, "domain library") {
+  Component(rule, "ClassRule", "Pure helper", "Names the rule a class breaks")
+  Component(shipped, "shippedClass", "TheClassSource", "INTERVALS_TO_THE_BEAT, checked on each read")
+  Component(summary, "PlanSummary", "Pure helper", "The plan's efforts and its time-weighted target power")
+  Component(ridewithrule, "rideWith", "Pure helper", "Ibiza when kept and drawable, else the class video")
+  Component(kept, "HowToRideStore", "HowToRide", "The choice in localStorage")
+  Component(graphics, "BrowserCourseGraphics", "CourseGraphics", "WebGPU or WebGL 2, asked once")
+  Component(power, "PowerModel", "Pure helper", "Target power of a segment")
+}
+Container_Boundary(video, "video library") {
+  Component(player, "YouTubeVideoPlayer", "VideoPlayer", "Privacy-enhanced embed; loaded on demand")
+}
+Container_Boundary(api, "api library") {
+  Component(classes, "THE_CLASS", "Injection token", "Contract TheClassSource")
+  Component(how, "HOW_TO_RIDE", "Injection token", "Contract HowToRide")
+  Component(can, "COURSE_GRAPHICS", "Injection token", "Contract CourseGraphics")
+  Component(conn, "BIKE_CONNECTION", "Injection token", "Contract BikeConnection; the ble state")
+  Component(factory, "VIDEO_PLAYER_FACTORY", "Injection token", "Resolves a VideoPlayer by dynamic import")
+}
+
+Rel(rider, block, "Reads and presses the start button on")
+Rel(page, block, "Passes TheClassView to; handles start")
+Rel(block, profile, "Draws the plan with")
+Rel(page, store, "Provides and reads")
+Rel(store, classes, "Reads the class through")
+Rel(shipped, classes, "Implements")
+Rel(shipped, rule, "Checks the class with")
+Rel(store, view, "Builds the view with")
+Rel(store, summary, "Reads structure and average power from")
+Rel(store, how, "Reads and keeps the choice through")
+Rel(store, can, "Asks whether the course can be drawn through")
+Rel(kept, how, "Implements")
+Rel(graphics, can, "Implements")
+Rel(store, ridewithrule, "Decides how the class is ridden with")
+Rel(block, ridewith, "Draws the choice with")
+Rel(page, bike, "Puts on its link to Connect Bike")
+Rel(summary, power, "Computes each segment's target power with")
+Rel(store, conn, "Reads ble through")
+Rel(store, factory, "Asks for a player through")
+Rel(factory, player, "Imports and creates", "dynamic import")
+Rel(player, youtube, "Embeds video il_OFz6o42I from", "iframe")
+@enduml

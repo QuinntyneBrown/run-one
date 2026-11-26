@@ -1,0 +1,49 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Keep the ride clock true
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+
+Container_Boundary(ride, "ride application") {
+  Component(page, "ClassRidePage", "Angular page", "beforeunload host listener: confirmLeaving()")
+  Component(store, "ClassRideStore", "Page-scoped store", "Counts running seconds; holds the wake lock")
+  Component(provide, "provideClassRide()", "Class Ride route providers", "Binds SCREEN_WAKE_LOCK")
+  Component(provideBike, "provideBikeConnection()", "Parent-route providers", "Binds MONOTONIC_TIME, shared with the keepalive")
+}
+Container_Boundary(components, "components library") {
+  Component(readouts, "ClassHeader, ClassSegment, ClassStat", "wz-class-*", "Clock, countdown, Power and Cadence")
+}
+Container_Boundary(domain, "domain library") {
+  Component(clock, "RideClock", "engine service", "Monotonic time since start, less time held")
+  Component(ticker, "RideTicker", "engine service", "One timeout per whole second; ticks on visibilitychange")
+  Component(engine, "WorkoutEngine and planStateAt", "engine service and pure function", "Segment for any elapsed time")
+  Component(totals, "RideTotals, EffortTotals, OnTargetCounter", "engine services", "The ride's running totals: output, efforts, on-target seconds")
+  Component(telemetry, "BikeTelemetry", "engine service", "Decodes notifications into signals")
+  Component(sampler, "ReadoutSampler", "engine helper, new", "Publishes a reading at most once a second")
+  Component(wake, "BrowserScreenWakeLock", "browser service", "navigator.wakeLock, taken again when visible")
+}
+Container_Boundary(api, "api library") {
+  Component(mono, "MONOTONIC_TIME", "Contract and token", "now() in milliseconds")
+  Component(swl, "SCREEN_WAKE_LOCK", "Contract and token", "hold() and release()")
+  Component(conn, "BIKE_CONNECTION", "Contract and token", "frames observable")
+}
+
+Rel(rider, page, "Rides, hides the tab, closes the tab")
+Rel(page, store, "Binds")
+Rel(page, readouts, "Renders")
+Rel(provideBike, mono, "Binds to performance.now()")
+Rel(provide, swl, "Binds")
+Rel(clock, mono, "Reads")
+Rel(ticker, clock, "Reads elapsedMs()")
+Rel(engine, ticker, "Steps on ticks")
+Rel(store, ticker, "Counts seconds on ticks")
+Rel(store, totals, "Reports each running second to")
+Rel(store, swl, "Holds and releases")
+Rel(wake, swl, "Implements")
+Rel(telemetry, conn, "Subscribes to frames")
+Rel(sampler, telemetry, "Reads power and cadence")
+Rel(store, sampler, "Reads paced readouts")
+Rel(conn, bike, "Notifications", "Web Bluetooth")
+@enduml

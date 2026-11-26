@@ -1,0 +1,39 @@
+@startuml
+title UML sequence behaviour — Go back to the class
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "NotFoundPage" as page
+  participant "Router" as router
+  participant "rememberedBikeGuard" as opening
+end box
+box "Device — Browser" #F2F4F7
+  database "localStorage" as storage
+end box
+rider -> page : Choose "Back to the class"
+page -> router : Navigate to / (L2-145 AC2)
+router -> opening : Run the opening rule of / (L2-167)
+opening -> storage : Read the remembered bike and the record
+storage --> opening : Stored values, validated as untrusted data
+alt a remembered bike or at least one finished ride
+  opening --> router : Allow /
+  router --> rider : The Class opens (L2-145 AC2)
+else a new rider
+  opening --> router : Redirect to /connect
+  router --> rider : Connect Bike opens (L2-145 AC2)
+end
+router -> page : Destroy the page; nothing is left to release
+@enduml

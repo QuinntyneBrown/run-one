@@ -1,0 +1,13 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Keep the ride clock true
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System(telo, "Telo Ride 1", "One class, on the rider's own bike")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+
+Rel(rider, telo, "Rides the class; switches tabs or closes the tab in")
+Rel(rider, bike, "Pedals")
+Rel(telo, bike, "Reads notifications and sets resistance on time", "Bluetooth LE")
+@enduml

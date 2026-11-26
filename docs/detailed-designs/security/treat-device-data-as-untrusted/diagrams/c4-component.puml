@@ -1,0 +1,35 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Treat device data as untrusted
+
+Container_Boundary(ride, "ride application") {
+  Component(page, "ConnectBikePage", "Routed page", "Passes the bike's name and identifier to the card; shows the app's own words for a failure")
+  Component(guard, "rememberedBikeGuard", "Route guard", "Opens Connect Bike when the bike and the record are both absent")
+}
+Container_Boundary(componentslib, "components library") {
+  Component(card, "ConnectDevice", "wz-connect-device", "Renders device text by interpolation only")
+}
+Container_Boundary(domainlib, "domain library") {
+  Component(identity, "bikeIdentity", "Pure function", "Names a device and cuts the name to 64 characters")
+  Component(conn, "WebBluetoothBikeConnection", "Service", "Holds BikeInfo and frames; reports error text through LOGGER to the console only")
+  Component(bikeStore, "RememberedBikeStore", "Service", "Parses the stored bike; null when malformed")
+  Component(recordStore, "RideRecordStore, RecordRule.parse", "Service and helper, new", "Parse the stored record; null when out of rule")
+  Component(telemetry, "BikeTelemetry", "Service", "Applies a decoded sample; ignores null")
+  Component(decoders, "EchelonFrameDecoder, IndoorBikeDataDecoder", "Pure decoders", "Return null for a malformed frame")
+}
+Container_Boundary(apilib, "api library") {
+  Component(contracts, "BikeInfo, REMEMBERED_BIKE, RIDE_RECORD, BIKE_CONNECTION", "Types and tokens", "Carry device text as strings")
+}
+Rel(page, card, "Binds name and identifier to")
+Rel(page, conn, "Reads bike from")
+Rel(conn, identity, "Names the device with")
+Rel(page, bikeStore, "Saves the paired bike through REMEMBERED_BIKE to")
+Rel(guard, bikeStore, "Reads the remembered bike from")
+Rel(guard, recordStore, "Reads the record from")
+Rel(telemetry, conn, "Subscribes to frames of")
+Rel(telemetry, decoders, "Decodes each frame with")
+Rel(conn, contracts, "Implements")
+Rel(bikeStore, contracts, "Implements")
+Rel(recordStore, contracts, "Implements")
+@enduml

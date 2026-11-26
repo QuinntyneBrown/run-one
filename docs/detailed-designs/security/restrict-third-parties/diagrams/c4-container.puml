@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Restrict third parties
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(youtube, "YouTube", "Privacy-enhanced player for the class video")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The four screens, Web Bluetooth, the protocol and the engine")
+}
+
+Rel(rider, app, "Uses", "HTTPS")
+Rel(host, app, "Serves files, fonts and the Content Security Policy to", "HTTPS")
+Rel(app, youtube, "Loads iframe_api, the youtube-nocookie frame and the i.ytimg.com cover from", "HTTPS")
+@enduml

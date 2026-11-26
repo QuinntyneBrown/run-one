@@ -1,0 +1,33 @@
+// Block class-header (docs/design-system/assets/components.css, The Class and Class Ride).
+:host {
+  display: block;
+  flex-shrink: 0;
+}
+
+.class-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  border-bottom: var(--border-width-hairline) solid var(--color-line);
+  padding: var(--space-2-5) var(--space-4);
+
+  @media (min-width: 40rem) {
+    padding-inline: var(--space-6);
+  }
+
+  @media (min-width: 64rem) {
+    padding-inline: var(--space-8);
+  }
+}
+
+.class-header__end {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0; // the bike's name gives way before the header overflows
+  margin-left: auto;
+
+  @media (min-width: 40rem) {
+    gap: var(--space-4);
+  }
+}

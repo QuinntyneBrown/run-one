@@ -1,0 +1,61 @@
+@startuml
+title UML sequence behaviour — Pair an Echelon bike
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ConnectBikePage" as page
+  participant "ConnectBikeStore" as store
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "WebBluetoothBikeConnection" as conn
+  participant "EchelonLink" as link
+  participant "GattWriteQueue" as queue
+  participant "RememberedBikeStore" as remembered
+end box
+box "Device — Browser" #F2F4F7
+  participant "navigator.bluetooth" as bt
+end box
+box "Device — Smart bike" #F2F4F7
+  participant "Echelon EX-5s" as bike
+end box
+rider -> page : Press "Pair Echelon EX-5s"
+page -> store : pair() inside the click (L2-012 AC2)
+store --> page : searching: spinner, "Looking for bikes nearby…", "Searching…" (L2-011 AC2)
+store -> conn : requestBike()
+conn -> bt : requestDevice with filters Echelon service and 0x1826 only (L2-012 AC1)
+alt rider cancels the chooser (L2-012 AC3)
+  bt --> conn : NotFoundError
+  conn --> store : null
+  store --> page : default, no error
+else rider picks the bike
+  bt --> conn : BluetoothDevice "ECH-EX5S-141844"
+  conn --> store : BikeInfo "Echelon EX-5s", "EX5S-141844" (L2-013 AC4)
+  store --> page : pairing: aria-busy, spinner, "Pairing…" (L2-011 AC4)
+  store -> conn : connect()
+  conn -> bike : gatt.connect(), get service 0bf669f1
+  conn -> link : open(service)
+  link -> bike : Subscribe to notify 0bf669f4 before any write (L2-013 AC1)
+  conn -> link : initialise()
+  link -> queue : Enqueue F0 A1 00 91, F0 A3 00 93, F0 B0 01 01 A2 (L2-013 AC2)
+  queue -> bike : Write each to 0bf669f2 with response, one at a time, 300 ms apart (L2-013 AC3)
+  bike --> conn : First notification
+  conn --> store : ble is connected (L2-013 AC4)
+  store -> remembered : save(RememberedBikeRecord: id and name) (L2-015 AC3)
+  store --> page : paired: check "Paired", disabled "Paired" (L2-011 AC5)
+  store -> store : Wait 500 ms
+  store --> rider : The Class opens with the bike connected (L2-011 AC5)
+end
+@enduml

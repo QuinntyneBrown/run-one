@@ -1,0 +1,44 @@
+@startuml
+title UML sequence behaviour — Set resistance on the simulated bike
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRideStore" as store
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "ResistanceController" as controller
+  participant "SimulatedBikeConnection" as sim
+  participant "EchelonProtocol" as protocol
+  participant "SecondTicker" as ticker
+  participant "BikeTelemetry" as telemetry
+end box
+rider -> store : Presses "Raise resistance", or a segment starts
+store -> controller : nudge(+1) or applyPlanLevel(level)
+controller -> sim : setResistance(12)
+sim -> protocol : setResistance(12)
+protocol --> sim : F0 B1 01 0C AE
+sim -> protocol : parseSetResistance(bytes)
+protocol --> sim : 12
+sim -> sim : Store level 12
+sim --> controller : Acknowledged at once
+ticker -> sim : Next second
+sim -> protocol : resistance(12)
+protocol --> sim : F0 D2 01 0C CF
+sim -> telemetry : frames emits the D2 frame (L2-024 AC2)
+telemetry -> telemetry : EchelonFrameDecoder gives resistance 12
+telemetry --> store : resistance signal is 12
+store --> rider : Readout shows "12" and "of 32"
+@enduml

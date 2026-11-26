@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Ease off and roll on
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The five screens, Web Bluetooth, the protocol and the engine")
+  ContainerDb(storage, "Browser storage", "localStorage", "The record, written at 20:00; not written by the ending")
+}
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Ext(youtube, "YouTube", "Privacy-enhanced player for the class video")
+
+Rel(rider, app, "Watches the roll-out for 5.2 seconds", "HTTPS")
+Rel(app, bike, "Sends one level every 110 ms down to level 4; reads the resistance", "Web Bluetooth")
+Rel(app, youtube, "Keeps the player playing; destroys it when Class Done opens", "IFrame Player API")
+Rel(app, storage, "Reads nothing and writes nothing during the ending", "localStorage")
+@enduml

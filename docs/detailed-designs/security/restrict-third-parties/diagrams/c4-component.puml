@@ -1,0 +1,27 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Restrict third parties
+
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+System_Ext(youtube, "YouTube", "Privacy-enhanced player for the class video")
+Container_Boundary(ride, "ride application") {
+  Component(index, "index.html", "Document", "Names no foreign origin; loads only the app's bundles")
+  Component(fonts, "fonts.css", "Global stylesheet", "@font-face rules pointing at /fonts/*.woff2")
+}
+Container_Boundary(componentslib, "components library") {
+  Component(cover, "ClassVideo", "wz-class-video", "On Class Ride, shows the cover from i.ytimg.com until the player paints")
+}
+Container_Boundary(videolib, "video library") {
+  Component(player, "YouTubeVideoPlayer", "VideoPlayer", "Loads www.youtube.com/iframe_api; embeds from www.youtube-nocookie.com")
+}
+Container_Boundary(apilib, "api library") {
+  Component(factory, "VideoPlayer and VIDEO_PLAYER_FACTORY", "Contract and token", "The only way a screen reaches the player")
+}
+Rel(host, index, "Serves with the header set of L2-131")
+Rel(index, fonts, "Links the built stylesheet holding")
+Rel(fonts, host, "Fetches the font files from", "same origin")
+Rel(player, factory, "Implements")
+Rel(player, youtube, "Loads the script and the frame from", "HTTPS")
+Rel(cover, youtube, "Loads the cover image from", "HTTPS")
+@enduml

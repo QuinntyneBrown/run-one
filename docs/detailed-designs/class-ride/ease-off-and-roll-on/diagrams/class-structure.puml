@@ -1,0 +1,101 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Ease off and roll on
+
+class "easeOffLevels()" as fn <<function>> {
+  +EASE_OFF_TO = 4
+  +EASE_OFF_STEP_MS = 110
+  +easeOffLevels(from: number, to: number): number[]
+}
+
+class ResistanceEaseOff <<service>> {
+  +start(): void
+  +stop(): void
+  -next(levels: number[]): void
+}
+
+class ResistanceController <<service>> {
+  +target: Signal<number | null>
+  +canControl: Signal<boolean>
+  +byHand: Signal<boolean>
+  +applyPlanLevel(level: number): Promise<void>
+}
+
+interface BikeConnection {
+  +ble: Signal<BleState>
+  +setResistance(level: number): Promise<number>
+  +forgetTarget(): void
+}
+
+class RideEnding <<service>> {
+  +state: Signal<RideEndingState | null>
+  +start(): void
+}
+
+interface RideEndingState {
+  +stage: 'banner' | 'roll-out' | 'over'
+  +rollOut: number
+}
+
+class ClassRideStore <<store>> {
+  +phase: Signal<RidePhase>
+  +rollOut: Signal<RollOutView | null>
+  +stepperOff: Signal<boolean>
+  +courseSeconds: Signal<number>
+  +running: Signal<boolean>
+  -result: ClassResult | null
+  -finish(ride: ClassDefinition): void
+  -close(): void
+}
+
+interface RollOutView {
+  +title: string
+  +progress: number
+}
+
+class "rollOutTitle()" as titleFn <<function>> {
+  +rollOutTitle(way: 'video' | 'ibiza'): string
+}
+
+class ClassRollout <<component>> {
+  +title: InputSignal<string>
+  +progress: InputSignal<number>
+  #percent: Signal<number>
+}
+
+class Course {
+  +length: number
+  +duration: number
+  +end: number
+  +metresAt(seconds: number): number
+}
+
+class ClassRidePage <<component>> {
+  #store: ClassRideStore
+}
+
+ResistanceEaseOff ..> fn : reads
+ResistanceEaseOff --> ResistanceController : target(), applyPlanLevel()
+ResistanceController ..> BikeConnection : BIKE_CONNECTION
+ClassRideStore --> ResistanceEaseOff : start()
+ClassRideStore --> RideEnding : reads state
+RideEnding ..> RideEndingState : publishes
+ClassRideStore ..> BikeConnection : forgetTarget()
+ClassRideStore ..> RollOutView : exposes
+ClassRideStore ..> titleFn : asks
+ClassRidePage --> ClassRideStore : reads
+ClassRidePage *-- ClassRollout : projects into the box
+ClassRollout ..> RollOutView : draws
+ClassRidePage ..> Course : courseSeconds, through CourseScene
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Record diagnostics
+
+Person(person, "Person diagnosing", "Opens the app with diagnose in the address to find a fault with a bike")
+System(telo, "Telo Ride 1", "One class, on the rider's own bike; records the Bluetooth link while switched on")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Ext(downloads, "Downloads folder", "The device's own files; receives the saved recording and captures")
+
+Rel(person, telo, "Rides with; adds notes, captures the screen and saves the files in")
+Rel(telo, bike, "Exchanges Bluetooth messages with, and records each", "Bluetooth LE")
+Rel(telo, downloads, "Saves the recording and the captures to, on Save files", "Browser download")
+Rel(person, downloads, "Reads the saved recording in")
+@enduml

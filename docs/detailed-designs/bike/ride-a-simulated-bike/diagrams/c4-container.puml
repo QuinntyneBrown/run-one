@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Ride a simulated bike
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The four screens, Web Bluetooth, the protocol and the engine")
+}
+
+Rel(rider, app, "Opens with ?simulate; connects without the chooser", "development build")
+Rel(app, bike, "Connects to, in a production build or without ?simulate", "Web Bluetooth GATT")
+@enduml

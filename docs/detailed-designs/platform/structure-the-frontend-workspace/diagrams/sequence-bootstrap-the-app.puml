@@ -1,0 +1,48 @@
+@startuml
+title UML sequence behaviour — Bootstrap the app
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "main.ts" as main
+  participant "app.config.ts" as config
+  participant "Router" as router
+  participant "ride.routes.ts" as routes
+  participant "Page" as page
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "Presentation components" as comps
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "WebBluetoothBikeConnection" as conn
+end box
+box "Device — Browser" #F2F4F7
+  participant "navigator.bluetooth" as ble
+end box
+rider -> main : Open the app
+main -> config : bootstrapApplication(AppShell, appConfig)
+config -> config : provideZonelessChangeDetection() (L2-146 AC4)
+config -> router : provideRouter(routes)
+router -> routes : loadChildren: import("./ride.routes") (L2-146 AC1)
+routes -> conn : Bind BIKE_CONNECTION through provideBikeConnection()
+router -> page : loadComponent for the matched screen
+page -> conn : Inject BIKE_CONNECTION, never the class
+page -> comps : Render standalone OnPush components with signal inputs (L2-146 AC4)
+comps --> page : Outputs
+conn -> ble : The only access to navigator.bluetooth (L2-146 AC3)
+ble --> conn : Availability and devices
+conn --> page : ble and bike signals
+page --> rider : Show the screen
+@enduml

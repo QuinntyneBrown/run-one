@@ -1,0 +1,107 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Draw the course on a low-power tablet
+
+class FrameBudget {
+  +tier: number
+  -settled: boolean
+  -judged: number
+  -spent: number
+  +FrameBudget(steps: number, start: number)
+  +frame(ms: number, period: number): number
+  +restart(): void
+}
+
+class "frame-budget.ts" as fb <<constants>> {
+  JUDGED_FRAMES = 90
+  AT_PACE = 1.1
+  TOO_SLOW = 1.6
+}
+
+class FrameScheduler <<service>> {
+  +measurePeriod(frames = 30): Promise<number>
+  +startLoop(): () => void
+  +nextFrame(): Promise<void>
+}
+
+class "frame-period.ts" as fp <<module>> {
+  +estimateFramePeriod(intervals: number[]): number
+}
+
+class ThreeCourseRenderer {
+  -tier: number
+  -budget: FrameBudget
+  -period: number | null
+  -lastFrameAt: number | null
+  -pinned: boolean
+  +setFramePeriod(ms: number): void
+  +pauseBudget(): void
+  +resize(width, height, pixelRatio): void
+  -judge(): void
+  -step(by: number): void
+  -choose(): void
+  -warm(renderer): void
+}
+
+class "course-renderer.ts" as cr <<constants>> {
+  TIERS = 0.75 | 1 | 1.5 | 1.5 bloom | 2 bloom
+  START = 1
+  DRAWN_FAR = 0.65 | 0.7 | 0.75 | 0.75 | 0.75
+  RIDER_DETAIL = 0.6 | 0.7 | 0.8 | 0.9 | 1
+  SIMPLE_RIDERS = 1
+  CHUNK_SWEEP = 12
+}
+
+class CourseCyclistKit {
+  +simple: boolean
+  +make(jersey, number, lit, detail): RiderModel
+}
+
+class RiderBody {
+  +make(fine: boolean): RiderBodyParts
+}
+
+class SunShadow {
+  +detail(tier: number): void
+}
+
+class "sun-shadow.ts" as ss <<constants>> {
+  STEPS[0] = 128 texels, 3 readings, 3 frames
+  STEPS[1] = 128 texels, 5 readings, 2 frames
+  STEPS[2] = 192 texels, 7 readings, 2 frames
+  STEPS[3] = 256 texels, 7 readings, 2 frames
+  STEPS[4] = 256 texels, 7 readings, 2 frames
+}
+
+interface CourseDrawn <<test-only>> {
+  +tier: number
+  +backend: string
+  +drawCalls: number
+  +triangles: number
+  +shadowMap: boolean
+  +released: boolean
+  +heldBefore: {geometries, textures}
+  +held: {geometries, textures}
+}
+
+ThreeCourseRenderer *-- FrameBudget
+ThreeCourseRenderer ..> cr : reads
+FrameBudget ..> fb : reads
+FrameScheduler ..> fp : estimateFramePeriod
+ThreeCourseRenderer *-- CourseCyclistKit
+CourseCyclistKit --> RiderBody : make(detail >= 0.8)
+ThreeCourseRenderer *-- SunShadow
+SunShadow ..> ss : reads
+ThreeCourseRenderer ..> CourseDrawn : writes when pinned
+@enduml

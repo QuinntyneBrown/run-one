@@ -1,0 +1,47 @@
+@startuml
+title UML sequence behaviour — Lose the bike during the ending
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+  participant "ClassRideStore" as store
+  participant "Angular Router" as router
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "ResistanceEaseOff" as ease
+  participant "ResistanceController" as ctrl
+  participant "BikeConnection" as conn
+  participant "RideEnding" as ending
+end box
+box "Device" #F2F4F7
+  participant "Smart bike" as bike
+end box
+ease -> ctrl : applyPlanLevel(8)
+ctrl -> conn : setResistance(8)
+conn -> bike : Write the resistance command
+bike --> conn : Acknowledged
+bike -> conn : Stops answering
+conn --> store : ble becomes disconnected
+store -> store : rideHold(phase finished): no lost-bike alert (L2-182 AC8)
+page --> rider : The finish banner, with no alert
+ease -> ctrl : applyPlanLevel(7), then 6, 5 and 4
+ctrl -> conn : setResistance(level)
+conn --> ctrl : Not sent; the connection keeps the level as its target
+ending --> store : state: roll-out, then over, on time
+store -> conn : forgetTarget(): the unsent commands are dropped (AC8)
+store -> router : navigateByUrl("/done") with the ClassResult
+router --> rider : Class Done opens on time
+@enduml

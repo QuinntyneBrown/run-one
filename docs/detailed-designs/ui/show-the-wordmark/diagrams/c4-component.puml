@@ -1,0 +1,26 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Show the wordmark
+
+Person(rider, "Rider", "Rides a smart bike at home")
+Container_Boundary(ride, "ride application") {
+  Component(connect, "ConnectBikePage", "Angular component, /connect", "Draws connect~__header")
+  Component(pages, "TheClassPage, ClassDonePage, NotFoundPage", "Angular components", "Use the shared screen header")
+  Component(ridepage, "ClassRidePage", "Angular component, /ride", "Uses the ride header")
+  Component(names, "index.html and route titles", "Document and route data", "The product's name as Telo Ride 1")
+  Component(fonts, "fonts.css and tokens.css", "Global stylesheets", "Barlow Condensed, ~--color-volt-fg, ~--color-fg")
+}
+Container_Boundary(components, "components library") {
+  Component(screenheader, "ScreenHeader", "Angular component, wz-screen-header", "The class-header block with the lockup at md")
+  Component(classheader, "ClassHeader", "Angular component, wz-class-header", "Class Ride's header with the lockup at sm")
+  Component(lockup, "Lockup", "Angular component, wz-lockup", "The mark and TELO RIDE 1, role=img named Telo Ride 1")
+}
+Rel(rider, lockup, "Sees, or hears as Telo Ride 1")
+Rel(connect, lockup, "Renders at md")
+Rel(pages, screenheader, "Render")
+Rel(ridepage, classheader, "Renders")
+Rel(screenheader, lockup, "Renders at md")
+Rel(classheader, lockup, "Renders at sm; wordmark hidden below 384 px")
+Rel(lockup, fonts, "Reads the display font and the signal colour from")
+@enduml

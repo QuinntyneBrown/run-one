@@ -1,0 +1,45 @@
+@startuml
+title UML sequence behaviour — Leave or finish, and dispose the course
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRideStore" as store
+  participant "CourseSceneHost" as host
+end box
+box "Frontend — Ride app (world library)" #ECFDF3
+  participant "CourseScene" as scene
+  participant "FrameScheduler" as sched
+  participant "SceneDriver" as driver
+  participant "ThreeCourseRenderer" as renderer
+  participant "Course" as course
+end box
+box "Browser — Chrome or Edge" #F2F4F7
+  participant "Display and GPU" as gpu
+end box
+
+rider -> store : Press Leave, or the ride reaches Class Done
+store -> host : The view that holds the course is destroyed
+host -> scene : Destroy
+scene -> sched : Stop the loop (L2-174 AC8)
+scene -> scene : Clear the context timer; remove the context, visibility and screen listeners; disconnect the ResizeObserver
+scene -> renderer : dispose()
+renderer -> renderer : Dispose the bloom pipeline
+renderer -> renderer : Dispose each chunk's geometry of the map
+renderer -> renderer : Dispose materials, textures, the rider's body, kit, batch and shadow
+renderer -> gpu : WebGPURenderer.dispose()
+gpu --> renderer : Released
+note over renderer : No frame is drawn after this:\ndraw() returns when the renderer is gone
+@enduml

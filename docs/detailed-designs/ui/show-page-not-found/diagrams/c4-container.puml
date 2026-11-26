@@ -1,0 +1,15 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Show Page not found
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The four screens, Web Bluetooth, the protocol and the engine")
+  ContainerDb(storage, "Browser storage", "localStorage", "The record and the remembered bike")
+}
+Rel(rider, app, "Opens an unknown address in")
+Rel(host, app, "Serves index.html for an unknown path to", "HTTPS")
+Rel(app, storage, "Reads the remembered bike and the record on Back to the class from", "localStorage")
+@enduml

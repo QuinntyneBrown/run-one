@@ -1,0 +1,93 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Wait for a lost bike
+
+class ClassRidePage <<component>> {
+  #store: ClassRideStore
+}
+
+class ClassRideStore <<store>> {
+  +bikeLost: Signal<boolean>
+  +paused: Signal<boolean>
+  +canControl: Signal<boolean>
+  -pausedByRider: WritableSignal<boolean>
+  -pausedByBike: WritableSignal<boolean>
+  +reconnect(): void
+  -followBike(ride: ClassDto): void
+  -hold(): void
+  -carryOn(ride: ClassDto): void
+}
+
+class ClassLost <<component>> {
+  +body: InputSignal<string>
+  +reconnect: OutputEmitterRef<void>
+}
+
+class ClassResist <<component>> {
+  +level: InputSignal<number | null>
+  +disabled: InputSignal<boolean>
+}
+
+interface BikeConnection {
+  +ble: Signal<BleState>
+  +reconnectNow(): void
+  +setResistance(level: number): Promise<number>
+}
+
+enum BleState {
+  idle
+  connecting
+  connected
+  disconnected
+}
+
+interface Ticker {
+  +seconds: Observable<number>
+}
+
+class WebBluetoothBikeConnection {
+  -target: number | null
+}
+
+class DeviceReconnector {
+  +{static} RETRY_MS = 3000
+  +retryNow(): void
+}
+
+class ResistanceController {
+  +canControl: Signal<boolean>
+}
+
+class RideClock {
+  +pause(): void
+  +resume(): void
+}
+class WorkoutEngine {
+  +resend(): void
+}
+
+ClassRidePage *-- ClassRideStore : provides
+ClassRidePage ..> ClassLost : renders while lost
+ClassRidePage ..> ClassResist : disables
+ClassRideStore --> BikeConnection : reads ble
+ClassRideStore --> Ticker : checks each second
+ClassRideStore --> RideClock : holds
+ClassRideStore --> WorkoutEngine : resend() when the bike is back
+WorkoutEngine --> ResistanceController : applyPlanLevel
+ClassRideStore --> ResistanceController
+ResistanceController --> BikeConnection
+BikeConnection --> BleState
+WebBluetoothBikeConnection ..|> BikeConnection
+WebBluetoothBikeConnection *-- DeviceReconnector
+@enduml

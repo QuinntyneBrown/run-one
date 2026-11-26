@@ -1,0 +1,51 @@
+@startuml
+title UML sequence behaviour — Count on-target seconds
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRideStore" as store
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "RideTicker" as ticker
+  participant "WorkoutEngine" as engine
+  participant "BikeTelemetry" as telemetry
+  participant "OnTargetCounter" as counter
+  participant "PowerModel" as power
+end box
+rider -> store : Pedal through the class
+loop each running second; a paused ride does not tick
+  ticker -> store : tick(second)
+  store -> engine : state()
+  engine --> store : PlanState; targetPower null when the segment has no cadence aim
+  store -> telemetry : powerW()
+  telemetry --> store : Watts, or null when unknown
+  store -> counter : count(powerW, targetPowerW, seconds)
+  alt segment has no cadence aim (L2-170 AC4)
+    counter -> counter : Leave the second out of both counts
+  else power unknown (L2-170 AC3)
+    counter -> counter : aimedSeconds + seconds
+  else segment has a cadence aim and power is known
+    counter -> power : onTarget(powerW, targetPowerW)
+    alt within 10 % of the target power (L2-170 AC1)
+      power --> counter : true
+      counter -> counter : aimedSeconds + seconds, onTargetSeconds + seconds
+    else outside 10 %
+      power --> counter : false
+      counter -> counter : aimedSeconds + seconds
+    end
+  end
+end
+@enduml

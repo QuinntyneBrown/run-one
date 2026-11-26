@@ -1,0 +1,54 @@
+@startuml
+title UML sequence behaviour — Show the result
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "Router" as router
+  participant "classDoneGuard" as guard
+  participant "ClassDonePage" as page
+  participant "classDoneView" as view
+  participant "FinishedRideHolder" as holder
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "ClassDone" as block
+end box
+router -> guard : canActivate for /done
+guard -> holder : peek()
+holder --> guard : ClassResult
+guard --> router : true
+router -> page : Load and show Class Done
+page -> holder : peek()
+holder --> page : ClassResult
+page -> view : classDoneView(result)
+view -> view : Round the output to a whole kJ (L2-078 AC4)
+alt first finished ride (L2-077 AC3)
+  view -> view : Verdict "Class done. That’s your number to beat."; no best fact
+else output in whole kJ above the previous best (L2-077 AC1, AC4)
+  view -> view : Verdict "New best output"; gold; fact "Previous best"
+else output equal to or below the best (L2-077 AC2)
+  view -> view : Verdict "Your best is still {best} kJ"; fact "Best"
+end
+view -> view : Facts "Time", "Average", "On target" (L2-078 AC2, AC3)
+view -> view : Bar heights and the strongest effort (L2-169 AC3 to AC5)
+view --> page : ClassDoneView
+page -> block : view
+block --> rider : Verdict as the h1, "351 kJ", facts, eight efforts and Done (L2-078 AC1, L2-079 AC1)
+rider -> block : Press Done
+block -> page : done
+page -> holder : clear()
+page -> router : navigateByUrl("/")
+router --> rider : The Class with this ride counted and "Ride it again" (L2-079 AC2)
+@enduml

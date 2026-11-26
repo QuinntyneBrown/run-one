@@ -1,0 +1,38 @@
+<div class="class-course">
+  @if (loading() || unavailable()) {
+    <img class="class-course__still" [src]="still().url" [alt]="still().alt" />
+  }
+  <div class="class-course__scene">
+    <ng-content select="[slot=scene]" />
+  </div>
+  <!-- The YouTube inset, when the rider chose a YouTube sound (L2-186 AC1): under every overlay that follows. -->
+  <ng-content select="[slot=inset]" />
+  <!-- What lies over the course: the countdown (L2-180 AC1); the Sound button stays above it. -->
+  <ng-content select="[slot=overlay]" />
+  @if (loading() && !unavailable()) {
+    <p class="class-course__loading" role="status">Loading {{ name() }}</p>
+  }
+  <!-- The Sound button and its panel in the top-left corner, over every overlay (L2-185 AC1). -->
+  <div class="class-course__sound-slot">
+    <ng-content select="[slot=sound]" />
+  </div>
+  <!-- The ride's controls on the box's left edge: the intensity (L2-183 AC1), over the picture and "Paused". -->
+  <div class="class-course__controls">
+    <ng-content select="[slot=controls]" />
+  </div>
+  @if (paused()) {
+    <div class="class-course__paused" aria-hidden="true">
+      <p class="class-course__paused-label">Paused</p>
+    </div>
+  }
+</div>
+@if (unavailable()) {
+  <wz-inline-message class="class-course__notice" tone="warn" role="status"
+    >Ibiza can’t be drawn. The bike will still follow the class.</wz-inline-message
+  >
+}
+@if (youtubeUnavailable()) {
+  <wz-inline-message class="class-course__youtube-notice" tone="warn" role="status"
+    >YouTube can’t play. The bike will still follow the class.</wz-inline-message
+  >
+}

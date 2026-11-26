@@ -1,0 +1,19 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Draw the course on a low-power tablet
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The five screens, Web Bluetooth, the protocol and the engine")
+  Container(files, "Course files and music", "glTF, JSON and MP3, static", "ibiza.glb without textures; rider.glb at two finenesses; the track")
+}
+System_Ext(gpu, "Display and GPU", "WebGPU, or WebGL 2; the display's refresh rate")
+System_Ext(checks, "Playwright checks", "Behaviour specs, and perf and heap checks run when a person asks")
+
+Rel(rider, app, "Rides in Ibiza", "HTTPS")
+Rel(app, files, "Loads once", "fetch, same origin")
+Rel(app, gpu, "At most 120,000 triangles in 140 draw calls a frame, at one of five steps", "Three.js")
+Rel(gpu, app, "Frame times", "requestAnimationFrame")
+Rel(checks, app, "Pin a step and read what a frame drew", "test-only hook")
+@enduml

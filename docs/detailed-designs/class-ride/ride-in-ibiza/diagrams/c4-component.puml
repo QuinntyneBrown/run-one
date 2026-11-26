@@ -1,0 +1,45 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Ride in Ibiza
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(gpu, "GPU", "WebGPU, or WebGL 2")
+
+Container_Boundary(ride, "ride application") {
+  Component(page, "ClassRidePage", "Angular page, wz-class-ride-page", "Renders the course's box in the place of the video's")
+  Component(store, "ClassRideStore", "Store", "The way ridden, the clock's second, running, the bike's speed")
+  Component(host, "CourseSceneHost", "Directive, [wzCourseScene]", "Puts the course's scene in the box and binds the ride to it")
+}
+Container_Boundary(components, "components library") {
+  Component(box, "ClassCourse", "wz-class-course", "The box: still, scene slot, Paused overlay")
+}
+Container_Boundary(api, "api library") {
+  Component(contract, "CourseRenderer, CourseFrame", "Contract, token COURSE_RENDERER", "What a frame of the course is drawn through")
+}
+Container_Boundary(world, "world library") {
+  Component(scene, "CourseScene", "wz-course-scene", "The canvas; draws while the ride runs and the tab shows")
+  Component(sched, "FrameScheduler", "Root service", "The one requestAnimationFrame caller; none in a hidden tab")
+  Component(driver, "SceneDriver", "Class", "The scene's time from the clock's second; the crank's angle")
+  Component(renderer, "ThreeCourseRenderer", "CourseRenderer, Three.js", "Places the rider and the camera, draws, disposes")
+  Component(course, "Course", "Class", "Seconds to metres; a place on the road")
+  Component(camera, "chaseCamera", "Pure function", "Metres behind and above the rider")
+  Component(cyclist, "CourseCyclistKit, RiderBody", "Classes", "The rider's figure and bike from rider.glb")
+  Component(shadow, "SunShadow", "Class", "The rider's own figure laid on the road, no shadow map")
+}
+
+Rel(rider, page, "Rides on")
+Rel(page, store, "Binds")
+Rel(page, box, "Renders when the way is Ibiza")
+Rel(page, host, "Projects into the scene slot")
+Rel(host, scene, "Binds label, segments, elapsed, speedKmh, running")
+Rel(scene, sched, "Runs the loop while running")
+Rel(scene, driver, "Asks for a frame")
+Rel(driver, contract, "draw(CourseFrame)")
+Rel(renderer, contract, "Implements")
+Rel(renderer, course, "metresAt, place")
+Rel(renderer, camera, "Reads")
+Rel(renderer, cyclist, "Poses the rider")
+Rel(renderer, shadow, "Lays the shadow")
+Rel(renderer, gpu, "Renders", "Three.js")
+@enduml

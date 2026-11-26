@@ -1,0 +1,51 @@
+@startuml
+title UML sequence behaviour — Decode FTMS Indoor Bike Data
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRideStore" as store
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "WebBluetoothBikeConnection" as conn
+  participant "BikeTelemetry" as telemetry
+  participant "IndoorBikeDataDecoder" as decoder
+  participant "PowerModel" as power
+end box
+box "Device — Smart bike" #F2F4F7
+  participant "FTMS bike" as bike
+end box
+rider -> bike : Pedals
+bike -> conn : Notify Indoor Bike Data (0x2AD2)
+conn -> telemetry : frames emits the bytes
+telemetry -> decoder : decode(bytes, at)
+decoder -> decoder : Read the uint16 flags, then walk the fields in order
+alt notification shorter than its flags require
+  decoder --> telemetry : null, no error (L2-021 AC4)
+else cadence and power flagged present
+  decoder -> decoder : Cadence uint16 x 0.5 rpm, power sint16 W; skip the rest by length (L2-021 AC1)
+  decoder --> telemetry : sample with cadence and powerW
+  telemetry -> telemetry : Keep the reported power; powerIsEstimate is false (L2-021 AC2)
+  telemetry --> store : cadence and powerW signals change
+  store --> rider : Power shows the reported watts
+else power flagged absent
+  decoder --> telemetry : sample with cadence only
+  telemetry -> telemetry : Clear the reported power
+  telemetry -> power : estimate(cadence, resistance)
+  power --> telemetry : estimate, or null when an input is unknown (L2-023 AC2)
+  telemetry --> store : powerW is the estimate or null
+  store --> rider : Power shows the estimate or "—" (L2-021 AC3)
+end
+@enduml

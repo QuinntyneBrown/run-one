@@ -1,0 +1,18 @@
+<div class="class-countdown" [class.class-countdown--go]="step().go">
+  <div class="class-countdown__body">
+    <div class="class-countdown__lights" aria-hidden="true">
+      @for (light of lights; track light) {
+        <span
+          class="class-countdown__light"
+          [class.class-countdown__light--on]="light < step().lit"
+        ></span>
+      }
+    </div>
+    <!-- Each numeral is a new node, so its entry runs for each. -->
+    @for (numeral of [step().numeral]; track numeral) {
+      <p class="class-countdown__num" aria-hidden="true">{{ numeral }}</p>
+    }
+    <p class="class-countdown__line">The plan sets your resistance. Just pedal.</p>
+    <p class="visually-hidden" role="status">{{ said() }}</p>
+  </div>
+</div>

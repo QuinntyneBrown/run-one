@@ -1,0 +1,47 @@
+@startuml
+title UML sequence behaviour — Read the record
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "rememberedBikeGuard" as guard
+  participant "TheClassStore" as classStore
+  participant "ClassRideStore" as rideStore
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "RideRecordStore" as store
+  participant "RecordRule" as rule
+end box
+box "Device — Browser" #F2F4F7
+  database "localStorage" as storage
+end box
+rider -> guard : Open the app again in the same browser
+guard -> store : current()
+store -> storage : getItem("telo-ride.record"), once
+storage --> store : JSON text or null
+store -> rule : parse(value)
+alt stored record is valid
+  rule --> store : RecordData as it was written (L2-168 AC3)
+else missing, malformed or outside its rules
+  rule --> store : null, the rider is a new rider (L2-129 AC3)
+end
+store --> guard : RecordData or null
+classStore -> store : current()
+store --> classStore : RecordData or null
+classStore --> rider : "Rides", "Best output" and "Last time", or none of the three
+rider -> rideStore : Start the class, then press Leave before the finish
+note over rideStore, store : Leave never calls add, so the count, best and last are unchanged (L2-168 AC2)
+rideStore --> rider : The Class with the same record
+@enduml

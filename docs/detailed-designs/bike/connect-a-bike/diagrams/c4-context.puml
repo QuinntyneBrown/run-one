@@ -1,0 +1,13 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Connect a bike
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System(telo, "Telo Ride 1", "One class, on the rider's own bike")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+
+Rel(rider, telo, "Picks the bike once and pairs it on Connect Bike")
+Rel(telo, bike, "Connects, initialises and subscribes to", "Bluetooth LE GATT")
+Rel(bike, telo, "Notifies telemetry to", "Bluetooth LE GATT")
+@enduml

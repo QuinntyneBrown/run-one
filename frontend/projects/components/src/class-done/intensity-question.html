@@ -1,0 +1,29 @@
+@if (answer() === 'ask') {
+  <section class="class-done__intensity" aria-labelledby="intensity-question-title">
+    <h2 class="class-done__intensity-title" id="intensity-question-title">
+      Make {{ intensity() }}/10 your intensity?
+    </h2>
+    <p class="class-done__intensity-text">
+      Your next rides start at {{ intensity() }}/10. It’s kept on this device.
+    </p>
+    <div class="class-done__intensity-actions">
+      <button wz-button variant="raised" size="lg" type="button" (click)="keep.emit()">
+        Make it my default
+      </button>
+      <button wz-button variant="quiet" size="lg" type="button" (click)="dismiss.emit()">
+        Keep {{ current() }}/10
+      </button>
+    </div>
+  </section>
+} @else {
+  <section class="class-done__intensity" aria-labelledby="intensity-question-title">
+    <h2 class="visually-hidden" id="intensity-question-title">Intensity</h2>
+    <p class="class-done__intensity-text" role="status">
+      @if (answer() === 'kept') {
+        {{ intensity() }}/10 is now your intensity.
+      } @else {
+        Your intensity couldn’t be kept on this device.
+      }
+    </p>
+  </section>
+}

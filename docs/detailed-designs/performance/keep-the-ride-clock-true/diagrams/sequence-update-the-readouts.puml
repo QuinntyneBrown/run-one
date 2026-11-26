@@ -1,0 +1,50 @@
+@startuml
+title UML sequence behaviour — Update the readouts
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+  participant "ClassRideStore" as store
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "ClassStat" as stat
+  participant "ClassHeader and ClassSegment" as timers
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "BikeTelemetry" as telemetry
+  participant "ReadoutSampler" as sampler
+  participant "RideTicker" as ticker
+end box
+box "Device — Smart bike" #F2F4F7
+  participant "Smart bike" as bike
+end box
+bike -> telemetry : Notification, about once a second
+telemetry -> telemetry : Decode; set cadence, resistance and power
+telemetry -> sampler : Signals change
+alt 1 second or more since the last published reading
+  sampler --> store : Publish at once
+else sooner, as from an FTMS bike that notifies more often
+  sampler -> sampler : Hold the newest reading until the second ends
+  sampler --> store : Publish once (L2-134 AC2)
+end
+store --> page : power and cadence views
+page -> stat : value and hint
+stat --> rider : Power and Cadence, within 250 ms of the notification (L2-134 AC1)
+ticker -> store : Tick: a new whole second
+store --> page : elapsed and PlanState
+page -> timers : elapsed, remaining, progress
+timers --> rider : Clock and countdown change once (L2-134 AC2)
+@enduml

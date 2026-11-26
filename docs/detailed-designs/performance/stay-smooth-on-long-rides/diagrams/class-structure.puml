@@ -1,0 +1,104 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Stay smooth on long rides
+
+class RideTotals <<trimmed>> {
+  +runningSeconds: Signal<number>
+  +outputKj: Signal<number>
+  +avgPowerW: Signal<number | null>
+  +onRunningSecond(seconds: number): void
+}
+class EffortTotals <<new>> {
+  -wattSeconds: number[8]
+  -seconds: number[8]
+  +count(effort: number, powerW: number | null, seconds: number): void
+  +watts(): readonly number[]
+}
+class OnTargetCounter <<new>> {
+  -onTargetSeconds: number
+  -aimedSeconds: number
+  +count(powerW: number | null, targetPowerW: number | null, seconds: number): void
+  +percent(): number
+}
+class RideRecorder <<removed>> {
+  -speedsKmh: Float64Array(14400)
+  +record(powerW, speedKmh, seconds, onTarget): void
+}
+
+class ClassRideStore <<store>> {
+  -lastSecond: number
+  -pausedByRider: WritableSignal<boolean>
+  -pausedByBike: WritableSignal<boolean>
+  -player: WritableSignal<VideoPlayer | null>
+  -record(second: number): void
+}
+
+class ClassRidePage <<component>> {
+  providers: ClassRideStore, RideClock, RideTicker,
+  WorkoutEngine, ResistanceController,
+  BikeTelemetry, VideoClockSync, RideTotals,
+  EffortTotals, OnTargetCounter
+}
+
+class BikeTelemetry {
+  +cadence: Signal<number | null>
+  +resistance: Signal<number | null>
+  +powerW: Signal<number | null>
+  -expiry: Timeout
+}
+
+class RideTicker {
+  -timer: Timeout | null
+  +stop(): void
+}
+
+interface PlanState {
+  +index: number
+  +segment: Segment
+  +targetPower: number | null
+}
+
+class "long-ride.heap.ts" as LongRide <<heap check, new>> {
+  paused ride, 3 hours
+  growth at most 50 MB
+}
+
+class "enter-and-leave.heap.ts" as EnterLeave <<heap check, new>> {
+  10 visits to Class Ride
+  third to tenth return: at most 5 MB
+}
+
+class "playwright.heap.config.ts" as HeapConfig <<config, new>> {
+  testMatch: **/*.heap.ts
+  Chromium only, one worker
+  runs when a person asks
+}
+
+ClassRidePage *-- ClassRideStore
+ClassRidePage *-- RideTotals
+ClassRidePage *-- EffortTotals
+ClassRidePage *-- OnTargetCounter
+ClassRidePage *-- BikeTelemetry
+ClassRidePage *-- RideTicker
+ClassRideStore --> RideTotals : reports each running second
+ClassRideStore --> EffortTotals : reports each effort second
+ClassRideStore --> OnTargetCounter : reports each aimed second
+ClassRideStore --> BikeTelemetry : reads the latest power
+ClassRideStore ..> PlanState : reads segment and target
+ClassRideStore .. RideRecorder : replaced by the three accumulators
+HeapConfig ..> LongRide : runs
+HeapConfig ..> EnterLeave : runs
+LongRide ..> ClassRidePage : measures
+EnterLeave ..> ClassRidePage : measures
+@enduml

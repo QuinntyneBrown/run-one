@@ -1,0 +1,36 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Meet performance budgets
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+System_Ext(youtube, "YouTube", "Privacy-enhanced player for the class video")
+
+Container_Boundary(ride, "ride application") {
+  Component(appRoutes, "app.routes.ts", "Routes", "Initial bundle: loads ride.routes.ts lazily")
+  Component(rideRoutes, "ride.routes.ts", "Routes", "One lazy chunk per screen")
+  Component(classPage, "TheClassPage", "Lazy chunk", "Shows the video parked at the sync offset")
+  Component(ridePage, "ClassRidePage", "Lazy chunk", "Plays the video on the ride clock")
+  Component(other, "Connect Bike, Class Done, page not found", "Lazy chunks", "Never load the player")
+  Component(pcv, "provideClassVideo()", "Route provider", "Binds the factory to a dynamic import")
+}
+Container_Boundary(api, "api library") {
+  Component(factory, "VIDEO_PLAYER_FACTORY", "Contract and token", "Resolves a VideoPlayer on demand")
+}
+Container_Boundary(video, "video library") {
+  Component(yt, "YouTubeVideoPlayer", "Lazy chunk", "Fetched only when a player is asked for")
+}
+
+Rel(rider, appRoutes, "Opens the app")
+Rel(appRoutes, rideRoutes, "loadChildren")
+Rel(rideRoutes, classPage, "loadComponent")
+Rel(rideRoutes, ridePage, "loadChildren")
+Rel(rideRoutes, other, "loadComponent")
+Rel(classPage, factory, "Asks for a player")
+Rel(ridePage, factory, "Asks for a player")
+Rel(pcv, factory, "Binds")
+Rel(factory, yt, "import('@telo/video')")
+Rel(rideRoutes, host, "Fetches each chunk when its route opens", "HTTPS")
+Rel(yt, youtube, "Loads the IFrame API", "HTTPS")
+@enduml

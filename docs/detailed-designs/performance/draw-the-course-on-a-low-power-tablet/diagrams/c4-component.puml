@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Draw the course on a low-power tablet
+
+System_Ext(gpu, "Display and GPU", "WebGPU, or WebGL 2")
+System_Ext(checks, "Playwright checks", "class-ride-ibiza-budgets, ibiza-frames.perf, heap")
+
+Container_Boundary(world, "world library") {
+  Component(scene, "CourseScene", "wz-course-scene", "Measures the frame period; measures again when the tab or the screen changes")
+  Component(sched, "FrameScheduler", "Root service", "measurePeriod(): intervals of empty frames")
+  Component(period, "estimateFramePeriod", "Pure function", "Median interval snapped to a common refresh rate")
+  Component(renderer, "ThreeCourseRenderer", "CourseRenderer", "TIERS, DRAWN_FAR, RIDER_DETAIL; judge() and step()")
+  Component(budget, "FrameBudget", "Pure class", "Every 90 frames: up within 1.1, down over 1.6, never up after")
+  Component(chunks, "choose and warm", "Renderer methods", "Only chunks near the camera are in the scene")
+  Component(kit, "CourseCyclistKit, RiderBody", "Classes", "The rider at the fineness of the step they are made at")
+  Component(shadow, "SunShadow", "Class", "STEPS: texels, readings, frames a picture serves")
+  Component(probe, "course-probe", "Test-only hook", "Pins a step; reports triangles, draw calls, shadowMap")
+}
+
+Rel(scene, sched, "measurePeriod()")
+Rel(sched, period, "Intervals")
+Rel(scene, renderer, "setFramePeriod(ms), pauseBudget()")
+Rel(renderer, budget, "frame(ms, period) after each draw")
+Rel(renderer, chunks, "Every 12 frames")
+Rel(renderer, kit, "make(jersey, 4, true, RIDER_DETAIL[step])")
+Rel(renderer, shadow, "detail(step) on each step")
+Rel(renderer, gpu, "setPixelRatio; bloom pipeline or plain render")
+Rel(renderer, probe, "Reads the pin; writes what it drew")
+Rel(checks, probe, "Set before the app boots; read after a frame")
+@enduml

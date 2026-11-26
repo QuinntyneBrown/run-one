@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Show the class
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System(telo, "Telo Ride 1", "One class, on the rider's own bike")
+System_Ext(youtube, "YouTube", "Privacy-enhanced player for the class video")
+
+Rel(rider, telo, "Reads the class and starts it on")
+Rel(telo, youtube, "Embeds the class video from", "HTTPS, youtube-nocookie.com")
+@enduml

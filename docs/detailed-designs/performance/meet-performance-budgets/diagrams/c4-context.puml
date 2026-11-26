@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Meet performance budgets
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System(telo, "Telo Ride 1", "One class, on the rider's own bike")
+System_Ext(youtube, "YouTube", "Privacy-enhanced player for the class video")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+
+Rel(rider, telo, "Opens and rides in, on a tablet or low-power laptop")
+Rel(telo, host, "Loads its initial bundle and lazy chunks from", "HTTPS")
+Rel(telo, youtube, "Loads the player only on a screen that shows the video", "HTTPS")
+@enduml

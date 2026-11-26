@@ -1,0 +1,8 @@
+<canvas
+  #canvas
+  class="course-scene"
+  role="img"
+  [attr.aria-label]="label()"
+  [attr.aria-hidden]="shown() ? null : 'true'"
+  [class.course-scene--busy]="!shown()"
+></canvas>

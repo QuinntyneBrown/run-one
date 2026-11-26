@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Play the music
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The five screens, Web Bluetooth, the protocol and the engine")
+  Container(track, "Music file", "MP3, static", "music/beautiful-boom-bap.mp3, 2:04, shipped with the app")
+  ContainerDb(storage, "localStorage", "Browser storage", "telo-ride.music: \"off\", or no entry")
+}
+System_Ext(audio, "Browser audio", "HTMLAudioElement")
+
+Rel(rider, app, "Presses the Music button on Class Ride", "HTTPS")
+Rel(app, audio, "Creates one looping element; play, pause, release")
+Rel(audio, track, "Streams the track", "HTTPS, same origin")
+Rel(app, storage, "Reads the setting once; writes it on each toggle")
+@enduml

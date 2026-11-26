@@ -1,0 +1,45 @@
+@startuml
+title UML sequence behaviour — Open after clearing site data
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "Router" as router
+  participant "rememberedBikeGuard" as guard
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "RememberedBikeStore" as bikeStore
+  participant "RideRecordStore" as recordStore
+end box
+box "Device — Browser" #F2F4F7
+  participant "Site settings" as settings
+  participant "localStorage" as ls
+end box
+rider -> settings : Clear the site's data
+settings -> ls : Remove every key of the origin
+rider -> router : Open the app at /
+router -> guard : Decide where the app opens (L2-167)
+guard -> bikeStore : get()
+bikeStore -> ls : getItem("telo-ride.bike")
+ls --> bikeStore : null
+bikeStore --> guard : null
+guard -> recordStore : current()
+recordStore -> ls : getItem("telo-ride.record")
+ls --> recordStore : null
+recordStore --> guard : null
+note over guard, ls : No other copy exists: no server, cookie, IndexedDB or cache holds the record (L2-132 AC2)
+guard --> router : New rider: redirect to /connect
+router --> rider : Connect Bike opens (L2-132 AC4)
+@enduml

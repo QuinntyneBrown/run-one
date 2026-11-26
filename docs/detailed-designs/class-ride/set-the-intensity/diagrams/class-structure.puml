@@ -1,0 +1,53 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+package "@telo/api" {
+  interface IntensityDefault {
+    +kept(): number
+    +keep(intensity: number): boolean
+  }
+  class ClassResult {
+    +intensity: number
+  }
+}
+
+package "@telo/domain" {
+  class "intensityLevel()" as Rule
+  class RideIntensity {
+    +value: Signal<number>
+    +set(n: number): void
+    +raise(): void
+    +lower(): void
+  }
+  class WorkoutEngine {
+    +state: Signal<PlanState | null>
+    +resend(): void
+  }
+  class IntensityStore
+  IntensityStore ..|> IntensityDefault
+  RideIntensity --> IntensityDefault : starts at kept()
+  WorkoutEngine --> RideIntensity : scales each level
+  WorkoutEngine --> Rule
+}
+
+package "@telo/components" {
+  class ClassIntensity <<wz-class-intensity>> {
+    +value: input<number>
+    +disabled: input<boolean>
+    +changed: output<number>
+    +raise: output<void>
+    +lower: output<void>
+  }
+  class IntensityQuestion <<wz-intensity-question>>
+}
+
+package "ride" {
+  class ClassRideStore
+  class ClassDonePage
+  ClassRideStore --> RideIntensity
+  ClassRideStore ..> ClassResult : intensity at 20:00
+  ClassDonePage --> IntensityDefault
+}
+@enduml

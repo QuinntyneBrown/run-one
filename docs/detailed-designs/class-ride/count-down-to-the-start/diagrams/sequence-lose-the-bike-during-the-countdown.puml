@@ -1,0 +1,53 @@
+@startuml
+title UML sequence behaviour — Lose the bike during the countdown
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRidePage" as page
+  participant "ClassRideStore" as store
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "wz-class-lost" as lost
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "TICKER" as beat
+  participant "Countdown" as countdown
+  participant "BikeConnection" as conn
+end box
+box "Device" #F2F4F7
+  participant "Smart bike" as bike
+end box
+countdown --> store : step: "2", one light lit
+bike -> conn : Stops answering
+conn --> store : ble becomes disconnected
+beat -> store : A second passes: followBike()
+store -> countdown : stop(): the countdown stops (L2-180 AC7)
+countdown --> store : step: null
+store --> page : state: lost alert
+page -> lost : Render "Lost the bike" with Reconnect (L2-092)
+lost --> rider : Alert
+rider -> lost : Presses Reconnect
+lost -> store : reconnect()
+store -> conn : reconnectNow() (L2-017)
+conn -> bike : Reconnect and send the kept target resistance first (L2-027 AC4)
+bike --> conn : Connected
+conn --> store : ble becomes connected
+beat -> store : A second passes: followBike()
+store -> countdown : start(): from "3" again
+countdown --> store : step: "3", no light lit
+store --> page : phase countdown, no alert
+page --> rider : The countdown, from "3"
+@enduml

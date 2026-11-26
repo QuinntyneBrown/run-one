@@ -1,0 +1,20 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Load the course
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System_Boundary(telo, "Telo Ride 1") {
+  Container(app, "Ride app", "Angular, Chrome or Edge", "The five screens, Web Bluetooth, the protocol and the engine")
+  Container(sw, "Service worker", "Angular service worker", "Keeps the app and its lazy assets on the device")
+  ContainerDb(cache, "Cache Storage", "Browser cache", "The app's chunks and the lazy assets group")
+}
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+
+Rel(rider, app, "Starts a ride in Ibiza", "HTTPS")
+Rel(app, sw, "Requests the world chunk, Three.js, ibiza.glb, ibiza.course.json, rider.glb", "fetch")
+Rel(sw, cache, "Serves a kept file; keeps a file on first use")
+Rel(sw, host, "Fetches a file not yet kept", "HTTPS")
+Rel(app, bike, "Writes the first target resistance", "Web Bluetooth")
+@enduml

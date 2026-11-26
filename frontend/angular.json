@@ -1,0 +1,180 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "cli": {
+    "packageManager": "npm",
+    "schematicCollections": ["angular-eslint"],
+    "analytics": false
+  },
+  "newProjectRoot": "projects",
+  "projects": {
+    "ride": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/ride",
+      "sourceRoot": "projects/ride/src",
+      "prefix": "wz",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "outputPath": "dist/ride",
+            "browser": "projects/ride/src/main.ts",
+            "tsConfig": "projects/ride/tsconfig.app.json",
+            "define": { "require": "undefined" },
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "projects/ride/public"
+              }
+            ],
+            "styles": [
+              "projects/ride/src/styles/tokens.css",
+              "projects/ride/src/styles/fonts.css",
+              "projects/ride/src/styles/styles.scss"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "302kB",
+                  "maximumError": "305kB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kB",
+                  "maximumError": "10kB"
+                }
+              ],
+              "outputHashing": "all",
+              "namedChunks": true,
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                },
+                "fonts": false
+              },
+              "fileReplacements": [
+                {
+                  "replace": "projects/ride/src/app/bike/simulated-bike.provider.ts",
+                  "with": "projects/ride/src/app/bike/simulated-bike.provider.production.ts"
+                }
+              ],
+              "serviceWorker": "projects/ride/ngsw-config.json"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "ride:build:production"
+            },
+            "development": {
+              "buildTarget": "ride:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/ride/tsconfig.spec.json",
+            "include": ["**/*.spec.ts", "../../*/src/**/*.spec.ts"]
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["projects/ride/src/**/*.ts", "projects/ride/src/**/*.html"]
+          }
+        }
+      }
+    },
+    "api": {
+      "projectType": "library",
+      "root": "projects/api",
+      "sourceRoot": "projects/api/src",
+      "prefix": "wz",
+      "architect": {
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["projects/api/**/*.ts", "projects/api/**/*.html"]
+          }
+        }
+      }
+    },
+    "domain": {
+      "projectType": "library",
+      "root": "projects/domain",
+      "sourceRoot": "projects/domain/src",
+      "prefix": "wz",
+      "architect": {
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["projects/domain/**/*.ts", "projects/domain/**/*.html"]
+          }
+        }
+      }
+    },
+    "components": {
+      "projectType": "library",
+      "root": "projects/components",
+      "sourceRoot": "projects/components/src",
+      "prefix": "wz",
+      "architect": {
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["projects/components/**/*.ts", "projects/components/**/*.html"]
+          }
+        }
+      }
+    },
+    "video": {
+      "projectType": "library",
+      "root": "projects/video",
+      "sourceRoot": "projects/video/src",
+      "prefix": "wz",
+      "architect": {
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["projects/video/**/*.ts", "projects/video/**/*.html"]
+          }
+        }
+      }
+    },
+    "world": {
+      "projectType": "library",
+      "root": "projects/world",
+      "sourceRoot": "projects/world/src",
+      "prefix": "wz",
+      "architect": {
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["projects/world/**/*.ts", "projects/world/**/*.html"]
+          }
+        }
+      }
+    }
+  }
+}

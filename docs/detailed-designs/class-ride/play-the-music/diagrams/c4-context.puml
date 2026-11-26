@@ -1,0 +1,13 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Play the music
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System(telo, "Telo Ride 1", "One class, on the rider's own bike")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+
+Rel(rider, telo, "Rides in Ibiza; turns the music off and on")
+Rel(telo, host, "Fetches music/beautiful-boom-bap.mp3 when the music first plays", "HTTPS, same origin")
+Rel(telo, rider, "Plays the one track in the background")
+@enduml

@@ -1,0 +1,50 @@
+@startuml
+title UML sequence behaviour — Open with malformed storage
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "Router" as router
+  participant "rememberedBikeGuard" as guard
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "RememberedBikeStore" as bikeStore
+  participant "RideRecordStore" as recordStore
+  participant "RecordRule" as rule
+end box
+box "Device — Browser" #F2F4F7
+  participant "localStorage" as ls
+end box
+rider -> router : Open the app at /
+router -> guard : Decide where the app opens (L2-167)
+guard -> bikeStore : get()
+bikeStore -> ls : getItem("telo-ride.bike")
+ls --> bikeStore : Text that is not a valid bike
+bikeStore -> bikeStore : parse() rejects the value
+bikeStore --> guard : null (L2-129 AC3)
+guard -> recordStore : current()
+recordStore -> ls : getItem("telo-ride.record")
+alt missing, not JSON, or the read throws
+  ls --> recordStore : null, bad text or an exception
+  recordStore --> guard : null (L2-129 AC3)
+else a negative count or an output that is not a number
+  ls --> recordStore : JSON outside the record's rules
+  recordStore -> rule : parse(value)
+  rule --> recordStore : null
+  recordStore --> guard : null (L2-129 AC3)
+end
+guard --> router : New rider: redirect to /connect
+router --> rider : Connect Bike opens and the app does not fail (L2-129 AC3)
+@enduml

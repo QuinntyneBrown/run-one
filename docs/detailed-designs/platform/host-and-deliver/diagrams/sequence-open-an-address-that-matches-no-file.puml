@@ -1,0 +1,44 @@
+@startuml
+title UML sequence behaviour — Open an address that matches no file
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Device — Browser" #F2F4F7
+  participant "Chrome or Edge" as browser
+end box
+box "External — Static host" #FFF4E5
+  participant "Static host" as host
+end box
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "index.html" as index
+  participant "Router" as router
+  participant "Page" as page
+end box
+rider -> browser : Open https://<host>/ride or reload on it
+browser -> host : GET /ride over HTTPS (L2-149 AC1)
+host -> host : No file matches /ride
+host --> browser : 200 index.html with the headers of L2-131 (L2-149 AC1)
+browser -> index : Parse; base href is /
+browser -> host : GET the hashed bundles
+host --> browser : Static files with the headers of L2-131
+index -> router : Bootstrap and read the address
+alt the address is a screen
+  router -> page : loadComponent for /ride
+  page --> rider : Class Ride, or where its guards send the rider
+else the address matches no screen
+  router -> page : loadComponent for the wildcard route
+  page --> rider : Page not found (L2-145)
+end
+@enduml

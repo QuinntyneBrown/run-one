@@ -1,0 +1,70 @@
+@startuml
+title UML sequence behaviour — Show the class
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "TheClassPage" as page
+  participant "TheClassStore" as store
+end box
+box "Frontend — Ride app (components library)" #E0F2FE
+  participant "TheClass" as block
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "shippedClass" as classes
+  participant "ClassRule" as rule
+  participant "PlanSummary" as summary
+  participant "RideRecordStore" as record
+end box
+box "Frontend — Ride app (video library)" #ECFDF3
+  participant "YouTubeVideoPlayer" as player
+end box
+box "External — YouTube" #FFF4E5
+  participant "youtube-nocookie.com" as youtube
+end box
+rider -> page : Open The Class at /
+page -> store : Create with the page
+store -> classes : get() (L2-080 AC1, AC5)
+classes -> rule : broken(INTERVALS_TO_THE_BEAT) (L2-080 AC3)
+alt class breaks no rule
+  rule --> classes : null
+  classes --> store : ClassDefinition
+  store -> summary : averagePower(segments) (L2-084 AC3)
+  summary --> store : 254
+  store -> summary : efforts(segments) (L2-084 AC2)
+  summary --> store : 17 efforts, 15 s to 75 s
+  store -> record : current()
+  record --> store : RecordData or null (L2-084 AC8)
+  store --> page : TheClassView
+  page -> block : view
+  block --> rider : Title, summary, "20:00", record, plan and start button (L2-084 AC1, AC2)
+  block -> store : videoFrame(host)
+  store -> player : load(host, "il_OFz6o42I", start 3 s, controls, no autoplay)
+  player -> youtube : Embed the player
+  alt video loads
+    youtube --> player : Player ready
+    player --> rider : Video parked at 0:03 with its controls (L2-084 AC1)
+  else video cannot load (L2-084 AC9)
+    youtube --> player : Error or no answer
+    player --> store : state "error"
+    block --> rider : Class cover stays in the video box; start button works
+  end
+else class breaks a rule
+  rule --> classes : the rule
+  classes --> store : ClassError "class_invalid"
+  store --> page : unavailable
+  page --> rider : "The class can’t be loaded. Reload Telo Ride 1 to try again." and Reload; no start button (L2-080 AC3)
+end
+@enduml

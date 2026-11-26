@@ -1,0 +1,44 @@
+@startuml
+title UML sequence behaviour — Lose the bike in flight
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "RidePage" as ridePage
+  participant "IbizaFlyoverPage" as page
+  participant "FlyoverStore" as fly
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "BikeConnection" as conn
+end box
+box "Device" #F2F4F7
+  participant "Smart bike" as bike
+end box
+fly --> page : stage flying; "The DJ terrace · light beams over the crowd"
+bike -> conn : Stops answering
+conn --> fly : ble becomes disconnected
+fly --> page : bikeLost: true
+page --> rider : "No answer from the Echelon EX-5s" (role alert) with Try again (L2-179 AC7)
+fly -> fly : The flight carries on to share 1; the landing waits
+rider -> page : Presses Try again
+page -> fly : retry()
+fly -> conn : reconnectNow() (L2-017)
+conn -> bike : Reconnect and send the kept target resistance first
+bike --> conn : Connected
+conn --> fly : ble becomes connected
+fly --> page : bikeLost: false; stage landed: "Bike ready · lining up"
+fly --> ridePage : done, 900 ms later
+ridePage --> rider : Class Ride on the countdown
+@enduml

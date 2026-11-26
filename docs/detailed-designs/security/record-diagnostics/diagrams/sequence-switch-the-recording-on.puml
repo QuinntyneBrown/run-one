@@ -1,0 +1,62 @@
+@startuml
+title UML sequence behaviour — Switch the recording on
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Person diagnosing" as person
+box "Device — Browser" #F2F4F7
+  participant "Chrome or Edge" as browser
+end box
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "app.routes.ts" as approutes
+  participant "ride.routes.ts" as routes
+  participant "diagnosticsRequested" as switch
+  participant "provideDiagnostics" as provide
+  participant "DiagnosticsHost" as host
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "DiagnosticRecorder" as recorder
+  participant "WebBluetoothBikeConnection" as conn
+end box
+box "Hosting — Static host" #FFF4E5
+  participant "Static host" as static
+end box
+person -> browser : Open /?diagnose
+browser -> static : Fetch index.html and the initial bundle
+static --> browser : The same files a rider gets (L2-178 AC1)
+browser -> approutes : Bootstrap; match the empty path
+approutes -> routes : loadChildren imports the module and awaits rideRoutes
+routes -> switch : diagnosticsRequested(location.search), once (L2-178 AC2)
+alt diagnose is in the query
+  switch --> routes : true
+  routes -> static : import("./diagnostics/provide-diagnostics")
+  static --> routes : The recording's chunk
+  routes -> provide : provideDiagnostics()
+  provide --> routes : Providers for the parent route
+  routes --> approutes : rideRoutes resolves: the routes, with the recording's providers last
+  approutes -> provide : Run the environment initializer
+  provide -> recorder : Create; read the monotonic clock as the start; add EVT recording-started (L2-178 AC10)
+  provide -> host : Create with the root component's ViewContainerRef
+  host --> person : Show the recording mark, "Recording"
+  approutes -> conn : Create for the first screen
+  conn -> conn : inject(BIKE_LINK_TAP, optional) is the recorder
+  note over recorder, conn : The recording is on before the first Bluetooth call (L2-178 AC2)
+else no diagnose in the query
+  switch --> routes : false
+  routes --> approutes : rideRoutes is already resolved: the routes as they are
+  approutes -> conn : Create for the first screen
+  conn -> conn : inject(BIKE_LINK_TAP, optional) is null
+  note over routes, static : No chunk is fetched, by the page or the service worker; no mark is shown; nothing is recorded (L2-178 AC1)
+end
+@enduml

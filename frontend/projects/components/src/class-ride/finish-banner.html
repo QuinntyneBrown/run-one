@@ -1,0 +1,15 @@
+<div class="finish-banner">
+  <div class="finish-banner__band" aria-hidden="true">
+    <div class="finish-banner__chequer"></div>
+    <div class="finish-banner__body">
+      <p class="finish-banner__title">Finish!</p>
+      <p class="finish-banner__result">
+        <span class="finish-banner__output">{{ outputKj() }}</span>
+        <span>kJ output</span>
+        <span class="finish-banner__time">· {{ time() }}</span>
+      </p>
+    </div>
+    <div class="finish-banner__chequer"></div>
+  </div>
+  <p class="visually-hidden" role="status">Finished. {{ outputKj() }} kJ.</p>
+</div>

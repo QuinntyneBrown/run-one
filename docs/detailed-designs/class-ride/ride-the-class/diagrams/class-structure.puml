@@ -1,0 +1,134 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Ride the class
+
+class ClassRidePage <<component>> {
+  #store: ClassRideStore
+}
+
+class ClassRideStore <<store>> {
+  +ride: Signal<ClassDto | null>
+  +elapsed: Signal<number>
+  +plan: Signal<PlanState | null>
+  +level: Signal<number | null>
+  +canControl: Signal<boolean>
+  +power: Signal<StatView>
+  +cadence: Signal<StatView>
+  +videoUnavailable: Signal<boolean>
+  +playVideo(host: HTMLElement): void
+  +raise(): void
+  +lower(): void
+  -syncVideo(ride: ClassDto): void
+}
+
+interface StatView {
+  +value: string
+  +hint: string | null
+  +tone: ClassStatTone | null
+}
+
+class RideClock {
+  +running: Signal<boolean>
+  +start(): void
+  +elapsedMs(): number
+}
+
+class RideTicker {
+  +second: Signal<number>
+  +ticks: Observable<number>
+  +start(): void
+  +stop(): void
+}
+
+class WorkoutEngine {
+  +state: Signal<PlanState | null>
+  +follow(plan: Plan): void
+}
+
+interface PlanState {
+  +index: number
+  +segment: Segment
+  +remainingMs: number
+  +progress: number
+  +targetPower: number | null
+}
+
+interface Plan {
+  +segments: Segment[]
+}
+
+interface Segment {
+  +kind: SegmentKind
+  +duration: number
+  +level: number
+  +cadenceAim: number | null
+}
+
+enum SegmentKind {
+  warm-up
+  work
+  recover
+  cool-down
+}
+
+class PowerModel <<helper>> {
+  +{static} target(cadenceAim: number, level: number): number
+  +{static} onTarget(power: number, target: number): boolean
+}
+
+class BikeTelemetry {
+  +cadence: Signal<number | null>
+  +resistance: Signal<number | null>
+  +powerW: Signal<number | null>
+}
+
+class VideoClockSync {
+  +check(videoTime: number, elapsed: number, offset: number): number | null
+}
+
+class VideoStallWatch {
+  +check(state: PlayerState, second: number): boolean
+}
+
+interface VideoPlayer {
+  +state: Signal<PlayerState>
+  +load(host: HTMLElement, videoId: string, options: PlayerOptions): Promise<void>
+  +currentTime(): number
+  +play(): void
+  +pause(): void
+  +seekTo(seconds: number): void
+  +destroy(): void
+}
+
+class YouTubeVideoPlayer
+
+ClassRidePage *-- ClassRideStore : provides
+ClassRideStore --> RideClock
+ClassRideStore --> RideTicker
+ClassRideStore --> WorkoutEngine
+ClassRideStore --> BikeTelemetry
+ClassRideStore --> VideoClockSync
+ClassRideStore --> VideoStallWatch
+ClassRideStore --> VideoPlayer : controls
+ClassRideStore ..> StatView : derives
+ClassRideStore ..> PowerModel : compares with
+RideTicker --> RideClock
+WorkoutEngine --> RideClock
+WorkoutEngine --> RideTicker
+WorkoutEngine ..> PlanState : publishes
+PlanState --> Segment
+Plan "1" *-- "17" Segment
+Segment --> SegmentKind
+YouTubeVideoPlayer ..|> VideoPlayer
+@enduml

@@ -1,0 +1,57 @@
+// Block class-done__intensity (docs/design-system/assets/components.css, Class Done): a panel with the question and its
+// two answers, or the answer as a status. From lg it shares a row with Done and its text and buttons stand side by
+// side, so the score, the efforts and Done still fit one screen (L2-078 AC6).
+:host {
+  display: block;
+
+  @media (min-width: 64rem) {
+    flex: 1;
+  }
+}
+
+.class-done__intensity {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-1);
+  border-radius: var(--radius-xl);
+  background: var(--color-panel);
+  padding: var(--space-4);
+
+  @media (min-width: 64rem) {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: var(--space-4);
+    align-items: center;
+    align-content: center;
+    padding: var(--space-1) var(--space-4);
+  }
+}
+
+.class-done__intensity-title {
+  margin: 0;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  font-weight: var(--font-weight-semibold);
+}
+
+.class-done__intensity-text {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+  color: var(--color-muted);
+}
+
+.class-done__intensity-actions {
+  margin-top: var(--space-2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+
+  @media (min-width: 64rem) {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    margin-top: 0;
+  }
+}

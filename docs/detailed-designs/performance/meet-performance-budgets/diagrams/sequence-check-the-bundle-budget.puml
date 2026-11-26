@@ -1,0 +1,41 @@
+@startuml
+title UML sequence behaviour — Check the bundle budget
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Developer" as dev
+box "External — CI" #FFF4E5
+  participant "ci.yml build job" as ci
+  participant "ng build ride" as build
+  participant "bundle-size.mjs" as size
+end box
+dev -> ci : Push a change
+ci -> build : npm run build (production)
+build -> build : Compare the raw initial bundle with the angular.json budget
+alt over the raw budget
+  build --> ci : Build error
+  ci --> dev : The job fails
+else within the raw budget
+  build --> ci : dist/ride/browser
+  ci -> size : Run on the build output
+  size -> size : Read index.html; gzip each initial script and stylesheet
+  alt sum over 300 KB gzipped (L2-136 AC1)
+    size --> ci : Non-zero exit with each file's size
+    ci --> dev : The job fails
+  else at most 300 KB
+    size --> ci : Exit 0
+    ci --> dev : The job passes
+  end
+end
+@enduml

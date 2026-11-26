@@ -1,0 +1,51 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Keep the record
+
+interface RideRecord {
+  +current: Signal<RecordData | null>
+  +add(outputKj: number): RecordOutcome
+}
+class RecordData {
+  +rides: number
+  +bestOutputKj: number
+  +lastOutputKj: number
+}
+class RecordOutcome {
+  +previousBestKj: number | null
+  +saved: boolean
+}
+class RideRecordStore {
+  -record: WritableSignal<RecordData | null>
+  +current: Signal<RecordData | null>
+  +add(outputKj: number): RecordOutcome
+  -read(): RecordData | null
+  -write(record: RecordData): boolean
+}
+class RecordRule <<helper>> {
+  +{static} next(current: RecordData | null, outputKj: number): RecordData
+  +{static} parse(value: unknown): RecordData | null
+}
+class "localStorage" as LS <<browser>> {
+  +getItem("telo-ride.record"): string | null
+  +setItem("telo-ride.record", json): void
+}
+
+RideRecordStore ..|> RideRecord
+RideRecord --> "0..1" RecordData : holds
+RideRecord ..> RecordOutcome : returns
+RideRecordStore ..> RecordRule : uses
+RecordRule ..> RecordData : returns
+RideRecordStore ..> LS : reads and writes
+@enduml

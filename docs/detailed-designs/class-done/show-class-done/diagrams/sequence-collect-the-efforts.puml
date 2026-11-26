@@ -1,0 +1,49 @@
+@startuml
+title UML sequence behaviour — Collect the efforts
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "ClassRideStore" as store
+  participant "FinishedRideHolder" as holder
+  participant "Router" as router
+end box
+box "Frontend — Ride app (domain library)" #ECFDF3
+  participant "RideTicker" as ticker
+  participant "WorkoutEngine" as engine
+  participant "BikeTelemetry" as telemetry
+  participant "EffortTotals" as efforts
+  participant "RideTotals" as totals
+end box
+rider -> store : Pedal through the class
+loop each running second
+  ticker -> store : tick(second)
+  store -> engine : state()
+  engine --> store : PlanState with the segment and its index
+  store -> telemetry : powerW()
+  telemetry --> store : Watts, or null when unknown
+  opt segment kind is "work"
+    store -> efforts : count(effort, powerW, seconds), null as 0 W (L2-169 AC2)
+  end
+end
+ticker -> store : tick(1800), the plan's length
+store -> efforts : watts()
+efforts --> store : Eight rounded means, in plan order (L2-169 AC1, AC2)
+store -> totals : outputKj(), runningSeconds()
+totals --> store : Output and 1800 s
+store -> holder : set(ClassResult)
+store -> router : navigateByUrl("/done") (L2-078)
+router --> rider : Class Done opens
+@enduml

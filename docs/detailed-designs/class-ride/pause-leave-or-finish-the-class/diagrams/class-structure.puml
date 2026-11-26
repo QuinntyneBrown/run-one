@@ -1,0 +1,113 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Pause, leave or finish the class
+
+class ClassRidePage <<component>> {
+  #store: ClassRideStore
+  #confirmLeaving(event: BeforeUnloadEvent): void
+}
+
+class ClassRideStore <<store>> {
+  +paused: Signal<boolean>
+  +bikeLost: Signal<boolean>
+  -pausedByRider: WritableSignal<boolean>
+  -pausedByBike: WritableSignal<boolean>
+  +pause(): void
+  +resume(): void
+  -hold(): void
+  -carryOn(ride: ClassDto): void
+  -finish(ride: ClassDto): void
+}
+
+class RideClock {
+  -startedAt: number | null
+  -pausedAt: number | null
+  -pausedTotalMs: number
+  +running: Signal<boolean>
+  +pause(): void
+  +resume(): void
+  +elapsedMs(): number
+}
+
+class RideTicker {
+  +ticks: Observable<number>
+  +stop(): void
+}
+
+class WorkoutEngine {
+  +follow(plan: Plan): void
+}
+
+interface VideoPlayer {
+  +play(): void
+  +pause(): void
+  +seekTo(seconds: number): void
+  +destroy(): void
+}
+
+interface ScreenWakeLock {
+  +hold(): void
+  +release(): void
+}
+
+interface BikeConnection {
+  +setResistance(level: number): Promise<number>
+  +forgetTarget(): void
+  +disconnect(): void
+}
+class ClassResult {
+  +runningSeconds: number
+  +outputKj: number
+  +onTargetPercent: number
+  +effortWatts: readonly number[]
+  +previousBestKj: number | null
+  +saved: boolean
+}
+interface RideRecord {
+  +add(outputKj: number): RecordOutcome
+}
+interface FinishedRide {
+  +set(result: ClassResult): void
+}
+class RideTotals {
+  +runningSeconds: number
+  +outputKj: number
+}
+class EffortTotals {
+  +watts(): readonly number[]
+}
+class OnTargetCounter {
+  +percent(): number
+}
+class Router <<Angular>> {
+  +navigateByUrl(url: string): Promise<boolean>
+}
+
+ClassRidePage *-- ClassRideStore : provides
+ClassRideStore --> RideClock : pauses / resumes
+ClassRideStore --> RideTicker : stops at the finish
+ClassRideStore --> VideoPlayer : pauses / destroys
+ClassRideStore --> ScreenWakeLock : releases
+ClassRideStore --> BikeConnection : forgetTarget()
+ClassRideStore ..> ClassResult : builds at the finish
+ClassRideStore --> RideTotals : reads
+ClassRideStore --> EffortTotals : reads
+ClassRideStore --> OnTargetCounter : reads
+ClassRideStore --> RideRecord : RIDE_RECORD.add
+ClassRideStore --> FinishedRide : FINISHED_RIDE.set
+FinishedRide --> "0..1" ClassResult : holds
+ClassRideStore --> Router : opens /done
+RideTicker --> RideClock
+WorkoutEngine --> RideTicker : steps on ticks
+@enduml

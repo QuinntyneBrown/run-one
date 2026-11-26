@@ -1,0 +1,41 @@
+@startuml
+title UML sequence behaviour — Block a foreign request
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Rider" as rider
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "Any screen" as page
+end box
+box "Device — Browser" #F2F4F7
+  participant "Chrome or Edge" as browser
+end box
+box "External — CI" #FFF4E5
+  participant "guard fixture" as guard
+  participant "Playwright spec" as spec
+end box
+rider -> page : Use the app
+page -> browser : Code attempts a request to another origin
+alt deployed app
+  browser -> browser : Check the directive for the request type
+  browser --> page : Refuse: the origin is not the app's or a listed YouTube origin (L2-131 AC1, AC3)
+  page --> rider : The screen carries on without the resource
+else behaviour spec
+  browser -> guard : Route the request: host is not localhost
+  guard -> guard : YouTubeFixture.answers(url) is false
+  guard -> browser : Abort the request
+  guard -> spec : Record "request off localhost: <url>"
+  spec -> spec : Fail when the test ends (L2-131 AC3)
+end
+@enduml

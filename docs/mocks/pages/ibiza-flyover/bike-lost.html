@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ibiza Flyover · bike-lost — Telo Ride 1 mocks</title>
+<meta name="mock:kind" content="page">
+<meta name="mock:screen" content="ibiza-flyover">
+<meta name="mock:state" content="bike-lost">
+<meta name="mock:requirements" content="L2-175 L2-179">
+<meta name="description" content="Ibiza Flyover with the bike lost during the flight: the status reads “No answer from the Echelon EX-5s” with Try again; the flight carries on but the ride does not start.">
+<link rel="stylesheet" href="../../../design-system/tokens/tokens.css">
+<link rel="stylesheet" href="../../../design-system/assets/components.css">
+<link rel="stylesheet" href="../../assets/mock.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="app ibiza-flyover">
+  <header class="ibiza-flyover__bar">
+    <span class="lockup" role="img" aria-label="Telo Ride 1"><svg class="logo-mark" width="26" height="26" viewBox="0 0 48 48" aria-hidden="true"><path class="logo-mark__ring" d="M37.79 21.57 A14 14 0 1 1 26.43 10.21"/><path class="logo-mark__crank" d="M24 24 L38 10"/><circle class="logo-mark__hub" cx="24" cy="24" r="4.6"/></svg><span class="wordmark">TELO<span class="wordmark__product">Ride 1</span></span></span>
+    <a class="btn btn--raised btn--sm ibiza-flyover__skip" href="landed.html"><svg class="icon icon--md" viewBox="0 0 24 24" aria-hidden="true"><path d="m13 19 9-7-9-7z"/><path d="m2 19 9-7-9-7z"/></svg>Skip flyover</a>
+    <a class="icon-btn ibiza-flyover__cancel" href="../the-class/ibiza.html" aria-label="Cancel"><svg class="icon icon--md" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></a>
+  </header>
+
+  <main id="main" class="ibiza-flyover__scene">
+    <img class="photo" src="../../assets/images/courses/ibiza-sunset-strip-from-above.jpg" role="img" alt="Ibiza Sunset Strip from above">
+    <p class="mock-note">The bike stopped answering during the flight (L2-179 AC7). The flight carries on, but Class Ride does not open until the bike is back: <strong>Try again</strong> reconnects (L2-017). The warning is told by the icon and the words, not the colour alone. Cancel still goes back to The Class.</p>
+  </main>
+
+  <footer class="ibiza-flyover__band">
+    <div class="ibiza-flyover__where">
+      <h1 class="ibiza-flyover__title">Ibiza Sunset Strip</h1>
+      <p class="ibiza-flyover__caption" aria-live="polite"><span class="ibiza-flyover__place">The DJ terrace</span> · light beams over the crowd</p>
+    </div>
+    <div class="ibiza-flyover__lost" role="alert"><p class="ibiza-flyover__lost-line"><svg class="icon icon--md" viewBox="0 0 24 24" aria-hidden="true"><path d="m17 17-5 5V12l-5 5"/><path d="m2 2 20 20"/><path d="M14.5 9.5 17 7l-5-5v4.5"/></svg>No answer from the Echelon EX-5s</p><a class="btn btn--primary ibiza-flyover__retry" href="default.html"><svg class="icon icon--md" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>Try again</a></div>
+  </footer>
+</div>
+
+<nav class="mock-bar" aria-label="Mock navigation">
+  <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
+  <span class="mock-bar__screen">Ibiza Flyover</span>
+  <ul class="mock-bar__states">
+    <li><a href="default.html">default</a></li>
+    <li><a href="loading.html">loading</a></li>
+    <li><a href="landed.html">landed</a></li>
+    <li><a href="bike-lost.html" aria-current="page">bike-lost</a></li>
+    <li><a href="recording.html">recording</a></li>
+  </ul>
+  <button type="button" data-theme-toggle aria-pressed="true">☀ Light</button>
+  <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
+</nav>
+<script src="../../assets/mock.js"></script>
+</body>
+</html>

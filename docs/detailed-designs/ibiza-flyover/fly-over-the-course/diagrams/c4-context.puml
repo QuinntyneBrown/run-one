@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Fly over the course
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System(telo, "Telo Ride 1", "One class, on the rider's own bike")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Ext(host, "Static host", "Azure Static Web Apps; the app's own origin")
+
+Rel(rider, telo, "Watches the course from above, skips or cancels in")
+Rel(telo, bike, "Sends the warm-up's target resistance to and watches the link of", "Bluetooth LE")
+Rel(telo, host, "Fetches the renderer and the course's files once from", "HTTPS")
+@enduml

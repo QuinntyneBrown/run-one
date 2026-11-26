@@ -1,0 +1,48 @@
+@startuml
+title UML sequence behaviour — Check a frame against the budgets
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Playwright spec" as spec
+box "Frontend — Ride app (ride application)" #E0F2FE
+  participant "Class Ride in Ibiza" as page
+end box
+box "Frontend — Ride app (world library)" #ECFDF3
+  participant "ThreeCourseRenderer" as renderer
+  participant "course-probe" as probe
+end box
+box "Browser — Chrome or Edge" #F2F4F7
+  participant "GPU" as gpu
+end box
+box "Static host — the app's own origin" #FFF4E5
+  participant "Static host" as origin
+end box
+spec -> probe : Before the app boots: window.__wzWorldRide = { tier: 'ultra' }
+spec -> page : Start a ride in Ibiza on a paused clock
+page -> renderer : start(...)
+renderer -> probe : readCourseProbe(): pinned at step 4; the budget never moves it
+loop 25 places: 0 s, each 50 s to 1,150 s, and 1,190 s
+  spec -> page : Fast-forward the clock to the second
+  page -> renderer : draw(frame)
+  renderer -> gpu : Render
+  renderer -> probe : course = { tier, triangles, drawCalls, shadowMap, ... }
+  spec -> probe : Read course
+  probe --> spec : triangles <= 120,000; drawCalls <= 140; shadowMap false (L2-177 AC1)
+end
+spec -> origin : GET /courses/ibiza.glb
+origin --> spec : The model
+spec -> spec : No image or texture in its JSON; gzipped size <= 3 MB (L2-177 AC1, AC2)
+spec -> origin : GET /music/beautiful-boom-bap.mp3
+origin --> spec : Size <= 4 MB (L2-177 AC2)
+@enduml

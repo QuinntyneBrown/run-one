@@ -1,0 +1,101 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Control resistance
+
+interface BikeConnection <<api>> {
+  +ble: Signal<BleState>
+  +setResistance(level: number): Promise<number>
+  +forgetTarget(): void
+}
+
+class BikeConnectionError <<api>> {
+  +code: "blocked" | "failed" | "read-only"
+}
+
+enum ResistanceSource <<api>> {
+  plan
+  manual
+}
+
+class ResistanceController <<engine>> {
+  +target: Signal<number | null>
+  +source: Signal<ResistanceSource>
+  +canControl: Signal<boolean>
+  +applyPlanLevel(level: number): Promise<void>
+  +nudge(delta: 1 | -1): Promise<void>
+  -send(level: number, source: ResistanceSource): Promise<void>
+}
+
+class WorkoutEngine <<engine>> {
+  +state: Signal<PlanState | null>
+  +follow(plan: Plan): void
+  +resend(): void
+  -step(): void
+}
+
+class BikeTelemetry <<engine>> {
+  +resistance: Signal<number | null>
+}
+
+class EchelonProtocol <<protocol>> {
+  +MIN_RESISTANCE = 1
+  +MAX_RESISTANCE = 32
+  +setResistance(level: number): Uint8Array
+}
+
+class FtmsProtocol <<protocol>> {
+  +mapLevel(level: number, range: ResistanceRange): number
+  +setTargetResistanceLevel(raw: number): Uint8Array
+}
+
+class WebBluetoothBikeConnection <<bluetooth>> {
+  -target: number | null
+  +setResistance(level: number): Promise<number>
+  +forgetTarget(): void
+}
+
+class GattWriteQueue <<bluetooth>> {
+  +enqueue(write: () => Promise<void>, minGapMs: number, sent?: SentBytes): Promise<number>
+}
+
+class ClassRideStore <<ride>> {
+  +level: Signal<number | null>
+  +canControl: Signal<boolean>
+  +raise(): void
+  +lower(): void
+}
+
+class ClassResist <<components>> {
+  +level: number | null
+  +max: number
+  +disabled: boolean
+  +lower: OutputEmitterRef<void>
+  +raise: OutputEmitterRef<void>
+}
+
+WorkoutEngine --> ResistanceController : applyPlanLevel
+ResistanceController --> BikeConnection : BIKE_CONNECTION
+ResistanceController ..> BikeTelemetry : first nudge starts from
+ResistanceController ..> BikeConnectionError : read-only ends control
+ResistanceController --> ResistanceSource
+WebBluetoothBikeConnection ..|> BikeConnection
+WebBluetoothBikeConnection ..> EchelonProtocol : Echelon link
+WebBluetoothBikeConnection ..> FtmsProtocol : FTMS link
+WebBluetoothBikeConnection *-- GattWriteQueue
+ClassRideStore --> ResistanceController
+ClassRideStore --> WorkoutEngine : follow, resend
+ClassRideStore ..> BikeConnection : forgetTarget on leave or finish
+ClassRideStore --> BikeTelemetry
+ClassResist <.. ClassRideStore : inputs via ClassRidePage
+@enduml

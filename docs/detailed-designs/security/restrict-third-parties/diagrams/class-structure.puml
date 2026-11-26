@@ -1,0 +1,70 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Restrict third parties
+
+class "Security header set" as Headers <<config>> {
+  Content-Security-Policy
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+}
+
+class "Content Security Policy" as Csp <<config>> {
+  default-src 'self'
+  script-src 'self' https://www.youtube.com
+  style-src 'self' <TO SUPPLY>
+  frame-src https://www.youtube-nocookie.com
+  connect-src 'self'
+  img-src 'self' https://i.ytimg.com
+  font-src 'self'
+  object-src 'none'
+  base-uri 'self'
+  form-action 'self'
+  frame-ancestors 'none'
+}
+
+class YouTubeVideoPlayer {
+  -API_URL = "https://www.youtube.com/iframe_api"
+  -EMBED_HOST = "https://www.youtube-nocookie.com"
+  +destroy(): void
+}
+
+interface VideoPlayer
+
+class ClassVideo <<wz-class-video>> {
+  +videoId: input<string>
+  #cover: "https://i.ytimg.com/vi/<id>/hqdefault.jpg"
+}
+
+class "fonts.css" as Fonts <<stylesheet>> {
+  @font-face src: /fonts/*.woff2
+}
+
+class "angular.json" as Angular <<config>> {
+  optimization.fonts: false
+  optimization.styles.inlineCritical: false
+}
+
+class "guard" as Guard <<fixture>> {
+  fails a spec on a request off localhost
+  lets through what YouTubeFixture answers
+}
+
+Headers *-- Csp
+YouTubeVideoPlayer ..|> VideoPlayer
+Csp ..> YouTubeVideoPlayer : script-src and frame-src admit
+Csp ..> ClassVideo : img-src admits
+Csp ..> Fonts : font-src admits
+Angular ..> Fonts : bundles without inlining a font CDN
+Guard ..> Csp : proves the same set in specs
+@enduml

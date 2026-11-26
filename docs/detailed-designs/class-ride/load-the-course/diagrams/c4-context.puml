@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Load the course
+
+Person(rider, "Rider", "Rides a smart bike at home")
+System(telo, "Telo Ride 1", "One class, on the rider's own bike")
+System_Ext(bike, "Smart bike", "Echelon or FTMS; Bluetooth LE")
+System_Ext(host, "Static host", "Serves the app's files over HTTPS")
+
+Rel(rider, telo, "Starts a ride in Ibiza")
+Rel(telo, bike, "Sends the first segment's target resistance at once", "Bluetooth LE")
+Rel(telo, host, "Fetches the 3D renderer and the course's files, once", "HTTPS, same origin")
+@enduml

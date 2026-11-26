@@ -1,0 +1,18 @@
+// The course's canvas fills the box it is put in (the class-course block's scene).
+:host {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.course-scene {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+// Until the ride's first frame is drawn the canvas is unseen: while the course loads its programs compile on frames
+// drawn from the grid, which the rider never sees (L2-175 AC1, AC3).
+.course-scene--busy {
+  opacity: 0;
+}
